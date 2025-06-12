@@ -17,16 +17,27 @@
       }
       #start-btn {
         position: absolute;
-        top: 20px;
-        left: 20px;
-        padding: 12px 20px;
-        font-size: 16px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px 40px;
+        font-size: 24px;
         font-family: 'Press Start 2P', monospace;
         background-color: black;
         color: lime;
-        border: 2px solid lime;
+        border: 3px solid lime;
         cursor: pointer;
         z-index: 10;
+        animation: flash 1.2s infinite;
+      }
+
+      @keyframes flash {
+        0%, 100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
       }
     </style>
   </head>
@@ -40,7 +51,6 @@
       let message = "Hello World!";
       let typedText = "";
       let typeIndex = 0;
-      let font;
       let button;
 
       function setup() {
