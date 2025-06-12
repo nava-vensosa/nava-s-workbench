@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World Animation</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: black;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+      }
+      #start-btn {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        padding: 12px 20px;
+        font-size: 16px;
+        font-family: 'Press Start 2P', monospace;
+        background-color: black;
+        color: lime;
+        border: 2px solid lime;
+        cursor: pointer;
+        z-index: 10;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="start-btn">Click me!</button>
+
+    <script>
+      let wipeProgress = 0;
+      let wiping = false;
+      let typing = false;
+      let message = "Hello World!";
+      let typedText = "";
+      let typeIndex = 0;
+      let font;
+      let button;
+
+      function setup() {
+        createCanvas(windowWidth, windowHeight);
+        textFont("'Press Start 2P'");
+        textSize(32);
+        fill('lime');
+        noCursor();
+        background(0);
+
+        button = select('#start-btn');
+        button.mousePressed(() => {
+          button.hide();
+          wiping = true;
+          wipeProgress = 0;
+          typedText = "";
+          typeIndex = 0;
+        });
+      }
+
+      function draw() {
+        if (wiping) {
+          background(0);
+          fill('lime');
+          let barHeight = height / 20;
+          for (let i = 0; i < wipeProgress; i++) {
+            rect(0, i * barHeight, width, barHeight - 2);
+          }
+          wipeProgress += 1;
+          if (wipeProgress * (height / 20) > height) {
+            wiping = false;
+            typing = true;
+            frameCount = 0;
+          }
+        }
+
+        if (typing && frameCount % 8 === 0 && typeIndex < message.length) {
+          typedText += message[typeIndex];
+          typeIndex++;
+        }
+
+        if (typing) {
+          background(0);
+          fill('lime');
+          text(typedText, width / 2 - textWidth(typedText) / 2, height / 2);
+        }
+      }
+
+      function windowResized() {
+        resizeCanvas(windowWidth, windowHeight);
+      }
+    </script>
+  </body>
+</html>
