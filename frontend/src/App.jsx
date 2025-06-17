@@ -18,6 +18,14 @@ export default function App() {
       .catch(() => setUsers([]));
   }, [msg]); // refetch on msg change (after signup)
 
+  // Helper for switching modes and clearing fields
+  const switchMode = () => {
+    setMode(mode === "login" ? "signup" : "login");
+    setMsg("");
+    setUsername("");
+    setUserid("");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMsg("");
@@ -80,7 +88,7 @@ export default function App() {
         <input placeholder="User ID" value={userid} onChange={e => setUserid(e.target.value)} style={{ width: "100%", margin: 8, padding: 8 }} />
         <button type="submit" style={{ width: "100%", margin: 8, padding: 8 }}>{mode === "login" ? "Log In" : "Sign Up"}</button>
         <div style={{ marginTop: 8 }}>
-          <span style={{ color: "#818cf8", cursor: "pointer" }} onClick={() => { setMode(mode === "login" ? "signup" : "login"); setMsg(""); }}>
+          <span style={{ color: "#818cf8", cursor: "pointer" }} onClick={switchMode}>
             {mode === "login" ? "Don't have an account? Create one" : "Already have an account? Log in"}
           </span>
         </div>
@@ -99,7 +107,6 @@ export default function App() {
               padding: "8px 0", borderBottom: "1px solid #333", fontSize: 16
             }}>
               <span style={{ color: "#fff" }}>{u.username}</span>
-              <span style={{ color: "#818cf8", fontSize: 13, marginLeft: 8 }}>({u.userid})</span>
             </div>
           )}
         </div>
