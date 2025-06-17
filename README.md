@@ -1,3 +1,3 @@
-# This is Nava's Workbench!
+# TMASCI Calendar Assistant Drafting Space
 
-*Here's where I'll keep sketches of worke in progress!*
+This folder is for me to work on a website/server for coordinating the schedules of a large team for my organization, TMASCI.
