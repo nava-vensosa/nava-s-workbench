@@ -14,7 +14,7 @@
       padding: 0;
     }
 
-    h1, h2, h3, button, input, label {
+    h1, h2, h3, button, input, label, p {
       color: #ffffff;
     }
 
@@ -79,6 +79,7 @@
       transform: translate(-50%, -50%);
       z-index: 1000;
       max-width: 90%;
+      overflow-y: auto;
     }
 
     .overlay {
@@ -239,21 +240,172 @@
       document.getElementById('modal-container').classList.remove('hidden');
     }
 
-    // Placeholder functions for other features
+    // Implement Propose Hedge Feature
     function proposeHedge() {
-      alert('Propose Hedge feature not yet implemented.');
+      const modal = `
+        <div class="overlay"></div>
+        <div class="modal">
+          <button class="close-button" onclick="closeModal()">X</button>
+          <h2>Propose a Hedge</h2>
+          <label for="hedge-name">What's your hedge called?</label>
+          <input type="text" id="hedge-name">
+          <label for="hedge-description">Write a brief description:</label>
+          <textarea id="hedge-description"></textarea>
+          <h3>Select Critical Team Members:</h3>
+          <div id="team-member-list">
+            ${users.map(user => `
+              <label>
+                <input type="checkbox" value="${user.username}">
+                ${user.username}
+              </label>
+            `).join('<br>')}
+          </div>
+          <h3>Set Availability:</h3>
+          <div class="schedule-grid" id="hedge-schedule-grid">
+            ${generateScheduleGrid()}
+          </div>
+          <button onclick="saveHedge()">Save Hedge</button>
+        </div>
+      `;
+      document.getElementById('modal-container').innerHTML = modal;
+      document.getElementById('modal-container').classList.remove('hidden');
     }
 
+    function generateScheduleGrid() {
+      const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      const hours = Array.from({ length: 12 }, (_, i) => i + 10); // 10 AM to 9 PM
+      return days.map(day => `
+        <div>
+          <h4>${day}</h4>
+          ${hours.map(hour => `
+            <div class="schedule-cell" onclick="toggleScheduleCell(this)" data-day="${day}" data-hour="${hour}">
+              ${hour}:00
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+    }
+
+    function toggleScheduleCell(cell) {
+      cell.classList.toggle('green');
+    }
+
+    function saveHedge() {
+      const name = document.getElementById('hedge-name').value;
+      const description = document.getElementById('hedge-description').value;
+      const teamMembers = Array.from(document.querySelectorAll('#team-member-list input:checked')).map(input => input.value);
+      const schedule = Array.from(document.querySelectorAll('#hedge-schedule-grid .schedule-cell.green')).map(cell => ({
+        day: cell.getAttribute('data-day'),
+        hour: cell.getAttribute('data-hour')
+      }));
+
+      if (!name || !description) {
+        alert('Please fill out all fields!');
+        return;
+      }
+
+      const hedge = {
+        hedgemaster: currentUser.username,
+        team_members: teamMembers,
+        interested_attendees: [],
+        scheduled_sessions: schedule,
+        name,
+        description
+      };
+
+      hedges.push(hedge);
+      saveData();
+      alert('Hedge created successfully!');
+      closeModal();
+    }
+
+    // Implement Remaining Features
     function viewUpcomingHedges() {
-      alert('View Upcoming Hedges feature not yet implemented.');
+      const modal = `
+        <div class="overlay"></div>
+        <div class="modal">
+          <button class="close-button" onclick="closeModal()">X</button>
+          <h2>Upcoming Hedges</h2>
+          <div>
+            ${hedges.map((hedge, index) => `
+              <div>
+                <h3>${hedge.name}</h3>
+                <p>${hedge.description}</p>
+                <button onclick="toggleInterest(${index})">
+                  ${hedge.interested_attendees.includes(currentUser.username) ? 'Unmark Interest' : 'Mark Interest'}
+                </button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      document.getElementById('modal-container').innerHTML = modal;
+      document.getElementById('modal-container').classList.remove('hidden');
+    }
+
+    function toggleInterest(index) {
+      const hedge = hedges[index];
+      if (hedge.interested_attendees.includes(currentUser.username)) {
+        hedge.interested_attendees = hedge.interested_attendees.filter(user => user !== currentUser.username);
+      } else {
+        hedge.interested_attendees.push(currentUser.username);
+      }
+      saveData();
+      viewUpcomingHedges();
     }
 
     function indicateUnavailability() {
-      alert('Indicate Unavailability feature not yet implemented.');
+      const modal = `
+        <div class="overlay"></div>
+        <div class="modal">
+          <button class="close-button" onclick="closeModal()">X</button>
+          <h2>Indicate Unavailability</h2>
+          <div class="schedule-grid" id="unavailability-schedule-grid">
+            ${generateScheduleGrid()}
+          </div>
+          <button onclick="saveUnavailability()">Save Unavailability</button>
+        </div>
+      `;
+      document.getElementById('modal-container').innerHTML = modal;
+      document.getElementById('modal-container').classList.remove('hidden');
+    }
+
+    function saveUnavailability() {
+      const unavailability = Array.from(document.querySelectorAll('#unavailability-schedule-grid .schedule-cell.red')).map(cell => ({
+        day: cell.getAttribute('data-day'),
+        hour: cell.getAttribute('data-hour')
+      }));
+
+      currentUser.unavailability_schedule = unavailability;
+      saveData();
+      alert('Unavailability saved successfully!');
+      closeModal();
     }
 
     function checkHedges() {
-      alert('Check Hedges feature not yet implemented.');
+      const myHedges = hedges.filter(hedge =>
+        hedge.hedgemaster === currentUser.username ||
+        hedge.team_members.includes(currentUser.username) ||
+        hedge.interested_attendees.includes(currentUser.username)
+      );
+
+      const modal = `
+        <div class="overlay"></div>
+        <div class="modal">
+          <button class="close-button" onclick="closeModal()">X</button>
+          <h2>My Hedges</h2>
+          <div>
+            ${myHedges.map(hedge => `
+              <div>
+                <h3>${hedge.name}</h3>
+                <p>${hedge.description}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+      document.getElementById('modal-container').innerHTML = modal;
+      document.getElementById('modal-container').classList.remove('hidden');
     }
   </script>
 </body>
