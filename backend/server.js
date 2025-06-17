@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-const users = []; // Replace with DB later!
+const users = []; // In-memory, replace with DB for production
 
 app.post('/api/signup', (req, res) => {
   const { username, userid } = req.body;
