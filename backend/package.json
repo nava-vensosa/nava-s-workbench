@@ -15,4 +15,10 @@
     "vite": "^5.0.0",
     "@vitejs/plugin-react": "^4.0.0"
   }
+  "scripts": {
+    "start": "node server.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
 }
