@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-const { uploadBackup } = require('./s3');
+const { uploadBackup, listBackups, deleteBackup } = require('./s3');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -27,11 +27,29 @@ function loadUsers() {
 
 function saveUsers(users) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(users, null, 2), 'utf8');
-  // Also save to S3
-  const dateStr = new Date().toISOString().slice(0,10).replace(/-/g, '');
+  // Always upload daily backup
+  const now = new Date();
+  const dateStr = now.toISOString().slice(0,10).replace(/-/g, '');
+  const monthStr = now.toISOString().slice(0,7); // "YYYY-MM"
   uploadBackup(`users-${dateStr}.json`, users)
     .then(() => console.log('Backup uploaded to S3'))
     .catch(err => console.error('S3 upload failed:', err));
+  // Monthly backup logic
+  if (now.getDate() === 1) {
+    // It's the 1st of the month, make a monthly backup
+    uploadBackup(`users-${monthStr}.json`, users)
+      .then(() => console.log('Monthly backup uploaded to S3'))
+      .catch(err => console.error('Monthly S3 upload failed:', err));
+    // Clean up old monthly backups (keep last 3)
+    listBackups('users-').then(data => {
+      const monthlyBackups = (data.Contents || [])
+        .filter(obj => /^users-\d{4}-\d{2}\.json$/.test(obj.Key))
+        .sort((a, b) => b.Key.localeCompare(a.Key)); // Newest first
+      const oldBackups = monthlyBackups.slice(3); // keep 3 newest
+      return Promise.all(oldBackups.map(obj => deleteBackup(obj.Key)));
+    }).then(() => console.log('Old monthly backups cleaned up'))
+      .catch(err => console.error('Backup cleanup failed:', err));
+  }
 }
 
 let users = loadUsers();
