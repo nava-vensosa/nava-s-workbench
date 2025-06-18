@@ -93,3 +93,67 @@ app.get('/', (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
+
+
+
+app.use(express.urlencoded({ extended: false }));
+
+// Admin Panel Route
+app.get('/admin', (req, res) => {
+  res.send(`
+    <html>
+      <head>
+        <title>Admin Panel</title>
+        <style>
+          body { background: #18181b; color: #fff; font-family: monospace; padding: 24px; }
+          table { background: #232337; border-radius: 8px; padding: 12px; }
+          th, td { padding: 8px; }
+          button { background: #ef4444; color: #fff; border: none; border-radius: 4px; padding: 6px 12px; cursor: pointer; }
+        </style>
+      </head>
+      <body>
+        <h1>Admin: Users</h1>
+        <table>
+          <tr><th>User Name</th><th>User ID</th><th>Delete</th></tr>
+          ${users.map(u => `
+            <tr>
+              <td>${u.username}</td>
+              <td>${u.userid}</td>
+              <td>
+                <form method="POST" action="/admin/delete-user" style="display:inline;">
+                  <input type="hidden" name="userid" value="${u.userid}" />
+                  <button type="submit">Delete</button>
+                </form>
+              </td>
+            </tr>
+          `).join('')}
+        </table>
+        <br>
+        <h2>Edit All Users (JSON)</h2>
+        <form method="POST" action="/admin/update-users">
+          <textarea name="users" style="width:100%;height:200px;background:#232337;color:#fff;">${JSON.stringify(users, null, 2)}</textarea><br>
+          <button type="submit">Save All</button>
+        </form>
+      </body>
+    </html>
+  `);
+});
+
+// Delete single user
+app.post('/admin/delete-user', (req, res) => {
+  const { userid } = req.body;
+  users = users.filter(u => u.userid !== userid);
+  saveUsers(users); // triggers S3 snapshot
+  res.redirect('/admin');
+});
+
+// Overwrite all users (bulk edit)
+app.post('/admin/update-users', (req, res) => {
+  try {
+    users = JSON.parse(req.body.users);
+    saveUsers(users); // triggers S3 snapshot
+    res.redirect('/admin');
+  } catch (e) {
+    res.send(`<p style="color:red;">JSON Error: ${e.message}</p><a href="/admin">Back</a>`);
+  }
+});
