@@ -28,8 +28,16 @@ function deleteBackup(key) {
   }).promise();
 }
 
+function downloadBackup(key) {
+  return s3.getObject({
+    Bucket: BUCKET,
+    Key: key
+  }).promise();
+}
+
 module.exports = {
   uploadBackup,
   listBackups,
-  deleteBackup
+  deleteBackup,
+  downloadBackup
 };
