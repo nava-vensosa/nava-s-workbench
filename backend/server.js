@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-const { uploadBackup, listBackups, deleteBackup } = require('./s3');
+const { uploadBackup, listBackups, deleteBackup, downloadBackup } = require('./s3');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -13,14 +13,61 @@ app.use(express.urlencoded({ extended: false }));
 // --- Data Persistence ---
 const DATA_FILE = path.join(__dirname, 'users.json');
 
-// Load users from disk (fallback if S3 not available)
-function loadUsers() {
+// Restore users from S3 if needed
+async function restoreUsersFromS3IfNeeded() {
+  let shouldRestore = false;
+  if (!fs.existsSync(DATA_FILE)) {
+    shouldRestore = true;
+  } else {
+    try {
+      const fileContents = fs.readFileSync(DATA_FILE, 'utf8');
+      if (!fileContents || fileContents.trim() === "" || fileContents.trim() === "[]") {
+        shouldRestore = true;
+      }
+    } catch (e) {
+      shouldRestore = true;
+    }
+  }
+
+  if (shouldRestore) {
+    try {
+      // List all user backups
+      const data = await listBackups('users-');
+      const allObjects = (data.Contents || []);
+      // Find latest daily backup first
+      const dailyBackups = allObjects
+        .filter(obj => /^users-\d{8}\.json$/.test(obj.Key))
+        .sort((a, b) => b.Key.localeCompare(a.Key)).reverse(); // newest first
+      let latestKey = null;
+      if (dailyBackups.length > 0) {
+        latestKey = dailyBackups[0].Key;
+      } else {
+        // Fallback: try monthly
+        const monthlyBackups = allObjects
+          .filter(obj => /^users-\d{4}-\d{2}\.json$/.test(obj.Key))
+          .sort((a, b) => b.Key.localeCompare(a.Key)).reverse(); // newest first
+        if (monthlyBackups.length > 0) {
+          latestKey = monthlyBackups[0].Key;
+        }
+      }
+      if (latestKey) {
+        const s3obj = await downloadBackup(latestKey);
+        fs.writeFileSync(DATA_FILE, s3obj.Body.toString('utf8'), 'utf8');
+        console.log(`Restored users from S3 backup: ${latestKey}`);
+      } else {
+        console.warn("No S3 user backups found; starting with empty user list.");
+      }
+    } catch (e) {
+      console.error("Failed to restore users from S3:", e);
+    }
+  }
+  // Now load as usual
   try {
     if (fs.existsSync(DATA_FILE)) {
       return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
     }
   } catch (e) {
-    console.error("Failed to load users from disk:", e);
+    return [];
   }
   return [];
 }
@@ -88,7 +135,11 @@ function saveUsers(users) {
   }
 }
 
-let users = loadUsers();
+let users = [];
+
+(async () => {
+  users = await restoreUsersFromS3IfNeeded();
+})();
 
 // API: Ping (for frontend to check server readiness)
 app.get('/api/ping', (req, res) => {
