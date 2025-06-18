@@ -1,10 +1,50 @@
 const express = require('express');
 const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
+const { uploadBackup } = require('./s3');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
+
+// --- Data Persistence ---
+const DATA_FILE = path.join(__dirname, 'users.json');
+
+// Load users from disk (fallback if S3 not available)
+function loadUsers() {
+  try {
+    if (fs.existsSync(DATA_FILE)) {
+      return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+    }
+  } catch (e) {
+    console.error("Failed to load users from disk:", e);
+  }
+  return [];
+}
+
+function saveUsers(users) {
+  fs.writeFileSync(DATA_FILE, JSON.stringify(users, null, 2), 'utf8');
+  // Also save to S3
+  const dateStr = new Date().toISOString().slice(0,10).replace(/-/g, '');
+  uploadBackup(`users-${dateStr}.json`, users)
+    .then(() => console.log('Backup uploaded to S3'))
+    .catch(err => console.error('S3 upload failed:', err));
+}
+
+let users = loadUsers();
+
+app.post('/api/signup', (req, res) => {
+  const { username, userid } = req.body;
+  if (!username || !userid) return res.status(400).json({ error: 'Missing fields' });
+  if (users.some(u => u.username === username && u.userid === userid)) {
+    return res.status(409).json({ error: 'User already exists' });
+  }
+  users.push({ username, userid });
+  saveUsers(users);
+  res.json({ success: true });
+});
 
 const users = []; // In-memory, replace with DB for production
 
