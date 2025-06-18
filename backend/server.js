@@ -36,6 +36,11 @@ function saveUsers(users) {
 
 let users = loadUsers();
 
+// API: Ping (for frontend to check server readiness)
+app.get('/api/ping', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
 // API: Sign up
 app.post('/api/signup', (req, res) => {
   const { username, userid } = req.body;
