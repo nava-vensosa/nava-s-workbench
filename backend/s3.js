@@ -8,10 +8,28 @@ const BUCKET = process.env.S3_BUCKET_NAME;
 function uploadBackup(filename, data) {
   return s3.putObject({
     Bucket: BUCKET,
-    Key: filename, // e.g., 'users-20250618.json'
+    Key: filename,
     Body: typeof data === 'string' ? data : JSON.stringify(data, null, 2),
     ContentType: 'application/json',
   }).promise();
 }
 
-module.exports = { uploadBackup };
+function listBackups(prefix) {
+  return s3.listObjectsV2({
+    Bucket: BUCKET,
+    Prefix: prefix
+  }).promise();
+}
+
+function deleteBackup(key) {
+  return s3.deleteObject({
+    Bucket: BUCKET,
+    Key: key
+  }).promise();
+}
+
+module.exports = {
+  uploadBackup,
+  listBackups,
+  deleteBackup
+};
