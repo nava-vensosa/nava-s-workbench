@@ -175,4 +175,14 @@ app.get('/', (req, res) => {
   `);
 });
 
+app.get('/api/s3-test', async (req, res) => {
+  try {
+    await uploadBackup('test-backend-signal.json', { test: true, time: new Date().toISOString() });
+    res.json({ success: true });
+  } catch (err) {
+    console.error('S3 test upload failed:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
