@@ -35,6 +35,7 @@ const DUMMY_MESSAGES = [
 ];
 
 export default function App() {
+  const [loading, setLoading] = useState(true); // NEW
   const [mode, setMode] = useState("login");
   const [username, setUsername] = useState("");
   const [userid, setUserid] = useState("");
@@ -47,13 +48,30 @@ export default function App() {
   const [messages, setMessages] = useState(DUMMY_MESSAGES);
   const [availability, setAvailability] = useState([]); // implement later
 
+  // Backend ping check (wait for backend server before showing UI)
+  useEffect(() => {
+    let cancelled = false;
+    async function checkBackend() {
+      try {
+        const res = await fetch(`${API_URL}/api/ping`);
+        const data = await res.json();
+        if (!cancelled && data.status === "ok") setLoading(false);
+      } catch {
+        setTimeout(checkBackend, 2000); // Retry after 2s if failed
+      }
+    }
+    checkBackend();
+    return () => { cancelled = true; };
+  }, []);
+
   // Fetch users
   useEffect(() => {
+    if (loading) return;
     fetch(`${API_URL}/api/users`)
       .then(res => res.json())
       .then(setUsers)
       .catch(() => setUsers([]));
-  }, [msg]); // refetch on msg change (after signup)
+  }, [msg, loading]); // refetch on msg change (after signup)
 
   // Helper for switching modes and clearing fields
   const switchMode = () => {
@@ -85,6 +103,23 @@ export default function App() {
       setMsg(err.message);
     }
   };
+
+  if (loading) {
+    return (
+      <div style={{
+        background: "#18181b", color: "#fff", minHeight: "100vh",
+        display: "flex", alignItems: "center", justifyContent: "center"
+      }}>
+        <div style={{
+          background: "#232337", padding: 40, borderRadius: 12,
+          boxShadow: "0 2px 24px #000a", textAlign: "center"
+        }}>
+          <h2 style={{ color: "#a5b4fc" }}>Loading…</h2>
+          <p>Waiting for server to be ready…</p>
+        </div>
+      </div>
+    );
+  }
 
   // Main menu after login
   if (loggedIn) {
