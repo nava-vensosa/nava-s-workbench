@@ -27,28 +27,64 @@ function loadUsers() {
 
 function saveUsers(users) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(users, null, 2), 'utf8');
-  // Always upload daily backup
   const now = new Date();
   const dateStr = now.toISOString().slice(0,10).replace(/-/g, '');
   const monthStr = now.toISOString().slice(0,7); // "YYYY-MM"
   uploadBackup(`users-${dateStr}.json`, users)
     .then(() => console.log('Backup uploaded to S3'))
     .catch(err => console.error('S3 upload failed:', err));
-  // Monthly backup logic
   if (now.getDate() === 1) {
-    // It's the 1st of the month, make a monthly backup
     uploadBackup(`users-${monthStr}.json`, users)
       .then(() => console.log('Monthly backup uploaded to S3'))
       .catch(err => console.error('Monthly S3 upload failed:', err));
     // Clean up old monthly backups (keep last 3)
     listBackups('users-').then(data => {
-      const monthlyBackups = (data.Contents || [])
+      const allObjects = data.Contents || [];
+
+      // 1. Monthly backups cleanup
+      const monthlyBackups = allObjects
         .filter(obj => /^users-\d{4}-\d{2}\.json$/.test(obj.Key))
         .sort((a, b) => b.Key.localeCompare(a.Key)); // Newest first
-      const oldBackups = monthlyBackups.slice(3); // keep 3 newest
-      return Promise.all(oldBackups.map(obj => deleteBackup(obj.Key)));
-    }).then(() => console.log('Old monthly backups cleaned up'))
-      .catch(err => console.error('Backup cleanup failed:', err));
+      const oldMonthly = monthlyBackups.slice(3); // keep 3 newest
+
+      // 2. Daily backups cleanup (older than 7 days, but NOT the first of any month)
+      const today = new Date();
+      const dailyBackupsToDelete = allObjects
+        .filter(obj => {
+          const dailyMatch = obj.Key.match(/^users-(\d{8})\.json$/);
+          if (!dailyMatch) return false;
+          const datePart = dailyMatch[1];
+          const backupDate = new Date(datePart.slice(0,4), datePart.slice(4,6)-1, datePart.slice(6,8));
+          const isFirstOfMonth = backupDate.getDate() === 1;
+          const ageDays = (today - backupDate) / (1000 * 60 * 60 * 24);
+          return !isFirstOfMonth && ageDays >= 7;
+        });
+
+      // Combine and delete
+      const toDelete = [...oldMonthly, ...dailyBackupsToDelete];
+      return Promise.all(toDelete.map(obj => deleteBackup(obj.Key)));
+    })
+    .then(() => console.log('Old monthly and daily backups cleaned up'))
+    .catch(err => console.error('Backup cleanup failed:', err));
+  } else {
+    // On non-1st days, just clean up daily backups older than 7 days (except first of month)
+    listBackups('users-').then(data => {
+      const allObjects = data.Contents || [];
+      const today = new Date();
+      const dailyBackupsToDelete = allObjects
+        .filter(obj => {
+          const dailyMatch = obj.Key.match(/^users-(\d{8})\.json$/);
+          if (!dailyMatch) return false;
+          const datePart = dailyMatch[1];
+          const backupDate = new Date(datePart.slice(0,4), datePart.slice(4,6)-1, datePart.slice(6,8));
+          const isFirstOfMonth = backupDate.getDate() === 1;
+          const ageDays = (today - backupDate) / (1000 * 60 * 60 * 24);
+          return !isFirstOfMonth && ageDays >= 7;
+        });
+      return Promise.all(dailyBackupsToDelete.map(obj => deleteBackup(obj.Key)));
+    })
+    .then(() => console.log('Old daily backups cleaned up'))
+    .catch(err => console.error('Daily backup cleanup failed:', err));
   }
 }
 
