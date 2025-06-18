@@ -3,3 +3,4 @@ node_modules
 dist
 .env
 .nb
+backend/.nb/TMASCI-Calendar-Backup-Bot_accessKeys.csv
