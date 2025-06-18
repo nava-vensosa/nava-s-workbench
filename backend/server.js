@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 // --- Data Persistence ---
 const DATA_FILE = path.join(__dirname, 'users.json');
@@ -35,6 +36,7 @@ function saveUsers(users) {
 
 let users = loadUsers();
 
+// API: Sign up
 app.post('/api/signup', (req, res) => {
   const { username, userid } = req.body;
   if (!username || !userid) return res.status(400).json({ error: 'Missing fields' });
@@ -46,18 +48,7 @@ app.post('/api/signup', (req, res) => {
   res.json({ success: true });
 });
 
-const users = []; // In-memory, replace with DB for production
-
-app.post('/api/signup', (req, res) => {
-  const { username, userid } = req.body;
-  if (!username || !userid) return res.status(400).json({ error: 'Missing fields' });
-  if (users.some(u => u.username === username && u.userid === userid)) {
-    return res.status(409).json({ error: 'User already exists' });
-  }
-  users.push({ username, userid });
-  res.json({ success: true });
-});
-
+// API: Log in
 app.post('/api/login', (req, res) => {
   const { username, userid } = req.body;
   if (users.some(u => u.username === username && u.userid === userid)) {
@@ -66,12 +57,80 @@ app.post('/api/login', (req, res) => {
   res.status(401).json({ error: 'Invalid credentials' });
 });
 
-// New: List all users
+// API: List all users
 app.get('/api/users', (req, res) => {
   res.json(users);
 });
 
-// New: Show backend data as HTML (dark theme)
+// ADMIN PANEL: Direct Access Channel
+app.get('/admin', (req, res) => {
+  res.send(`
+    <html>
+      <head>
+        <title>Admin Panel</title>
+        <style>
+          body { background: #18181b; color: #fff; font-family: monospace; padding: 24px; }
+          table { background: #232337; border-radius: 8px; padding: 12px; }
+          th, td { padding: 8px; }
+          button { background: #ef4444; color: #fff; border: none; border-radius: 4px; padding: 6px 12px; cursor: pointer; }
+          textarea { width: 100%; height: 200px; background: #232337; color: #fff; border-radius: 6px; }
+        </style>
+      </head>
+      <body>
+        <h1>Admin: Users</h1>
+        <table>
+          <tr><th>User Name</th><th>User ID</th><th>Delete</th></tr>
+          ${users.map(u => `
+            <tr>
+              <td>${u.username}</td>
+              <td>${u.userid}</td>
+              <td>
+                <form method="POST" action="/admin/delete-user" style="display:inline;">
+                  <input type="hidden" name="userid" value="${u.userid}" />
+                  <button type="submit">Delete</button>
+                </form>
+              </td>
+            </tr>
+          `).join('')}
+        </table>
+        <br>
+        <h2>Edit All Users (JSON)</h2>
+        <form method="POST" action="/admin/update-users">
+          <textarea name="users">${JSON.stringify(users, null, 2)}</textarea><br>
+          <button type="submit">Save All</button>
+        </form>
+        <br>
+        <a href="/">Back to Home</a>
+      </body>
+    </html>
+  `);
+});
+
+// ADMIN: Delete user by userid
+app.post('/admin/delete-user', (req, res) => {
+  const { userid } = req.body;
+  const initialLength = users.length;
+  users = users.filter(u => u.userid !== userid);
+  if (users.length < initialLength) {
+    saveUsers(users);
+  }
+  res.redirect('/admin');
+});
+
+// ADMIN: Overwrite all users from textarea JSON
+app.post('/admin/update-users', (req, res) => {
+  try {
+    const newUsers = JSON.parse(req.body.users);
+    if (!Array.isArray(newUsers)) throw new Error("Submitted data must be an array.");
+    users = newUsers;
+    saveUsers(users);
+    res.redirect('/admin');
+  } catch (e) {
+    res.send(`<p style="color:red;">JSON Error: ${e.message}</p><a href="/admin">Back</a>`);
+  }
+});
+
+// Show backend data as HTML (dark theme, for devs)
 app.get('/', (req, res) => {
   res.send(`
     <html>
@@ -87,6 +146,7 @@ app.get('/', (req, res) => {
         <h1>Backend State</h1>
         <h2>Users</h2>
         <pre>${JSON.stringify(users, null, 2)}</pre>
+        <p><a href="/admin" style="color:#a5b4fc;">Go to Admin Panel</a></p>
       </body>
     </html>
   `);
