@@ -4,6 +4,8 @@ const showRegisterLink = document.getElementById('show-register-link');
 const backToLoginBtn = document.getElementById('back-to-login');
 const authSection = document.getElementById('auth-section');
 
+fetch('https://your-https://nava-s-workbench.onrender.com/api/ping')
+
 // Clear input fields helper
 function clearInputs(form) {
   Array.from(form.querySelectorAll('input')).forEach(input => input.value = '');

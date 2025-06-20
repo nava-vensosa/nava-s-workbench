@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <style>
+    body { font-family: sans-serif; background: #181a1b; color: #f1f1f1; }
+    table { border-collapse: collapse; width: 100%; margin-top: 2rem; }
+    th, td { border: 1px solid #444; padding: 0.5rem; }
+    th { background: #23272a; }
+    button { background: #d32f2f; color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; }
+    button:hover { background: #b71c1c; }
+  </style>
+</head>
+<body>
+  <h1>Admin Dashboard</h1>
+  <table id="user-table">
+    <thead>
+      <tr><th>Name</th><th>User ID</th><th>Actions</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script>
+    function loadUsers() {
+      fetch('/api/users').then(r => r.json()).then(users => {
+        const tbody = document.querySelector('#user-table tbody');
+        tbody.innerHTML = '';
+        users.forEach(u => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${u.name}</td><td>${u.id}</td>
+            <td><button onclick="deleteUser('${u.id}')">Delete</button></td>`;
+          tbody.appendChild(tr);
+        });
+      });
+    }
+    function deleteUser(id) {
+      fetch('/api/users/' + id, { method: 'DELETE' })
+        .then(() => loadUsers());
+    }
+    loadUsers();
+  </script>
+</body>
+</html>
