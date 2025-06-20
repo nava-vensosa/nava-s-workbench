@@ -22,20 +22,18 @@
       </header>
       <main>
         <section id="auth-section">
-          <form id="login-form">
+          <form id="login-form" class="auth-form">
             <input type="text" id="username" placeholder="Username" required autocomplete="off"/>
             <input type="text" id="userid" placeholder="User ID" required autocomplete="off"/>
             <button type="submit">Log In</button>
           </form>
-          <div style="text-align:center; margin-top:1rem;">
-            <a href="#" id="show-register-link">Don't have an account? Create an account</a>
-          </div>
-          <form id="register-form" style="display:none;">
+          <a href="#" id="show-register-link" class="auth-link">Don't have an account? Create an account</a>
+          <form id="register-form" class="auth-form" style="display:none;">
             <input type="text" id="new-username" placeholder="New Username" required autocomplete="off"/>
             <input type="text" id="new-userid" placeholder="New User ID" required autocomplete="off"/>
             <button type="submit">Register</button>
-            <button type="button" id="back-to-login">Back to Log In</button>
           </form>
+          <a href="#" id="back-to-login-link" class="auth-link" style="display:none;">Return to Log In</a>
         </section>
         <section id="main-menu" style="display:none;">
           <button id="view-messages-btn">View My Messages</button>
