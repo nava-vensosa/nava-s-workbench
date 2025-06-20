@@ -10,30 +10,42 @@
 </head>
 <body>
   <div id="app">
-    <header>
-      <h1>Hedge App</h1>
-    </header>
-    <main>
-      <section id="auth-section">
-        <form id="login-form">
-          <input type="text" id="username" placeholder="Username" required />
-          <input type="password" id="password" placeholder="Password" required />
-          <button type="submit">Log In</button>
-        </form>
-        <form id="register-form">
-          <input type="text" id="new-username" placeholder="New Username" required />
-          <input type="password" id="new-password" placeholder="New Password" required />
-          <button type="submit">Register</button>
-        </form>
-      </section>
-      <section id="main-menu" style="display:none;">
-        <button id="view-messages-btn">View My Messages</button>
-        <button id="indicate-availability-btn">Indicate My Availability</button>
-        <button id="propose-hedge-btn">Propose a Hedge</button>
-        <button id="view-hedges-btn">View Upcoming Hedges</button>
-      </section>
-      <section id="content-section"></section>
-    </main>
+    <aside class="sidebar">
+      <h2>Users</h2>
+      <ul class="user-list" id="user-list">
+        <!-- Populated by JS -->
+      </ul>
+    </aside>
+    <div class="main-content">
+      <header>
+        <h1>Hedge App</h1>
+      </header>
+      <main>
+        <section id="auth-section">
+          <form id="login-form">
+            <input type="text" id="username" placeholder="Username" required autocomplete="off"/>
+            <input type="text" id="userid" placeholder="User ID" required autocomplete="off"/>
+            <button type="submit">Log In</button>
+          </form>
+          <div style="text-align:center; margin-top:1rem;">
+            <a href="#" id="show-register-link">Don't have an account? Create an account</a>
+          </div>
+          <form id="register-form" style="display:none;">
+            <input type="text" id="new-username" placeholder="New Username" required autocomplete="off"/>
+            <input type="text" id="new-userid" placeholder="New User ID" required autocomplete="off"/>
+            <button type="submit">Register</button>
+            <button type="button" id="back-to-login">Back to Log In</button>
+          </form>
+        </section>
+        <section id="main-menu" style="display:none;">
+          <button id="view-messages-btn">View My Messages</button>
+          <button id="indicate-availability-btn">Indicate My Availability</button>
+          <button id="propose-hedge-btn">Propose a Hedge</button>
+          <button id="view-hedges-btn">View Upcoming Hedges</button>
+        </section>
+        <section id="content-section"></section>
+      </main>
+    </div>
   </div>
   <script src="js/auth.js"></script>
   <script src="js/main.js"></script>
