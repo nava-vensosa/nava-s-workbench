@@ -1,40 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hedge App</title>
-  <link rel="stylesheet" href="css/main.css" />
-  <link rel="stylesheet" href="css/buttons.css" />
-</head>
-<body>
-  <div id="app">
-    <header>
-      <h1>Hedge App</h1>
-    </header>
-    <main>
-      <section id="auth-section">
-        <form id="login-form">
-          <input type="text" id="username" placeholder="Username" required />
-          <input type="password" id="password" placeholder="Password" required />
-          <button type="submit">Log In</button>
-        </form>
-        <form id="register-form">
-          <input type="text" id="new-username" placeholder="New Username" required />
-          <input type="password" id="new-password" placeholder="New Password" required />
-          <button type="submit">Register</button>
-        </form>
-      </section>
-      <section id="main-menu" style="display:none;">
-        <button id="view-messages-btn">View My Messages</button>
-        <button id="indicate-availability-btn">Indicate My Availability</button>
-        <button id="propose-hedge-btn">Propose a Hedge</button>
-        <button id="view-hedges-btn">View Upcoming Hedges</button>
-      </section>
-      <section id="content-section"></section>
-    </main>
-  </div>
-  <script src="js/auth.js"></script>
-  <script src="js/main.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + Svelte</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
 </html>
