@@ -1,78 +1,74 @@
 const express = require('express');
 const cors = require('cors');
-const http = require('http');
-const { Server } = require('socket.io');
-const { getUsers } = require('./data/users');
-
-const userRoutes = require('./routes/users');
-const adminRoutes = require('./routes/admin');
-const { setupSocket } = require('./sockets');
-const { restoreUsersFromS3IfNeeded, setIO } = require('./data/users');
+const path = require('path');
+const {
+  uploadBackup,
+  downloadBackup
+} = require('./s3');
 
 const app = express();
-const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: '*' } });
-
-setIO(io); // Make io available to data modules
+const PORT = process.env.PORT || 3001;
+const USERS_KEY = 'users.json';
 
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use('/admin', express.static(path.join(__dirname, 'public')));
 
-// Restore users on server start (async)
-restoreUsersFromS3IfNeeded().then(() => {
-  console.log('User data loaded/restored');
+// Helper to read users from S3
+async function readUsers() {
+  try {
+    const data = await downloadBackup(USERS_KEY);
+    return JSON.parse(data.Body.toString('utf8'));
+  } catch (err) {
+    if (err.code === 'NoSuchKey') return [];
+    throw err;
+  }
+}
+
+// Helper to write users to S3
+async function writeUsers(users) {
+  await uploadBackup(USERS_KEY, users);
+}
+
+// Ping endpoint
+app.get('/api/ping', (req, res) => {
+  res.json({ status: 'ok' });
 });
 
-app.use('/api', userRoutes);
-app.use('/admin', adminRoutes);
-
-// Dark themed homepage showing all server data structures (currently users)
-app.get('/', (req, res) => {
-  const users = getUsers();
-  res.send(`
-    <html>
-      <head>
-        <title>Nava's Workbench (Raw Data View)</title>
-        <style>
-          body { background: #18181b; color: #fff; font-family: monospace; padding: 24px; }
-          .container { max-width: 900px; margin: 0 auto; }
-          .block {
-            background: #232337;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 32px;
-            box-shadow: 0 2px 12px #0004;
-          }
-          pre {
-            background: #18181b;
-            color: #fff;
-            border-radius: 6px;
-            padding: 18px;
-            font-size: 16px;
-            overflow-x: auto;
-          }
-          h1, h2, h3 { color: #a5b4fc; }
-          a { color: #a5b4fc; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <h1>Nava's Workbench: Raw Data Structures</h1>
-          <div class="block">
-            <h2>Users Data (what the server sees)</h2>
-            <pre>${JSON.stringify(users, null, 2)}</pre>
-          </div>
-          <!-- Add more data sections here (projects, messages, etc.) as you implement them -->
-          <a href="/admin">Go to Admin Backchannel</a>
-        </div>
-      </body>
-    </html>
-  `);
+// List users
+app.get('/api/users', async (req, res) => {
+  try {
+    const users = await readUsers();
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to read users' });
+  }
 });
 
-// Set up socket.io
-setupSocket(io);
+// Register user
+app.post('/api/users', async (req, res) => {
+  const { username, userid } = req.body;
+  if (!username || !userid) {
+    return res.status(400).json({ error: 'Missing username or userid' });
+  }
+  try {
+    let users = await readUsers();
+    if (users.find(u => u.userid === userid)) {
+      return res.status(409).json({ error: 'User ID exists' });
+    }
+    users.push({ username, userid });
+    await writeUsers(users);
+    res.status(201).json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to write user' });
+  }
+});
 
-const PORT = process.env.PORT || 3001;
-server.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
+// Serve admin dashboard
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+app.listen(PORT, () => {
+  console.log(`Backend running on port ${PORT}`);
+});
