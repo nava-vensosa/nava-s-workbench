@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+app.use(cors());
 const path = require('path');
 const http = require('http');
 const { uploadBackup, downloadBackup } = require('./s3');
@@ -12,7 +13,6 @@ const io = require('socket.io')(server, {
 const PORT = process.env.PORT || 3001;
 const USERS_KEY = 'users.json';
 
-app.use(cors());
 app.use(express.json());
 app.use('/admin', express.static(path.join(__dirname, 'public')));
 
