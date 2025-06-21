@@ -9,6 +9,15 @@
   <link rel="stylesheet" href="css/forms.css" />
 </head>
 <body>
+  <div id="loading-screen" style="display:flex;align-items:center;justify-content:center;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#181a1b;z-index:9999;">
+    <div style="text-align:center;">
+      <div style="font-size:2rem;margin-bottom:1rem;">Loading backend...</div>
+      <div class="spinner" style="border:6px solid #23272a;border-top:6px solid #42a5f5;border-radius:50%;width:48px;height:48px;animation:spin 1s linear infinite;margin:0 auto;"></div>
+    </div>
+  </div>
+  <style>
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+  </style>
   <div id="app">
     <aside class="sidebar">
       <h2>Users</h2>

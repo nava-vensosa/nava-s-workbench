@@ -3,6 +3,34 @@ const registerForm = document.getElementById('register-form');
 const showRegisterLink = document.getElementById('show-register-link');
 const backToLoginLink = document.getElementById('back-to-login-link');
 const authSection = document.getElementById('auth-section');
+const loadingScreen = document.getElementById('loading-screen');
+const userList = document.getElementById('user-list');
+
+// Set your backend base URL here:
+const BACKEND_URL = 'https://your-backend-service.onrender.com';
+
+// Show loading screen and ping backend
+function showLoadingScreen() {
+  loadingScreen.style.display = 'flex';
+  pingBackend();
+}
+function hideLoadingScreen() {
+  loadingScreen.style.display = 'none';
+}
+
+// Ping backend to check if it's up
+function pingBackend() {
+  fetch(`${BACKEND_URL}/api/ping`)
+    .then(res => res.json())
+    .then(() => {
+      hideLoadingScreen();
+      authSection.style.display = 'block';
+      loadUserList();
+    })
+    .catch(() => {
+      setTimeout(pingBackend, 1500); // Retry until backend is up
+    });
+}
 
 // Clear input fields helper
 function clearInputs(form) {
@@ -31,39 +59,67 @@ backToLoginLink.addEventListener('click', (e) => {
   clearInputs(registerForm);
 });
 
-// Placeholder login logic
+// Login logic: check if user exists in backend
 loginForm.addEventListener('submit', function(e) {
   e.preventDefault();
-  document.getElementById('auth-section').style.display = 'none';
-  document.getElementById('main-menu').style.display = 'block';
+  const username = document.getElementById('username').value.trim();
+  const userid = document.getElementById('userid').value.trim();
+  fetch(`${BACKEND_URL}/api/users`)
+    .then(res => res.json())
+    .then(users => {
+      const found = users.find(u => u.name === username && u.id === userid);
+      if (found) {
+        authSection.style.display = 'none';
+        document.getElementById('main-menu').style.display = 'block';
+      } else {
+        alert('User not found. Please check your Username and User ID.');
+      }
+    })
+    .catch(() => alert('Could not connect to backend.'));
 });
 
-// Placeholder register logic
+// Register logic: send new user to backend
 registerForm.addEventListener('submit', function(e) {
   e.preventDefault();
-  alert('Registration submitted!');
-  registerForm.style.display = 'none';
-  backToLoginLink.style.display = 'none';
-  loginForm.style.display = 'block';
-  showRegisterLink.style.display = 'block';
-  clearInputs(loginForm);
-  clearInputs(registerForm);
+  const name = document.getElementById('new-username').value.trim();
+  const id = document.getElementById('new-userid').value.trim();
+  fetch(`${BACKEND_URL}/api/users`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, id })
+  })
+    .then(res => {
+      if (res.status === 201) {
+        alert('Registration successful! You can now log in.');
+        registerForm.style.display = 'none';
+        backToLoginLink.style.display = 'none';
+        loginForm.style.display = 'block';
+        showRegisterLink.style.display = 'block';
+        clearInputs(loginForm);
+        clearInputs(registerForm);
+        loadUserList();
+      } else if (res.status === 409) {
+        alert('User ID already exists.');
+      } else {
+        alert('Registration failed.');
+      }
+    })
+    .catch(() => alert('Could not connect to backend.'));
 });
 
-// Populate user list (placeholder data)
-const users = [
-  { name: "Alice", id: "alice123" },
-  { name: "Bob", id: "bob456" },
-  { name: "Charlie", id: "charlie789" }
-];
-
-const userList = document.getElementById('user-list');
-function renderUserList() {
-  userList.innerHTML = '';
-  users.forEach(user => {
-    const li = document.createElement('li');
-    li.textContent = `${user.name} (${user.id})`;
-    userList.appendChild(li);
-  });
+// Load user list from backend
+function loadUserList() {
+  fetch(`${BACKEND_URL}/api/users`)
+    .then(res => res.json())
+    .then(users => {
+      userList.innerHTML = '';
+      users.forEach(user => {
+        const li = document.createElement('li');
+        li.textContent = `${user.name} (${user.id})`;
+        userList.appendChild(li);
+      });
+    });
 }
-renderUserList();
+
+// On page load, show loading screen and ping backend
+window.addEventListener('DOMContentLoaded', showLoadingScreen);
