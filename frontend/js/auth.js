@@ -1,3 +1,5 @@
+const BACKEND_URL = 'https://your-https://nava-s-workbench.onrender.com';
+
 const loginForm = document.getElementById('login-form');
 const registerForm = document.getElementById('register-form');
 const showRegisterLink = document.getElementById('show-register-link');
@@ -5,9 +7,6 @@ const backToLoginLink = document.getElementById('back-to-login-link');
 const authSection = document.getElementById('auth-section');
 const loadingScreen = document.getElementById('loading-screen');
 const userList = document.getElementById('user-list');
-
-// Set your backend base URL here:
-const BACKEND_URL = 'https://your-backend-service.onrender.com';
 
 // Show loading screen and ping backend
 function showLoadingScreen() {
@@ -57,6 +56,7 @@ backToLoginLink.addEventListener('click', (e) => {
   showRegisterLink.style.display = 'block';
   clearInputs(loginForm);
   clearInputs(registerForm);
+  loadUserList(); // Always reload user list when returning to login
 });
 
 // Login logic: check if user exists in backend
@@ -67,12 +67,13 @@ loginForm.addEventListener('submit', function(e) {
   fetch(`${BACKEND_URL}/api/users`)
     .then(res => res.json())
     .then(users => {
-      const found = users.find(u => u.name === username && u.id === userid);
+      const found = users.find(u => u.username === username && u.userid === userid);
       if (found) {
         authSection.style.display = 'none';
         document.getElementById('main-menu').style.display = 'block';
       } else {
         alert('User not found. Please check your Username and User ID.');
+        loadUserList(); // Refetch in case data changed
       }
     })
     .catch(() => alert('Could not connect to backend.'));
@@ -81,12 +82,12 @@ loginForm.addEventListener('submit', function(e) {
 // Register logic: send new user to backend
 registerForm.addEventListener('submit', function(e) {
   e.preventDefault();
-  const name = document.getElementById('new-username').value.trim();
-  const id = document.getElementById('new-userid').value.trim();
+  const username = document.getElementById('new-username').value.trim();
+  const userid = document.getElementById('new-userid').value.trim();
   fetch(`${BACKEND_URL}/api/users`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, id })
+    body: JSON.stringify({ username, userid })
   })
     .then(res => {
       if (res.status === 201) {
@@ -97,7 +98,7 @@ registerForm.addEventListener('submit', function(e) {
         showRegisterLink.style.display = 'block';
         clearInputs(loginForm);
         clearInputs(registerForm);
-        loadUserList();
+        loadUserList(); // Refetch user list after registration
       } else if (res.status === 409) {
         alert('User ID already exists.');
       } else {
@@ -115,7 +116,7 @@ function loadUserList() {
       userList.innerHTML = '';
       users.forEach(user => {
         const li = document.createElement('li');
-        li.textContent = `${user.name} (${user.id})`;
+        li.textContent = `${user.username} (${user.userid})`;
         userList.appendChild(li);
       });
     });
