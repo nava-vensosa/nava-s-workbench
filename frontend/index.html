@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hedge App</title>
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="css/buttons.css" />
+  <link rel="stylesheet" href="css/forms.css" />
+</head>
+<body>
+  <div id="app">
+    <aside class="sidebar">
+      <h2>Users</h2>
+      <ul class="user-list" id="user-list">
+        <!-- Populated by JS -->
+      </ul>
+    </aside>
+    <div class="main-content">
+      <header>
+        <h1>Hedge App</h1>
+      </header>
+      <main>
+        <section id="auth-section">
+          <form id="login-form" class="auth-form">
+            <input type="text" id="username" placeholder="Username" required autocomplete="off"/>
+            <input type="text" id="userid" placeholder="User ID" required autocomplete="off"/>
+            <button type="submit">Log In</button>
+          </form>
+          <a href="#" id="show-register-link" class="auth-link">Don't have an account? Create an account</a>
+          <form id="register-form" class="auth-form" style="display:none;">
+            <input type="text" id="new-username" placeholder="New Username" required autocomplete="off"/>
+            <input type="text" id="new-userid" placeholder="New User ID" required autocomplete="off"/>
+            <button type="submit">Register</button>
+          </form>
+          <a href="#" id="back-to-login-link" class="auth-link" style="display:none;">Return to Log In</a>
+        </section>
+        <section id="main-menu" style="display:none;">
+          <button id="view-messages-btn">View My Messages</button>
+          <button id="indicate-availability-btn">Indicate My Availability</button>
+          <button id="propose-hedge-btn">Propose a Hedge</button>
+          <button id="view-hedges-btn">View Upcoming Hedges</button>
+        </section>
+        <section id="content-section"></section>
+      </main>
+    </div>
+  </div>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
