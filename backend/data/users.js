@@ -8,22 +8,22 @@ let io = null;
 
 function setIO(socketio) { io = socketio; }
 function getUsers() { return users; }
-function setUsers(newUsers) { users = newUsers; saveUsers(users); if (io) io.emit('users_updated'); }
+function setUsers(newUsers) { users = newUsers; saveUsers(users); if (io) io.emit('usersUpdated'); }
 function addUser(user) {
   users.push(user);
   saveUsers(users);
-  if (io) io.emit('users_updated');
+  if (io) io.emit('usersUpdated');
 }
 function deleteUserById(userid) {
   const initial = users.length;
   users = users.filter(u => u.userid !== userid);
   if (users.length < initial) {
     saveUsers(users);
-    if (io) io.emit('users_updated');
+    if (io) io.emit('usersUpdated');
   }
 }
 
-// Persistence & S3 logic (copied from your old server.js, minimal changes)
+// Persistence & S3 logic
 async function restoreUsersFromS3IfNeeded() {
   let shouldRestore = false;
   if (!fs.existsSync(DATA_FILE)) {
