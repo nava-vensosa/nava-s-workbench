@@ -1,4 +1,4 @@
-const BACKEND_URL = 'https://your-https://nava-s-workbench.onrender.com';
+const BACKEND_URL = 'https://nava-s-workbench.onrender.com';
 
 const loginForm = document.getElementById('login-form');
 const registerForm = document.getElementById('register-form');
