@@ -19,7 +19,7 @@ function hideLoadingScreen() {
 
 // Ping backend to check if it's up
 function pingBackend() {
-  fetch(`${BACKEND_URL}/api/ping`)
+  fetch(`${BACKEND_URL}api/ping`)
     .then(res => res.json())
     .then(() => {
       hideLoadingScreen();
