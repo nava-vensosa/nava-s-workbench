@@ -89,7 +89,8 @@ registerForm.addEventListener('submit', function(e) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, userid })
   })
-    .then(res => {
+    .then(async res => {
+      const data = await res.json().catch(() => ({}));
       if (res.status === 201) {
         alert('Registration successful! You can now log in.');
         registerForm.style.display = 'none';
@@ -102,10 +103,10 @@ registerForm.addEventListener('submit', function(e) {
       } else if (res.status === 409) {
         alert('User ID already exists.');
       } else {
-        alert('Registration failed.');
+        alert('Registration failed: ' + (data.error || res.status));
       }
     })
-    .catch(() => alert('Could not connect to backend.'));
+    .catch(err => alert('Could not connect to backend: ' + err));
 });
 
 // Load user list from backend
