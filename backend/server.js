@@ -1,3 +1,17 @@
+const express = require('express');
+const http = require('http');
+const users = require('./data/users'); // adjust path as needed
+
+const app = express();
+const server = http.createServer(app);
+const io = require('socket.io')(server, { cors: { origin: '*' } });
+
+const PORT = process.env.PORT || 3001;
+
+// Attach Socket.IO to users module if needed
+users.setIO(io);
+
+// Socket.IO events
 io.on('connection', (socket) => {
   socket.on('getUsers', (data, callback) => {
     callback(users.getUsers());
@@ -17,4 +31,10 @@ io.on('connection', (socket) => {
   });
 
   // You can add similar socket events for delete, update, etc.
+});
+
+// (Optional) Express routes here, e.g. for /api/ping
+
+server.listen(PORT, () => {
+  console.log(`Backend running on port ${PORT}`);
 });
