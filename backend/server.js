@@ -1,22 +1,52 @@
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
+const { S3Client, GetObjectCommand, PutObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
+const bodyParser = require('body-parser');
+const stream = require('stream');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-const DB_FILE = path.join(__dirname, 'db.json');
+// === S3 CONFIGURATION ===
+const S3_BUCKET = 'your-bucket-name'; // <-- replace with your bucket name
+const S3_KEY = 'users.json';          // file in your bucket
+const REGION = 'your-region';         // e.g. 'us-east-1'
 
-app.use(express.json());
-app.use('/admin', express.static(path.join(__dirname, 'public')));
+const s3 = new S3Client({
+  region: REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,     // set these in your Render environment
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  }
+});
 
-// Helper to read/write db
-function readDB() {
-  if (!fs.existsSync(DB_FILE)) return [];
-  return JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+app.use(bodyParser.json());
+app.use('/admin', express.static(__dirname + '/public'));
+
+// Helper to read users from S3
+async function readUsers() {
+  try {
+    const data = await s3.send(new GetObjectCommand({ Bucket: S3_BUCKET, Key: S3_KEY }));
+    const chunks = [];
+    for await (const chunk of data.Body) chunks.push(chunk);
+    const json = Buffer.concat(chunks).toString('utf8');
+    return JSON.parse(json);
+  } catch (err) {
+    // If file doesn't exist, return empty array
+    if (err.name === 'NoSuchKey') return [];
+    throw err;
+  }
 }
-function writeDB(data) {
-  fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+
+// Helper to write users to S3
+async function writeUsers(users) {
+  await s3.send(new PutObjectCommand({
+    Bucket: S3_BUCKET,
+    Key: S3_KEY,
+    Body: JSON.stringify(users, null, 2),
+    ContentType: 'application/json'
+  }));
 }
+
+// === API ENDPOINTS ===
 
 // Ping endpoint
 app.get('/api/ping', (req, res) => {
@@ -24,33 +54,34 @@ app.get('/api/ping', (req, res) => {
 });
 
 // Create user
-app.post('/api/users', (req, res) => {
+app.post('/api/users', async (req, res) => {
   const { name, id } = req.body;
   if (!name || !id) return res.status(400).json({ error: 'Missing name or id' });
-  const users = readDB();
+  let users = await readUsers();
   if (users.find(u => u.id === id)) return res.status(409).json({ error: 'User ID exists' });
   users.push({ name, id });
-  writeDB(users);
+  await writeUsers(users);
   res.status(201).json({ success: true });
 });
 
 // List users
-app.get('/api/users', (req, res) => {
-  res.json(readDB());
+app.get('/api/users', async (req, res) => {
+  const users = await readUsers();
+  res.json(users);
 });
 
 // Delete user
-app.delete('/api/users/:id', (req, res) => {
-  let users = readDB();
+app.delete('/api/users/:id', async (req, res) => {
+  let users = await readUsers();
   const before = users.length;
   users = users.filter(u => u.id !== req.params.id);
-  writeDB(users);
+  await writeUsers(users);
   res.json({ deleted: before - users.length });
 });
 
 // Serve admin dashboard
 app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+  res.sendFile(__dirname + '/public/admin.html');
 });
 
 app.listen(PORT, () => {
