@@ -7,6 +7,7 @@ const backToLoginLink = document.getElementById('back-to-login-link');
 const authSection = document.getElementById('auth-section');
 const loadingScreen = document.getElementById('loading-screen');
 const userList = document.getElementById('user-list');
+
 // Connect to Socket.IO server
 const socket = io(BACKEND_URL);
 
@@ -14,7 +15,6 @@ const socket = io(BACKEND_URL);
 socket.on('usersUpdated', () => {
   loadUserList();
 });
-
 
 // Show loading screen and ping backend
 function showLoadingScreen() {
