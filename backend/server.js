@@ -76,7 +76,8 @@ app.use((req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Backend running on port ${PORT}`);
-});const express = require('express');
+});
+const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const http = require('http');
