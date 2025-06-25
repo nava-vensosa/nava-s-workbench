@@ -4,10 +4,10 @@ import LabCalendar from "./LabCalendar.jsx";
 import ProposeHedge from "./ProposeHedge.jsx";
 import MyHedges from "./MyHedges.jsx";
 import Messages from "./Messages.jsx";
+import HedgeForm from "./HedgeForm.jsx";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-// Dummy data for hedges/messages until backend endpoints exist:
 const DUMMY_HEDGES = [
   {
     id: "1",
@@ -35,20 +35,18 @@ const DUMMY_MESSAGES = [
 ];
 
 export default function App() {
-  const [loading, setLoading] = useState(true); // NEW
+  const [loading, setLoading] = useState(true);
   const [mode, setMode] = useState("login");
   const [username, setUsername] = useState("");
   const [userid, setUserid] = useState("");
   const [msg, setMsg] = useState("");
   const [users, setUsers] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [view, setView] = useState("menu"); // controls menu/subpages
-  // Demo state for features
+  const [view, setView] = useState("menu");
   const [hedges, setHedges] = useState(DUMMY_HEDGES);
   const [messages, setMessages] = useState(DUMMY_MESSAGES);
-  const [availability, setAvailability] = useState([]); // implement later
+  const [availability, setAvailability] = useState([]);
 
-  // Backend ping check (wait for backend server before showing UI)
   useEffect(() => {
     let cancelled = false;
     async function checkBackend() {
@@ -57,23 +55,21 @@ export default function App() {
         const data = await res.json();
         if (!cancelled && data.status === "ok") setLoading(false);
       } catch {
-        setTimeout(checkBackend, 2000); // Retry after 2s if failed
+        setTimeout(checkBackend, 2000);
       }
     }
     checkBackend();
     return () => { cancelled = true; };
   }, []);
 
-  // Fetch users
   useEffect(() => {
     if (loading) return;
     fetch(`${API_URL}/api/users`)
       .then(res => res.json())
       .then(setUsers)
       .catch(() => setUsers([]));
-  }, [msg, loading]); // refetch on msg change (after signup)
+  }, [msg, loading]);
 
-  // Helper for switching modes and clearing fields
   const switchMode = () => {
     setMode(mode === "login" ? "signup" : "login");
     setMsg("");
@@ -95,7 +91,6 @@ export default function App() {
       if (!res.ok) throw new Error(data.error || "Request failed");
       setMsg(mode === "login" ? "Logged in!" : "Account created!");
       if (mode === "login") setLoggedIn(true);
-      // Refetch users after signup
       if (mode === "signup") {
         setTimeout(() => setMsg(""), 2000);
       }
@@ -121,9 +116,18 @@ export default function App() {
     );
   }
 
-  // Main menu after login
   if (loggedIn) {
-    // Show feature views if not on menu
+    if (view === "hedgeForm") {
+      return (
+        <Centered>
+          <HedgeForm
+            users={users}
+            setHedges={setHedges}
+            onBack={() => setView("menu")}
+          />
+        </Centered>
+      );
+    }
     if (view === "calendar") {
       return (
         <Centered>
@@ -146,19 +150,6 @@ export default function App() {
             userid={userid}
             setHedges={setHedges}
             users={users}
-            onBack={() => setView("menu")}
-          />
-        </Centered>
-      );
-    }
-    if (view === "propose") {
-      return (
-        <Centered>
-          <ProposeHedge
-            users={users}
-            hedges={hedges}
-            setHedges={setHedges}
-            userid={userid}
             onBack={() => setView("menu")}
           />
         </Centered>
@@ -191,7 +182,6 @@ export default function App() {
         </Centered>
       );
     }
-    // Main menu
     return (
       <Centered>
         <div style={{
@@ -203,7 +193,7 @@ export default function App() {
           }}>
             <button style={mainBtn} onClick={() => setView("calendar")}>Indicate When I'm Unavailable</button>
             <button style={mainBtn} onClick={() => setView("labcalendar")}>View Upcoming Hedges</button>
-            <button style={mainBtn} onClick={() => setView("propose")}>Propose a Hedge</button>
+            <button style={mainBtn} onClick={() => setView("hedgeForm")}>Propose a Hedge</button>
             <button style={mainBtn} onClick={() => setView("myhedges")}>Check on My Hedges</button>
             <button style={mainBtn} onClick={() => setView("messages")}>Check My Messages</button>
             <button style={miniBtn} onClick={() => { setLoggedIn(false); setUsername(""); setUserid(""); setView("menu"); }}>Log Out</button>
@@ -213,7 +203,6 @@ export default function App() {
     );
   }
 
-  // Login/Create User UI with user list sidebar
   return (
     <div style={{
       background: "#18181b", color: "#fff", minHeight: "100vh",
@@ -245,7 +234,6 @@ export default function App() {
         </div>
         {msg && <div style={{ color: msg.includes("!") ? "lime" : "red", marginTop: 8 }}>{msg}</div>}
       </form>
-      {/* User list sidebar */}
       <div style={{
         width: 240, height: 400, background: "#232337", borderRadius: 8, overflowY: "auto", padding: 16,
         display: "flex", flexDirection: "column"

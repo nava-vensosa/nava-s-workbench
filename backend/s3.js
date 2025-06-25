@@ -1,11 +1,4 @@
-const AWS = require('aws-sdk');
-
-const s3 = new AWS.S3({
-  region: process.env.AWS_REGION
-});
-const BUCKET = process.env.S3_BUCKET_NAME;
-
-function uploadBackup(filename, data) {
+function uploadHedgeBackup(filename, data) {
   return s3.putObject({
     Bucket: BUCKET,
     Key: filename,
@@ -14,21 +7,21 @@ function uploadBackup(filename, data) {
   }).promise();
 }
 
-function listBackups(prefix) {
+function listHedgeBackups(prefix) {
   return s3.listObjectsV2({
     Bucket: BUCKET,
     Prefix: prefix
   }).promise();
 }
 
-function deleteBackup(key) {
+function deleteHedgeBackup(key) {
   return s3.deleteObject({
     Bucket: BUCKET,
     Key: key
   }).promise();
 }
 
-function downloadBackup(key) {
+function downloadHedgeBackup(key) {
   return s3.getObject({
     Bucket: BUCKET,
     Key: key
@@ -39,5 +32,9 @@ module.exports = {
   uploadBackup,
   listBackups,
   deleteBackup,
-  downloadBackup
+  downloadBackup,
+  uploadHedgeBackup,
+  listHedgeBackups,
+  deleteHedgeBackup,
+  downloadHedgeBackup
 };

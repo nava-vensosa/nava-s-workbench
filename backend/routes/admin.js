@@ -1,36 +1,35 @@
 const express = require('express');
 const router = express.Router();
-const { getUsers, setUsers, deleteUserById } = require('../data/users');
+const { getHedges, addHedge } = require('../data/hedges');
 
-// For parsing urlencoded POST bodies (forms)
-router.use(express.urlencoded({ extended: false }));
-
-// ADMIN PANEL: Direct Access Channel
-router.get('/', (req, res) => {
-  const users = getUsers();
+// ADMIN PANEL: Direct Access Channel for Hedges
+router.get('/hedges', (req, res) => {
+  const hedges = getHedges();
   res.send(`
     <html>
       <head>
-        <title>Admin Panel</title>
+        <title>Admin Panel - Hedges</title>
         <style>
           body { background: #18181b; color: #fff; font-family: monospace; padding: 24px; }
           table { background: #232337; border-radius: 8px; padding: 12px; }
           th, td { padding: 8px; }
           button { background: #ef4444; color: #fff; border: none; border-radius: 4px; padding: 6px 12px; cursor: pointer; }
-          textarea { width: 100%; height: 200px; background: #232337; color: #fff; border-radius: 6px; }
         </style>
       </head>
       <body>
-        <h1>Admin: Users</h1>
+        <h1>Admin: Hedges</h1>
         <table>
-          <tr><th>User Name</th><th>User ID</th><th>Delete</th></tr>
-          ${users.map(u => `
+          <tr><th>Name</th><th>Description</th><th>Date</th><th>Hedgemasters</th><th>Team Members</th><th>Delete</th></tr>
+          ${hedges.map(h => `
             <tr>
-              <td>${u.username}</td>
-              <td>${u.userid}</td>
+              <td>${h.title}</td>
+              <td>${h.description}</td>
+              <td>${h.calendar[0].date} ${h.calendar[0].start}–${h.calendar[0].end}</td>
+              <td>${h.hedgemasters.join(', ')}</td>
+              <td>${h.team_members.join(', ')}</td>
               <td>
-                <form method="POST" action="/admin/delete-user" style="display:inline;">
-                  <input type="hidden" name="userid" value="${u.userid}" />
+                <form method="POST" action="/admin/delete-hedge" style="display:inline;">
+                  <input type="hidden" name="hedgeId" value="${h.id}" />
                   <button type="submit">Delete</button>
                 </form>
               </td>
@@ -38,44 +37,43 @@ router.get('/', (req, res) => {
           `).join('')}
         </table>
         <br>
-        <h2>Edit All Users (JSON)</h2>
-        <form method="POST" action="/admin/update-users">
-          <textarea name="users">${JSON.stringify(users, null, 2)}</textarea><br>
-          <button type="submit">Save All</button>
+        <h2>Add New Hedge</h2>
+        <form method="POST" action="/admin/add-hedge">
+          <input type="text" name="title" placeholder="Hedge Name" required />
+          <textarea name="description" placeholder="Brief Description" required></textarea>
+          <input type="text" name="hedgemasters" placeholder="Hedgemaster(s) (comma-separated)" required />
+          <input type="text" name="team_members" placeholder="Team Members (comma-separated)" required />
+          <input type="date" name="date" required />
+          <input type="time" name="start" required />
+          <input type="time" name="end" required />
+          <button type="submit">Add Hedge</button>
         </form>
         <br>
         <a href="/">Back to Home</a>
-        <script src="/socket.io/socket.io.js"></script>
-        <script>
-          const socket = io();
-          socket.on('users_updated', () => {
-            window.location.reload();
-          });
-        </script>
       </body>
     </html>
   `);
 });
 
-// POST route to delete a user
-router.post('/delete-user', (req, res) => {
-  const { userid } = req.body;
-  if (!userid) {
-    return res.status(400).send("Missing userid");
-  }
-  deleteUserById(userid);
-  res.redirect('/admin');
+// POST route to add a hedge
+router.post('/add-hedge', (req, res) => {
+  const { title, description, hedgemasters, team_members, date, start, end } = req.body;
+  const hedge = {
+    title,
+    description,
+    hedgemasters: hedgemasters.split(',').map(h => h.trim()),
+    team_members: team_members.split(',').map(m => m.trim()),
+    calendar: [{ date, start, end }]
+  };
+  addHedge(hedge);
+  res.redirect('/admin/hedges');
 });
 
-// POST route to update all users (from JSON textarea)
-router.post('/update-users', (req, res) => {
-  try {
-    const users = JSON.parse(req.body.users);
-    setUsers(users);
-    res.redirect('/admin');
-  } catch (e) {
-    res.status(400).send("Invalid JSON");
-  }
+// POST route to delete a hedge
+router.post('/delete-hedge', (req, res) => {
+  const { hedgeId } = req.body;
+  deleteHedgeById(hedgeId);
+  res.redirect('/admin/hedges');
 });
 
 module.exports = router;

@@ -23,7 +23,7 @@ function deleteUserById(userid) {
   }
 }
 
-// Persistence & S3 logic (copied from your old server.js, minimal changes)
+// Persistence & S3 logic
 async function restoreUsersFromS3IfNeeded() {
   let shouldRestore = false;
   if (!fs.existsSync(DATA_FILE)) {
