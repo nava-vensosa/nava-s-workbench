@@ -1,3 +1,10 @@
-# TMASCI Calendar Assistant Drafting Space
+Here's what's on my workbench:
 
-This folder is for me to work on a website/server for coordinating the schedules of a large team for my organization, TMASCI.
+-Thought Journal
+-Essays
+-Reading Log
+-Tracker For My Classes
+-Nachsterb Inn
+-FIBRIL
+-Astrid
+-Planetary Squencer
