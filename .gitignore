@@ -3,6 +3,3 @@ node_modules
 dist
 .env
 db.json
-package-lock.json
-backend/.nb/backend/.nb/TMASCI-Calendar-Backup-Bot_accessKeys.csv
-backend/.nb/TMASCI-Calendar-Backup-Bot_credentials.csv
