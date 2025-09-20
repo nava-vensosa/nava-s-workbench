@@ -8,4 +8,8 @@ iii. Each element will determine its probability by crunching ''given'' rules-- 
 
 iv. The set of rules which determine our Bayesian inferences  are derived from: GC_Input, Placement_Sliders_Config, Color_Drawbars_Config. GC_Input is interpreting intuitive gestures from the ranks, impacting voice leading, spread, color density, and placement-- not necessarily color choice. Placement_Sliders_Config is an experimental feature which lets the user draw a curve and slide it left/right to directly control placement variance in the algorithm (this shiild have a strength knob, effectively bounding the range of placement options for the GC_Input). Color_Drawbars_Config pertains to the drawbars whose relative position biases the probabilistic weighting of the 1, 2, 3, 4, 5, 6, 7, 8, and 9 intervals upon the root of what is played in a rank.
 
-v. The list of n bodies can be graphically shown as a box segmented into 127 boxes, which resize as the algorithm marches until a static state is reached, upon which the dice are rolled and a box/body is swlected. The body corresponding to what is selected will be added to the map of what is about to voice, and the algorithm will re-roll against the new map, until the quota is reached.
+v. When computing a body's probability, sum {P(B), P(B | A), P(B | C), ...) for all rules; weighting can either be relative or normalized.
+
+vi. The list of n bodies can be graphically shown as a box segmented into 127 boxes, which resize as the algorithm marches until a static state is reached, upon which the dice are rolled and a box/body is swlected. The body corresponding to what is selected will be added to the map of what is about to voice, and the algorithm will re-roll against the new map, until the quota is reached.
+
+N.b. RDC or Relative Distribution Curve is an alternaive name for experimental feature; remember we want root sequencing to be both intelligent AND adaptive-- never directly controlled--, derived from GC_Input
