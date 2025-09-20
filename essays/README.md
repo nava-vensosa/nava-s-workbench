@@ -2,4 +2,6 @@
 ___
 *Meditation on the Presence of Particles: A Question Oriented at Quantum Thermodynamics*
 ___
-*Muthos, Kosmos, Logos, Nomos, and Metronomy*
+*Muthos, Morphe, Kosmos, Doxa, Logos, Nomos, and Metronomy*
+___
+*Careening Chronologically through Math*
