@@ -8,5 +8,9 @@ Spent an hour with Emilia beginning collaboration, discussing design and plannin
 ---
 Monday 9/22/2025
 ---
-Planning to spend an hour with emilia on blueprinting
+Spent an hour with Emilia; view transcription of notes file <orrery1_9222025_devlog.txt>
+---
+Wednesday 9/24/2025
+---
+Planning to spend an hour with Emilia blueprinting a prototype on paper for the Composition Assembly (Variable-track Archimedes Trammel, Rotating Trammel Base, Composition Disc, Drive Train)
 

@@ -1,0 +1,26 @@
+# Components List:
+
+1. Pivot Lever
+2. Tuning Slide / Tailpiece
+3. Tuning Button / Fine Tuner
+4. Support / Saddle
+5. Adjusting Screw 1
+6. Adjusting Screw 2
+7. Forward Cam
+8. Backward Cam
+9. Depth Stop
+10. Spring Tension Screw
+11. Spring
+
+
+1. Pivot Lever: 
+2. Tuning Slide: Anchors the String to the Pivot Lever (Holds the string's Ball-End)
+3. Tuning Button: 
+4. Support:
+5. Adjusting Screw 1:
+6. Adjusting Screw 2:
+7. Forward Cam: The cam closest to the saddle, which acts as a depth stop for the second adjusting screw
+8. Backward Cam: The cam closet to the Tuning Button, which acts as a wedge for the entire pivot lever; when activated, the Backward Cam raises the pivot lever to its highest position. When deactivated, the pivot lever drops to the position determined by Adjusting Screw 1. 
+9. Depth Stop: Acts as the stop for Adjusting Screw 2, setting the lowest tension position
+10. Spring Tension Screw: Adjusts the tension on the Spring
+11. Spring: Mechanical leverage for changing tunings; exerts pressure against the strings' downward pressure

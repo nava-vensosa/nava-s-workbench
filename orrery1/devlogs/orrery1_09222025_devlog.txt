@@ -1,0 +1,37 @@
+# Orrery: Milling Metronomy
+---
+*Orrery: A Planetary Mechanism*
+*Milling: A nod to the inspiration taken from planetary ball mills*
+*Metronomy: A reference to the work's being in conversation with Heraclitean fragments on kosmos, metro, and nomos*
+
+### Components we anticipate needing to model:
+1. Drive Train
+2. Optional Tensor Ring
+3. Control Station
+4. Trammels (4x)
+5. Rotating Trammel Base (4x)
+6. Composition Disc (4x)
+7. Platform
+
+### Descriptions: 
+1. Drive Train: Rotary motor + system of gears driving the mechanism's components' motion
+2. Tensor Ring: Mostly cosmetic; indicates the clock rate of the drive train
+3. Control Station: Where the user can control clock rate, Trammel Ranges & Rotations, and other MCU Parameters
+4. Trammels: Drives the orbital motion triggering sends
+5. Rotating Trammel Base: Controls/Automates offset for the Trammel's Ellipse
+6. Composition Disc: Tracks sends for the user to control rhythm
+7. Platform
+
+### Improvements on the Design:
+1. Instead of percussive gears for sends, use a light sensor and Black/Wyhite dots, with a black track
+2. More minimal design for the drive train-- don't distract attention from the musical design
+3. Write the purpose of how it works, what the intention behind the design demonstrates about rhythmic composition
+
+### Further collaborations
+1. Ask Danny Rozin about good light sensors for this application, as well as what kind of motor he would recommend
+2. Meet with Ethan Hein and ask his input
+
+### Actions:
+1. OH With Danny Rozin maybe next Monday?
+2. OH with Ethan in the second week of October?
+3. Prototype Blueprinting session scheduled for this wendesday-- will be modeling the variable track trammel, its rotary platform, and the composition disc (Paper blueprint first, then FreeCAD or Blender)
