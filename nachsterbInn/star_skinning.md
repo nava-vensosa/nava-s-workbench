@@ -1,0 +1,5 @@
+# Star Skinning
+---
+From my mother's stories growing up, I believe that at conception a star-spirit looks down from the sky and chooses its parents, before falling to the earth. This Bright Dot brings the divinities to us-- a little heaven on earth. There was a time I was almost a mom, but we lost the baby. I don't like these songs, they hurt. It hurts to think about, but like Antigone suggests, it's not the living who decree what must be done; it's for the living to remember what once was and what could have been, to gather into presence the possibility and the absence of life for those spirits in the sky-- all the little Bright Dots in constellation with the Night. 
+
+I chose the name Novalynn after Novalis and Yusei's Stardust Dragon. Novalis was a German poet who loved so deeply that, when his love Sophia died of tuberculosis, he wrote Hymns to the Night and fell inyo a long winter which lastes years under the sky of 'Nachsturben.' Nachsturben roughly translates to 'willing unto night' and is the OG 'I Will Follow You Into the Dark,' as Novalis wanted to will himself into death to join his lost love in the cold serenity of the dark night. 
