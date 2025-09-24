@@ -7,3 +7,38 @@ Danny Rozin Meeting Plan:
 
 Plan for the work with Emilia:
 1. On paper, start modelling the test prototype. 
+
+
+Check In:
+
+30 Minutes to Meeting with Danny Rozin and Drafting for Orrery
+1 hour with Emilia revising design and prepping for first modelling sessions.
+
+
+Notes from Meeting with Danny Rozin:
+1. Hall effect sensors may work better than LDRs... perhaps, magnets get pushed up by tracker motion according to the control board, and the trammel arm has 3 Hall Effect Sensors hooked up to the read pin?
+2. You will need a slip ring for the trammel arm sensors, else the wires will twist and break
+3. Linear Actuators might be worthwhile... though, cams give us smooth transitions for the trammel pegs, as the motion must be sinusoidal linear motion
+4. You'll want a Gear DC Motor (probably 10 RPM)... though, for variable RPM, maybe brushless? is that overkill?
+5. You must think of the min/max rpm the user can play with... this will also vary the composition discs 
+6. How will the cam system work? you have to model it!
+
+Notes from Meeting with Emilia:
+1. Fully revised design: No more Archimedes Trammel, instead a cleverly designed conic cam with variable shape for elliptical driving of the gear shaft, which will directly drive the motion of the sensor arm
+2. 2 hall sensors in the sensor arm, for 4/4 and 6/8 time
+3. 16 triggers for the 4/4 track, 12 triggers for the 6/8 track
+4. Push/Pull stops design for toggling hall sensor actuators
+
+Components List:
+1. Full Base (10"x10")
+2. Composition Disc (6" Diameter) + Push/Pull Stops
+3. Cam/Sensor Assembly
+4. Rotary Base for ease of use
+5. Drive Train (Motor + Layered Gear Shafts)
+6. Control Board (Can maybe integrate into the Full Base)
+
+Next Steps:
+1. Model Composition Discs + Push/Pull Stops
+2. Model Platform
+3. Brainstorm Cam Assembly
+4. Check In
