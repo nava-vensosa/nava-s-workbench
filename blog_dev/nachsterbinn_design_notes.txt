@@ -1,0 +1,60 @@
+For each page we create, use the same css stylesheet and javascript for the animated stars in the background as our main existing implementation.
+
+We're going to make a new homepage. When we load this new homepage, the user will be greeted with a welcome message. For now, populate that welcome message with Lorem Ipsum text. Then, there will be links to 3 pages:
+
+1. ITP Gallery
+2. Nachsterb Inn
+3. Critical Clockwerkshop
+
+Each of these 3 pages should be a different html file with the same structure: Table of Contents, followed by headers and then the content associated with those headers.
+
+ We're going to maintain content files in separate directories for each page. The name of each header section will correspond with the filename for the content that will be loaded into the paragraph section by the content loader script. We'll write the content loader later. 
+
+When the user clicks on entries in the table of contents on a page, it should auto scroll down to the corresponding header. Each page should have a [Return to Home] button somewhere at the bottom and at the top. 
+
+Here are the sectiosn which should correspond to the table of contents for each file:
+
+
+
+ITP Gallery:
+- Semester
+  - Class
+    - Week
+      - Lecture Reflections
+        - Takeaway
+        - Question
+      - Reading Reflections
+        - Synopsis
+        - Thoughts
+      - In Class Assigned Material
+      - Homework
+    - Projects
+      - Demo
+      - Prompt
+      - Tech Spec
+      - Implementation Guide
+      - Critical Writing
+
+Nachsterb Inn:
+- What is the NI?
+- Community Board
+- Message Board
+- Sections:
+  - Essays
+  - Journals
+  - Stories
+  - Poems
+
+
+Critical Clockwerkshop: 
+- FIBRIL
+- Antikythera / Astrid
+- Cartographies of Fugitive Law
+- Appositive Law
+- Helm & Hull
+- On Cartography: Speculative Figure Drawing as Anarchival Practice
+
+
+
+
+

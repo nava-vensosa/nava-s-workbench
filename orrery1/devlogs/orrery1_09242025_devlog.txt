@@ -1,0 +1,9 @@
+The plan for today is: Half an hour with Danny Rozin, followed by an hour with Emilia.
+
+Danny Rozin Meeting Plan:
+1. Here's our Design
+2. What's a good motor for this?
+3. If we want to use, for example, 3 Light Dependent Resistors for each Trammel Arm, swinging over black or white dots on black tracks, how can we prepare for a consistent readout? We just need binary detection-- black or white dot-- but light levels might vary; do we need to create a rig for each LDS that emits a small light as it passes over each array point and shields the light to give consistent response? what's the most sustainable way to get this with an LDS without burning a bunch of labor hours in development and testing?
+
+Plan for the work with Emilia:
+1. On paper, start modelling the test prototype. 

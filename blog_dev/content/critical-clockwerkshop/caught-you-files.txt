@@ -1,0 +1,52 @@
+Counter-Surveillance Toolkit: Files and Resources
+
+Repository: https://github.com/username/caught-you-counter-surveillance
+Documentation: https://caught-you.org
+Security Contact: security@caught-you.org (PGP key provided)
+
+Hardware Designs (Open Source):
+- RF signal detector schematics (Eagle/KiCad files)
+- Infrared LED jammer circuit designs
+- Pocket surveillance detector enclosure (3D printable)
+- Mesh networking hardware specifications
+- Component sourcing guides and supplier recommendations
+
+Software Components:
+- Signal detection firmware (Arduino)
+- Real-time spectrum analysis software (Python/GNU Radio)
+- Secure mesh networking protocols (C++)
+- Facial recognition jamming algorithms
+- Mobile privacy audit applications (Android/iOS)
+- Encrypted communication protocols
+
+Installation Materials:
+- Workshop facilitation guides
+- Security culture best practices
+- Legal consideration documents
+- Threat modeling worksheets
+- Digital security checklists
+
+Safety Warnings:
+- Legal disclaimer: Check local laws regarding surveillance detection devices
+- RF emission guidelines: Some devices may interfere with legitimate communications
+- Operational security: Always assess personal risk before using counter-surveillance tools
+- Community security: Never share detailed information about others' security practices
+
+Build Instructions:
+1. Source components from provided supplier list
+2. Assemble hardware following detailed schematics
+3. Flash firmware and calibrate detection sensitivity
+4. Install software dependencies and configuration files
+5. Conduct initial testing in controlled environment
+6. Practice operational security protocols
+7. Connect to local mesh network and test communications
+
+Educational Resources:
+- Surveillance studies reading list
+- Digital rights organizations contact information
+- Counter-surveillance technique tutorials
+- Legal aid resources for surveillance targets
+
+Estimated cost: $200-500 per complete toolkit
+Assembly time: 15-20 hours including software configuration
+Legal status: Varies by jurisdiction - research local laws before building
