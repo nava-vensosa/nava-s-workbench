@@ -1,0 +1,10 @@
+The FIBRIL demonstration showcases a network of fiber-optic strands suspended in a darkened space, creating an otherworldly environment where light becomes the primary medium of communication. Participants can approach the installation and observe how their movements trigger cascading patterns of illumination that ripple through the fiber network.
+
+The demo includes several interactive modes:
+
+1. Proximity Mode: Light intensity and color shift as participants move closer to or farther from the installation
+2. Touch Response: Direct contact with fiber endpoints creates localized bursts of light that propagate through the network
+3. Ambient Mode: The installation responds to environmental factors like sound, temperature, and air movement
+4. Collaborative Mode: Multiple participants can create complex light patterns through coordinated interaction
+
+Technical specifications include a custom-built array of RGB LED drivers, proximity sensors, and a real-time processing system that calculates light propagation patterns based on simulated neural network models.

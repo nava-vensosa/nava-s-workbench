@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title data-template-slot="page-title">{{PAGE_TITLE}} - Nachsterbinn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet">
+  <link rel="stylesheet" data-template-slot="css-path" href="{{CSS_PATH}}">
+</head>
+<body>
+  <canvas id="stars"></canvas>
+  <script defer data-template-slot="stars-path" src="{{STARS_PATH}}"></script>
+  <script defer data-template-slot="content-loader-path" src="{{CONTENT_LOADER_PATH}}"></script>
+  <script defer data-template-slot="toc-scroll-path" src="{{TOC_SCROLL_PATH}}"></script>
+
+  <div class="red-stripe"></div>
+
+  <header>
+    <img src="https://preview.redd.it/ioc8m5hgpeb51.png?width=1080&crop=smart&auto=webp&s=5aeb2be2c9daf93493cc798a4dc5b239a715bc73" alt="Stardust Dragon Banner">
+  </header>
+
+  <div class="container">
+    <!-- Navigation breadcrumb -->
+    <div data-template-slot="breadcrumb">{{BREADCRUMB}}</div>
+
+    <!-- Page title -->
+    <h1 data-template-slot="main-title" data-content-hook="{{TITLE_HOOK}}" data-page="{{PAGE_TYPE}}">{{PAGE_TITLE}}</h1>
+
+    <!-- Top navigation/description banner -->
+    <div data-template-slot="top-banner">{{TOP_BANNER}}</div>
+
+    <hr class="divider">
+
+    <!-- Main content area -->
+    <main data-template-slot="main-content">{{MAIN_CONTENT}}</main>
+
+    <hr class="divider">
+
+    <!-- Footer navigation -->
+    <div data-template-slot="footer-nav">{{FOOTER_NAV}}</div>
+  </div>
+</body>
+</html>

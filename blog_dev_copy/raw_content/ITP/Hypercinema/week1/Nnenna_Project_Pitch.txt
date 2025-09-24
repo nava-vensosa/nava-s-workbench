@@ -1,0 +1,6 @@
+For our project, we're going to try and make a generative sound piece which can receive samples or live audio and transforms it by some sound engine controlled by applied Braid Theory. For a physical component, we might use actual braids-- such that the user could entangle, detatch/reattach, and otherwise design or arrange braids, and this will alter the quality of the sound in.
+
+
+Our intuition for now is that we'll use 3 loops/strands to control either a mix of 3 sound sources or a mix of audio effects applied to a set of sound sources.
+
+For a HID, we'll likely adapt an ADC circuit fed into an Arduino to measure the user's different arrangements of the braids in real time.

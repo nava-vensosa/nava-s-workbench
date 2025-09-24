@@ -1,0 +1,1 @@
+The demo features text analysis tools that visualize the computational structure of legal language, allowing participants to see how legal documents function as algorithmic systems. Interactive workshops invite participants to rewrite existing laws using different grammatical structures and observe how these changes might affect outcomes for different communities.

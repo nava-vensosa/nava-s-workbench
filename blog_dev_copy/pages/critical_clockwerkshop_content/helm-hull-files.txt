@@ -1,0 +1,4 @@
+Repository: https://github.com/username/helm-hull-navigation
+Learning Platform: https://traditional-navigation.org
+
+Files include traditional navigation instruction manuals, celestial calculation tools, DIY instrument construction guides, and speculative design proposals for post-GPS navigation technologies. Materials emphasize ecological relationship and community knowledge over individual technological solutions.

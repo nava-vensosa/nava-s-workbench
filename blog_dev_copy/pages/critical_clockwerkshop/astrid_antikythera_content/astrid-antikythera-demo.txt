@@ -1,0 +1,15 @@
+The Astrid/Antikythera demonstration centers around an interactive archaeological workstation where participants can examine 3D printed "artifacts" through augmented reality interfaces. The demo setup includes multiple components that work together to create an immersive speculative archaeology experience.
+
+Central Elements:
+
+Archaeological Workstation: A custom-built examination table with embedded sensors that detect when artifacts are placed upon it, triggering corresponding digital overlays and historical data projections.
+
+AR Artifact Examination: Using tablet interfaces, participants can view detailed 3D models, speculative histories, and technical documentation for each discovered "device."
+
+Astrid's Journal Interface: An interactive digital notebook where participants can read Astrid's field notes, theoretical frameworks, and discoveries about the relationship between ancient and future computing.
+
+Temporal Navigation System: A unique interface that allows participants to explore different historical periods and see how the same technologies might have developed along alternative timelines.
+
+Voice Interaction: Participants can ask questions directly to "Astrid," whose AI-generated responses draw from feminist technology theory, archaeological methodology, and speculative design principles.
+
+The demonstration emphasizes slow, contemplative interaction over rapid consumption, encouraging participants to sit with questions about technology, gender, and historical knowledge rather than seeking immediate answers.

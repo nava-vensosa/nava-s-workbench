@@ -1,0 +1,19 @@
+Human-Interface Design for Astrid/Antikythera: Feminist Approaches to Archaeological Computing
+
+The interface design for Astrid/Antikythera deliberately subverts conventional archaeological and computational interfaces by centering feminist principles of care, collaboration, and situated knowledge. Rather than presenting a single, authoritative interface, the project offers multiple entry points and interaction modalities that reflect different ways of knowing.
+
+Key Design Principles:
+
+Situated Knowledge: Following Donna Haraway's concept of situated knowledge, the interface acknowledges that all archaeological and technological knowledge is partial and contextual. Participants are invited to contribute their own interpretations rather than consume predetermined narratives.
+
+Care Ethics: The interface design emphasizes slow, careful examination over rapid data extraction. Touch interactions require sustained contact, and information is revealed gradually through patient engagement.
+
+Non-linear Navigation: Unlike traditional database interfaces that privilege hierarchical organization, the system allows for associative, intuitive exploration that mirrors how memory and archaeological discovery actually work.
+
+Collaborative Interpretation: Multiple participants can interact with the same artifacts simultaneously, with their combined interactions revealing different layers of information and interpretation.
+
+Embodied Interaction: The physical manipulation of 3D printed artifacts is central to the interface, recognizing that knowledge is produced through haptic as well as visual engagement.
+
+Speculative Documentation: The interface includes tools for creating alternative histories and speculative interpretations, positioning participants as co-creators rather than passive consumers of archaeological knowledge.
+
+This approach challenges the masculine-coded association of archaeological interfaces with conquest, extraction, and objective truth, proposing instead an interface based on care, speculation, and collaborative meaning-making.

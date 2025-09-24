@@ -1,0 +1,17 @@
+The "Caught You___" demonstration provides hands-on experience with surveillance detection and counter-surveillance techniques through an interactive learning environment that simulates real-world monitoring scenarios.
+
+Demo Components:
+
+Signal Detection Station: Participants use custom-built RF detectors to scan for wireless surveillance devices. Real-time visualizations show the electromagnetic spectrum around them, revealing hidden cameras, microphones, and tracking devices.
+
+Facial Recognition Jamming Lab: Demonstration of infrared LED arrays and computer vision poisoning techniques that can confuse facial recognition systems. Participants can test these tools against live facial recognition software.
+
+Secure Communication Network: A local mesh network that allows anonymous messaging between participants without internet connectivity or corporate mediation. Messages are encrypted and automatically deleted after transmission.
+
+Privacy Toolkit Assembly: Hands-on workshop where participants build their own pocket-sized surveillance detection devices using open-source hardware and learn to configure privacy-protecting software on their personal devices.
+
+Surveillance Theater: Role-playing scenarios where participants take turns being surveillance operators and targets, developing empathy for different positions while learning how monitoring systems actually function.
+
+Digital Security Training: Practical instruction in using VPNs, encrypted messaging, secure browsers, and other privacy tools, with emphasis on threat modeling and assessing personal risk levels.
+
+The demo emphasizes practical skills over theoretical knowledge, ensuring participants leave with actionable tools and techniques they can apply in their daily lives.
