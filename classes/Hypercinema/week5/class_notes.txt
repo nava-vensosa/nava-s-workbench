@@ -1,0 +1,10 @@
+- Gisele Kerozene Stop Motions
+- More great stop motion animations on the hypercinema site and on shortoftehweek.com
+- ShotDeck AI Generated Art?
+- Andrew B. Myers Video Art is really good
+- Vallee Duhamel "Strangers" on masking/greenscreen
+- "Baaa" Cyriak 2011 on AfterEffects
+- You can use code in AfterEffects! You can do it with code instead of using keyframes
+  - These are called Expressions
+  - Option + Cmd + Shift + E on a layer's Opacity will instantiate Keylight-- Greenscreening!
+
