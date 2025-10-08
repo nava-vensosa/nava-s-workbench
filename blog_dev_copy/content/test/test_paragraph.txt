@@ -1,0 +1,1 @@
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. This paragraph demonstrates how the content loader can dynamically load text content from external files, making it easier to manage and update website content without modifying the HTML structure.

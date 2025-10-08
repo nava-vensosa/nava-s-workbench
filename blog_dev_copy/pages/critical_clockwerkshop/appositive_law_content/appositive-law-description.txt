@@ -1,5 +1,0 @@
-"Appositive Law" explores legal language as a computational system, investigating how grammatical structures in legal writing create and constrain possibilities for justice. Drawing from computational linguistics and critical legal studies, the project treats legal documents as algorithmic systems that process human lives through linguistic operations.
-
-The project creates interactive visualizations of legal language that reveal the hidden computational logic underlying judicial decisions, legislation, and legal precedent. Through text analysis, machine learning, and speculative rewriting exercises, participants can explore how small changes in legal language might produce dramatically different outcomes for affected communities.
-
-The title references the grammatical concept of apposition—when two elements are placed side by side to modify each other's meaning. The project argues that all law is fundamentally appositive, gaining meaning through its relationship to other laws, precedents, and social contexts rather than containing inherent meaning.

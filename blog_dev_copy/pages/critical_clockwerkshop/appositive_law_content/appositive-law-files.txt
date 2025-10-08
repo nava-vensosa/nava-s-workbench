@@ -1,4 +1,0 @@
-Repository: https://github.com/username/appositive-law
-Analysis Tools: https://appositive-law.herokuapp.com
-
-Files include natural language processing scripts for legal text analysis, interactive visualization tools, and workshop materials for collaborative legal rewriting exercises. The toolkit enables communities to analyze how legal language affects them and experiment with alternative framings.

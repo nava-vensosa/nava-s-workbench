@@ -1,1 +1,0 @@
-The interface design prioritizes collective creation over individual consumption, with drawing tools and collaborative workspace that support group cartographic exploration. Participants work together to create maps that couldn't be produced individually, developing shared spatial vocabularies through drawing practice.

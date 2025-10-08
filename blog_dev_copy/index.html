@@ -2,32 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Novalynn's Website</title>
+  <title>Novalynn's Blog - Homepage</title>
   <link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
   <canvas id="stars"></canvas>
   <script defer src="js/stars.js"></script>
-  <script defer src="content-loader-example.js"></script>
-
-  <div class="red-stripe"></div>
+  <script defer src="js/content-loader.js"></script>
 
   <header>
     <img src="https://preview.redd.it/ioc8m5hgpeb51.png?width=1080&crop=smart&auto=webp&s=5aeb2be2c9daf93493cc798a4dc5b239a715bc73" alt="Stardust Dragon Banner">
   </header>
 
   <div class="container">
-    <h1 data-content-hook="main-title" data-page="homepage"></h1>
+    <h1>Novalynn's Blog - Homepage</h1>
+
+    <hr class="divider">
 
     <div class="top-bar">
-      <span>
-        ✉️ <a href="https://docs.google.com/forms/d/e/1FAIpQLScJvrjMVs33tesYgF_fW0lmFegvTRL3E55L4LmTgpp2cAhOMQ/viewform?usp=header" target="_blank">Join the Infrequent Mailing List</a>
-        &nbsp;&nbsp;|&nbsp;&nbsp;
-        🌐 <a href="https://www.instagram.com/heyits.nava/?hl=en" target="_blank">Instagram</a>
-        &nbsp;&nbsp;|&nbsp;&nbsp;
-        🌐 <a href="https://www.are.na/novalynn-_/blocks" target="_blank">Are.na</a>
-      </span>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLScJvrjMVs33tesYgF_fW0lmFegvTRL3E55L4LmTgpp2cAhOMQ/viewform?usp=header" target="_blank">Join the Infrequent Mailing List</a>
+      &nbsp;|&nbsp;
+      <a href="https://www.instagram.com/heyits.nava/?hl=en" target="_blank">Instagram</a>
+      &nbsp;|&nbsp;
+      <span class="contact-copy" onclick="copyToClipboard('nava.vensosa@gmail.com')" style="cursor: pointer; color: #8E71AC;">nava.vensosa@gmail.com</span>
     </div>
 
     <hr class="divider">
@@ -35,26 +33,35 @@
     <nav class="main-nav">
       <ul>
         <li>
-          🔗 <a href="pages/itp_gallery.html">ITP Gallery</a>
-          <p data-content-hook="itp-gallery-description" data-page="homepage"></p>
+          <a href="pages/itp_gallery.html">ITP Gallery</a>
         </li>
         <li>
-          🔗 <a href="pages/nachsterb_inn.html">Nachsterb Inn</a>
-          <p data-content-hook="nachsterb-inn-description" data-page="homepage"></p>
+          <a href="pages/nachsterb_inn.html">Nachsterb Inn</a>
         </li>
         <li>
-          🔗 <a href="pages/critical_clockwerkshop.html">Critical Clockwerkshop</a>
-          <p data-content-hook="critical-clockwerkshop-description" data-page="homepage"></p>
+          <a href="pages/critical_clockwerk_shop.html">Critical Clockwerk Shop</a>
         </li>
       </ul>
     </nav>
 
     <hr class="divider">
 
-    <div class="comments">
-      <h3 data-content-hook="leave-message-header" data-page="homepage"></h3>
-      <iframe src="https://forms.gle/FnJTiVtfdVq4uy1TA">Loading…</iframe>
+    <div class="navigation-footer">
+      <a href="#top" class="back-to-top">Back to Top</a>
     </div>
   </div>
+
+  <script>
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const elem = document.querySelector('.contact-copy');
+        const originalText = elem.textContent;
+        elem.textContent = 'copied to clipboard!';
+        setTimeout(() => {
+          elem.textContent = originalText;
+        }, 2000);
+      });
+    }
+  </script>
 </body>
 </html>

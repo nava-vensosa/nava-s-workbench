@@ -1,4 +1,0 @@
-Repository: https://github.com/username/speculative-figure-drawing
-Resource Library: https://anarchival-cartography.org
-
-Files include collaborative drawing exercise guides, anarchival theory resources, digital tools for collective map creation, and documentation protocols for preserving speculative cartographic knowledge. All materials emphasize collective creation and resistance to institutional documentation practices.

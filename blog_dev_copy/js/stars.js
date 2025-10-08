@@ -20,9 +20,9 @@ function initCanvas() {
 function animate() {
   ctx.clearRect(0, 0, width, height);
   for (let star of stars) {
-    star.y -= star.speed;
-    if (star.y < 0) {
-      star.y = height;
+    star.y += star.speed;
+    if (star.y > height) {
+      star.y = 0;
       star.x = Math.random() * width;
     }
     star.opacity += (Math.random() - 0.5) * 0.05;

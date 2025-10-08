@@ -21,9 +21,13 @@ canvas#stars {
 }
 
 h1 {
-  font-size: 2.5rem;
+  font-size: clamp(1.2rem, 3vw, 2rem);
   margin: 0 0 0.5rem;
   color: #A274C4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
 }
 
 h2 {
@@ -72,9 +76,9 @@ header img {
 }
 
 .container {
-  max-width: 44rem;
-  margin: .5rem auto;
-  padding: 1rem;
+  max-width: 56rem;
+  margin: 0.5rem 6rem;
+  padding: 1.5rem;
   background-color: rgba(0, 10, 30, 0.8);
   border-radius: 0.75rem;
   box-shadow: 0 0 0.75rem rgba(90, 61, 255, 0.2);
@@ -82,10 +86,18 @@ header img {
   line-height: 1.6;
 }
 
+@media (min-width: 60rem) {
+  .container {
+    margin: 0.5rem auto;
+    margin-left: 10rem;
+    margin-right: 10rem;
+  }
+}
+
 .divider {
   border: none;
   border-top: 3px solid #5a3dff;
-  margin: 2rem 0;
+  margin: 1rem 0;
 }
 
 /* Additional styles for new navigation and table of contents */
@@ -133,33 +145,26 @@ header img {
   margin: 0.5rem 0;
 }
 
-.home-button {
+.home-button, .back-to-top {
   display: inline-block;
-  margin: 1rem 0;
+  margin: 0.5rem;
   padding: 0.5rem 1rem;
   background: rgba(90, 61, 255, 0.2);
   border-radius: 0.25rem;
   transition: background 0.2s;
+  font-size: 1rem;
+  min-width: 8rem;
+  text-align: center;
 }
 
-.home-button:hover {
+.home-button:hover, .back-to-top:hover {
   background: rgba(90, 61, 255, 0.3);
   text-decoration: none;
 }
 
-.back-to-top {
-  display: inline-block;
-  margin: 1rem 0;
-  padding: 0.2rem 0.45rem;
-  background: rgba(90, 61, 255, 0.2);
-  border-radius: 0.25rem;
-  transition: background 0.2s;
-  font-size: 0.8rem;
-}
-
-.back-to-top:hover {
-  background: rgba(90, 61, 255, 0.3);
-  text-decoration: none;
+.navigation-footer {
+  text-align: center;
+  margin: 2rem 0 1rem;
 }
 
 section {
@@ -168,4 +173,19 @@ section {
 
 section section {
   margin-left: 1.5rem;
+}
+
+.top-bar {
+  text-align: center;
+  font-size: clamp(0.65rem, 2vw, 1rem);
+  line-height: 1.5;
+  margin: 0.5rem 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.contact-copy:hover {
+  color: #AA85D1;
+  text-decoration: underline;
 }
