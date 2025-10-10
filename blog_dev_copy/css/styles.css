@@ -189,3 +189,35 @@ section section {
   color: #AA85D1;
   text-decoration: underline;
 }
+
+/* Vim Navigation Styles */
+.link-number {
+  color: #8E71AC;
+  font-weight: bold;
+  user-select: none;
+  margin-right: 0.3rem;
+}
+
+#vim-cursor {
+  position: fixed;
+  width: 12px;
+  height: 20px;
+  background-color: #8E71AC;
+  pointer-events: none;
+  z-index: 10000;
+  opacity: 0.8;
+  animation: vim-blink 1s step-end infinite;
+}
+
+@keyframes vim-blink {
+  0%, 50% { opacity: 0.8; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Highlight effect for links when selected via keyboard */
+.main-nav a:focus,
+.main-nav a:active {
+  background-color: rgba(142, 113, 172, 0.2);
+  outline: 2px solid #8E71AC;
+  outline-offset: 2px;
+}

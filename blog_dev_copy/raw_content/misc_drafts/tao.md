@@ -78,4 +78,32 @@ It seems to be the common ancestor of all, the father of things.
 
 [5]
 
+Heaven-and-Earth is not sentimental;
+It treats all things as straw-dogs.
+The Sage is not sentimental;
+He treats all his people as straw-dogs.
+
+Between Heaven and Earth,
+There seems to be a Bellows:
+It is empty, and yet it is inexhaustible;
+The more it works, the more comes out of it.
+No amount of words can fathom it:
+Better look for it within you.
+
+---
+
+[6]
+
+The Spirit of the Fountain dies not.
+It is called the Mysterious Feminine.
+The Doorway of the Mysterious Feminine
+Is called the Root of Heaven-and-Earth.
+
+Lingering like gossamer, it has only a hint of existence;
+And yet when you draw upon it, it is inexhaustible.
+
+---
+
+[7]
+
 

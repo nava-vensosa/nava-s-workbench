@@ -1,0 +1,47 @@
+{
+  "manifest_version": 3,
+  "name": "Safari Vim Navigator",
+  "version": "1.0.0",
+  "description": "Vim-style keyboard navigation with free-mode for any webpage. Navigate text with h/j/k/l, use Caps Lock for free cursor movement, and click with Enter.",
+
+  "permissions": [
+    "activeTab"
+  ],
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["scripts/vim-navigator.js"],
+      "css": ["styles/vim-cursor.css"],
+      "run_at": "document_end"
+    }
+  ],
+
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+
+  "background": {
+    "service_worker": "scripts/background.js"
+  },
+
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png"
+    },
+    "default_title": "Safari Vim Navigator"
+  },
+
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+V"
+      }
+    }
+  }
+}

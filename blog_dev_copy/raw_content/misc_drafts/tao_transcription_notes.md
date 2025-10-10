@@ -38,4 +38,21 @@
 
 [5]
 
+- The [Heaven-and-Earth] object is generative, yet lacks moralization; the "Sage" attains to heavenliness and groundedness, and as such "treats all his people as straw-dogs"
+  - The tie between this and the Bellows is intriguing
+- The Bellows: Between Heaven and Earth, an inexhaustible deep; words can't fathom it, "Better look for it within you."
+  - Kant & Constellation? there's a figure here I'm unfamiliar with, a strange texture, a foreign shape
 
+---
+
+[6]
+
+- N.b. gossamer!!!
+- Mysterious Feminine = Spirit of the Fountain; Doorway of the Spirit-of-the-Fountain/Mysterious Feminine = Root(Heaven-and-Earth)
+  - Draw upon the gossamer, which is the lightest touch, and is the Root of firmament itself / is the Geist(wellspring)
+
+---
+
+[7]
+
+- 
