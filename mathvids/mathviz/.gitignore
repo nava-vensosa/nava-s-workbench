@@ -1,0 +1,36 @@
+# Build directories
+build/
+cmake-build-*/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Compiled files
+*.o
+*.a
+*.so
+*.dylib
+*.exe
+*.out
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+compile_commands.json
+
+# macOS
+.DS_Store
+
+# External dependencies (Dear ImGui should be cloned)
+external/imgui/
+
+# Output videos
+output/
+*.mp4
+*.mov
