@@ -1,1 +1,0 @@
-This project argues that legal language functions as a computational system that processes human lives through algorithmic operations embedded in grammar and syntax. By understanding law as code, we can develop new methods for debugging legal systems and optimizing them for justice rather than efficiency or precedent maintenance.

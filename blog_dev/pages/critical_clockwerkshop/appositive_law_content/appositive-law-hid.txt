@@ -1,1 +1,0 @@
-The interface design treats legal language as code that can be debugged, refactored, and optimized for different values. Participants can explore legal documents through computational lenses while maintaining awareness of how language changes affect real people's lives and access to justice.

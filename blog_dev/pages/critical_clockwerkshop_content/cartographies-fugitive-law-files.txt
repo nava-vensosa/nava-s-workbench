@@ -1,4 +1,0 @@
-Repository: https://github.com/username/cartographies-fugitive-law
-Interactive Map: https://fugitive-law-maps.org
-
-Files include mapping software, community facilitation guides, oral history collection protocols, and workshop materials for designing community justice processes. All materials prioritize community self-determination and safety for participants sharing knowledge about alternative legal practices.

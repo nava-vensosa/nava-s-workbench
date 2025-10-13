@@ -1,5 +1,0 @@
-FIBRIL is an innovative project that explores the intersection of technology and biological systems through interactive fiber-optic installations. This project investigates how light transmission through synthetic and organic materials can create immersive experiences that blur the boundaries between digital and physical realms.
-
-The project draws inspiration from the fibrillar structures found in nature, particularly in muscle tissue and plant fibers, to create responsive installations that react to human presence and environmental changes. Through the use of advanced sensor technology and custom-developed software, FIBRIL creates dynamic light patterns that evolve based on user interaction.
-
-Key aspects of this project include the development of custom fiber-optic networks, real-time data processing systems, and innovative human-computer interaction paradigms that prioritize embodied experience over traditional screen-based interfaces.

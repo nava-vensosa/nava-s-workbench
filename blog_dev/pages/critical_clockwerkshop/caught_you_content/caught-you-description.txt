@@ -1,7 +1,0 @@
-"Caught You___" is a surveillance counter-surveillance installation that exposes the hidden infrastructures of digital monitoring while creating spaces for anonymous expression and resistance. The project transforms surveillance anxiety into creative agency by providing tools for detecting, documenting, and subverting pervasive monitoring systems.
-
-The installation consists of multiple interconnected components: RF signal detectors that visualize wireless surveillance activity, facial recognition jamming devices that protect participant anonymity, and secure communication networks that enable encrypted messaging within the gallery space. Participants can use provided devices to scan for hidden cameras, identify tracking beacons, and communicate without corporate or state surveillance.
-
-The project title references the incomplete nature of surveillance capture—while we are often "caught" by monitoring systems, the ellipsis suggests that surveillance is never total, and there are always gaps, glitches, and possibilities for escape. Through hands-on interaction with counter-surveillance tools, participants develop practical skills for protecting privacy while gaining critical awareness of how surveillance systems operate.
-
-Rather than promoting paranoia or resignation, "Caught You___" aims to transform surveillance anxiety into informed resistance, providing both practical tools and critical frameworks for navigating monitored environments with greater agency and awareness.
