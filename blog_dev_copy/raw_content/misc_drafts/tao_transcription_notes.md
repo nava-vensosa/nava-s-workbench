@@ -55,4 +55,26 @@
 
 [7]
 
+- Durability... "don't give yourself away"
+
+---
+
+[8]
+
+- This is one of the ones you just have to read an d reread
+- Taoism isn't just about emotional regulation, it's about business and finances and R&D too
+- Food for thought in Tao 8: Water, Striving, Deeps, & Knowing
+
+---
+
+[9]
+
+- Stop in time! When done with work, retire!
+  - Here is the Way of Heaven? Hmmmm
+- You want to be sharp; you don't want calamity; sharp edges are not only honed, they are preserved....
+
+---
+
+[10]
+
 - 

@@ -106,4 +106,59 @@ And yet when you draw upon it, it is inexhaustible.
 
 [7]
 
+Heaven lasts long, and Earth abides.
+What is the secret of their durability?
+Is it not because they do not live for themselves
+That they can live so long?
+
+Therefore, the Sage wants to remain behind,
+But finds himself at the head of others;
+Reckons himself out,
+But finds himself safe and secure.
+Is it not because he is selfless
+That his Self is realised?
+
+---
+
+[8]
+
+The highest form of goodness is like water.
+Water knows how to benefit all things wouthout striving with them.
+It stays in places loathed by all men.
+Therefore, it comes near the Tao.
+
+In choosing your dwelling, know how to keep to the ground.
+In cultivating your mind, know how to dive in the hidden deeps.
+In dealing with others, know how to be gentle and kind.
+In speaking, know how to keep your words.
+In governing, know how to maintain order.
+In transacting business, know how to be efficient.
+In making a move, know how to choose the right moment.
+
+If you do not strive with others,
+You will be free from blame.
+
+---
+
+[9]
+
+As for holding to fullness,
+Far beter were it to stop in time!
+
+Keep on beating and sharpening a sword,
+And the edge cannot be preserved for long.
+
+Fill your house with gold and jade,
+And it can no longer be guarded.
+
+Set store by your riches and honour,
+And you will only reap a crop of calamities.
+
+Here is the Way of Heaven:
+When you have done your work, retire!
+
+---
+
+[10]
+
 
