@@ -78,7 +78,7 @@ header img {
 
 .container {
   max-width: 56rem;
-  margin: 0.5rem 1rem;
+  margin: 0.5rem 0.25rem;
   padding: 1.5rem;
   background-color: rgba(0, 10, 30, 0.8);
   border-radius: 0.75rem;
@@ -185,15 +185,18 @@ section section {
 /* Content Images - Responsive and centered */
 .content-image {
   display: block;
-  max-width: 100%;
+  width: 100%;
+  max-width: 40rem;
   height: auto;
   margin: 1.5rem auto;
   border-radius: 0.5rem;
   box-shadow: 0 0 0.5rem rgba(90, 61, 255, 0.3);
+  object-fit: contain;
 }
 
 @media (max-width: 48rem) {
   .content-image {
+    max-width: 100%;
     margin: 1rem auto;
   }
 }
