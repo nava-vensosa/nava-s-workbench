@@ -182,6 +182,23 @@ section section {
   margin-left: 1.5rem;
 }
 
+/* Content Text - Preserve whitespace and formatting */
+.content-text {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Content Markdown - Preserve structure */
+.content-markdown {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.content-markdown p {
+  margin: 0.5rem 0;
+}
+
 /* Content Images - Responsive and centered */
 .content-image {
   display: block;

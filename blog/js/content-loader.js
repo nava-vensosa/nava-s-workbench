@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         case 'text':
         case 'plain':
           element.textContent = content;
+          element.classList.add('content-text');
           break;
 
         case 'html':
@@ -37,6 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         case 'markdown':
           // Simple markdown to HTML conversion (basic support)
           element.innerHTML = convertMarkdownToHTML(content);
+          element.classList.add('content-markdown');
           break;
 
         case 'image':
@@ -79,26 +81,60 @@ document.addEventListener('DOMContentLoaded', async () => {
 function convertMarkdownToHTML(markdown) {
   let html = markdown;
 
-  // Headers
-  html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
-  html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
-  html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+  // Split into lines to preserve structure
+  let lines = html.split('\n');
+  let result = [];
+  let inParagraph = false;
 
-  // Bold
-  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  for (let line of lines) {
+    // Check for headers
+    if (line.match(/^### /)) {
+      if (inParagraph) { result.push('</p>'); inParagraph = false; }
+      result.push(line.replace(/^### (.*)$/, '<h3>$1</h3>'));
+    } else if (line.match(/^## /)) {
+      if (inParagraph) { result.push('</p>'); inParagraph = false; }
+      result.push(line.replace(/^## (.*)$/, '<h2>$1</h2>'));
+    } else if (line.match(/^# /)) {
+      if (inParagraph) { result.push('</p>'); inParagraph = false; }
+      result.push(line.replace(/^# (.*)$/, '<h1>$1</h1>'));
+    } else if (line.trim() === '') {
+      // Empty line - close paragraph if open
+      if (inParagraph) {
+        result.push('</p>');
+        inParagraph = false;
+      }
+      result.push('');
+    } else {
+      // Regular line - preserve leading spaces
+      let processedLine = line;
 
-  // Italic
-  html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      // Bold
+      processedLine = processedLine.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
-  // Links
-  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+      // Italic
+      processedLine = processedLine.replace(/\*(.*?)\*/g, '<em>$1</em>');
 
-  // Line breaks
-  html = html.replace(/\n\n/g, '</p><p>');
-  html = '<p>' + html + '</p>';
+      // Links
+      processedLine = processedLine.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
 
-  // Remove empty paragraphs
-  html = html.replace(/<p><\/p>/g, '');
+      // Preserve leading spaces by converting to non-breaking spaces
+      let leadingSpaces = line.match(/^(\s+)/);
+      if (leadingSpaces) {
+        let spaces = leadingSpaces[1].replace(/ /g, '&nbsp;');
+        processedLine = spaces + processedLine.trim();
+      }
 
-  return html;
+      if (!inParagraph) {
+        result.push('<p>');
+        inParagraph = true;
+      }
+      result.push(processedLine + '<br>');
+    }
+  }
+
+  if (inParagraph) {
+    result.push('</p>');
+  }
+
+  return result.join('\n');
 }
