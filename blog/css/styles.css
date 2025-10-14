@@ -85,6 +85,8 @@ header img {
   box-shadow: 0 0 0.75rem rgba(90, 61, 255, 0.2);
   font-size: 1rem;
   line-height: 1.6;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 @media (min-width: 48rem) {
@@ -229,6 +231,36 @@ section section {
     max-width: 100% !important;
     width: auto !important;
     height: auto !important;
+  }
+
+  /* Ensure text formatting works on mobile */
+  .content-text {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    display: block !important;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .content-markdown {
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    display: block !important;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .content-markdown p {
+    margin: 0.5rem 0;
+    display: block;
+    width: 100%;
+  }
+
+  .content-markdown br {
+    display: block;
+    content: "";
+    margin: 0;
   }
 }
 
