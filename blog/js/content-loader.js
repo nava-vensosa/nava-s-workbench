@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           const img = document.createElement('img');
           img.src = contentPath;
           img.alt = hookName;
+          img.className = 'content-image';
           element.appendChild(img);
           break;
 

@@ -182,6 +182,22 @@ section section {
   margin-left: 1.5rem;
 }
 
+/* Content Images - Responsive and centered */
+.content-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem auto;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 0.5rem rgba(90, 61, 255, 0.3);
+}
+
+@media (max-width: 48rem) {
+  .content-image {
+    margin: 1rem auto;
+  }
+}
+
 .top-bar {
   text-align: center;
   font-size: clamp(0.65rem, 2vw, 1rem);
