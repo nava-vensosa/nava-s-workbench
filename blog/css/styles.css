@@ -24,16 +24,17 @@ h1 {
   font-size: clamp(1.2rem, 3vw, 2rem);
   margin: 0 0 0.5rem;
   color: #A274C4;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 h2 {
   font-size: 1.8rem;
   margin-top: 0.2rem;
   color: #9269B8;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 a {
@@ -77,13 +78,19 @@ header img {
 
 .container {
   max-width: 56rem;
-  margin: 0.5rem 6rem;
+  margin: 0.5rem 1rem;
   padding: 1.5rem;
   background-color: rgba(0, 10, 30, 0.8);
   border-radius: 0.75rem;
   box-shadow: 0 0 0.75rem rgba(90, 61, 255, 0.2);
   font-size: 1rem;
   line-height: 1.6;
+}
+
+@media (min-width: 48rem) {
+  .container {
+    margin: 0.5rem 6rem;
+  }
 }
 
 @media (min-width: 60rem) {

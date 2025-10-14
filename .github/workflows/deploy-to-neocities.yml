@@ -1,0 +1,23 @@
+name: Deploy to Neocities
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'blog/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to Neocities
+        uses: bcomnes/deploy-to-neocities@v1
+        with:
+          api_token: ${{ secrets.NEOCITIES_API_TOKEN }}
+          cleanup: false
+          dist_dir: blog
