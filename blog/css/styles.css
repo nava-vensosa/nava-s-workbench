@@ -185,8 +185,8 @@ section section {
 /* Content Images - Responsive and centered */
 .content-image {
   display: block;
-  width: 100%;
-  max-width: 40rem;
+  width: 40rem;
+  max-width: 100%;
   height: auto;
   margin: 1.5rem auto;
   border-radius: 0.5rem;
@@ -196,7 +196,7 @@ section section {
 
 @media (max-width: 48rem) {
   .content-image {
-    max-width: 100%;
+    width: 100%;
     margin: 1rem auto;
   }
 }
