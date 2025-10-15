@@ -23,6 +23,7 @@ public:
     void init(int argc, char** argv);
     void run();
     void shutdown();
+    void exportImage(const std::string& filename, int width, int height);
 
 private:
     void initGLFW();

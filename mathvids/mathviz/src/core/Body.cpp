@@ -10,3 +10,13 @@ void LineBody::render(Renderer& renderer) {
         renderer.drawLine(points, color, thickness);
     }
 }
+
+void TextBody::update(float dt) {
+    // TODO: Animation updates
+}
+
+void TextBody::render(Renderer& renderer) {
+    if (!content.empty()) {
+        renderer.drawText(content, position, color, font_size);
+    }
+}

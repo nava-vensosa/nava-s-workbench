@@ -115,3 +115,19 @@ void Renderer::drawCircle(const glm::vec2& center, float radius, const glm::vec3
 
     drawLine(points, color, 2.0f);
 }
+
+void Renderer::drawText(const std::string& text, const glm::vec2& position, const glm::vec3& color, float size) {
+    // TODO: Implement proper text rendering with FreeType or ImGui fonts
+    // For now, draw a placeholder rectangle to indicate text position
+    std::vector<glm::vec2> rect_points;
+    float width = text.length() * size * 0.6f; // Rough estimate
+    float height = size;
+
+    rect_points.push_back(position);
+    rect_points.push_back(position + glm::vec2(width, 0));
+    rect_points.push_back(position + glm::vec2(width, height));
+    rect_points.push_back(position + glm::vec2(0, height));
+    rect_points.push_back(position);
+
+    drawLine(rect_points, color, 1.0f);
+}

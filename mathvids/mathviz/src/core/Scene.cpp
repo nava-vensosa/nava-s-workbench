@@ -7,6 +7,8 @@ Scene::Scene()
     , fps(30)
     , background_color(0.1f, 0.1f, 0.1f)
     , output_path("")
+    , custom_width(1920)
+    , custom_height(1080)
 {}
 
 Scene::~Scene() {}
@@ -49,6 +51,16 @@ glm::ivec2 Scene::getResolution() const {
             return glm::ivec2(1920, 1080);
         case ResolutionMode::MOBILE_VERTICAL:
             return glm::ivec2(1080, 1920);
+        case ResolutionMode::POSTER_2_3:
+            return glm::ivec2(1200, 1800);
+        case ResolutionMode::POSTER_2_3_PRINT:
+            return glm::ivec2(2400, 3600);
+        case ResolutionMode::SQUARE_1080:
+            return glm::ivec2(1080, 1080);
+        case ResolutionMode::SQUARE_2000:
+            return glm::ivec2(2000, 2000);
+        case ResolutionMode::CUSTOM:
+            return glm::ivec2(custom_width, custom_height);
         default:
             return glm::ivec2(1920, 1080);
     }
@@ -57,4 +69,10 @@ glm::ivec2 Scene::getResolution() const {
 glm::vec2 Scene::getOrigin() const {
     glm::ivec2 res = getResolution();
     return glm::vec2(res.x / 2.0f, res.y / 2.0f);
+}
+
+void Scene::setCustomResolution(int width, int height) {
+    custom_width = width;
+    custom_height = height;
+    resolution_mode = ResolutionMode::CUSTOM;
 }

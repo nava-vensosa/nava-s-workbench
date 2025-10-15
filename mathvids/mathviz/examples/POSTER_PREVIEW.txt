@@ -1,0 +1,265 @@
+# ITP/IMA Winter Show 2025 Poster - Visual Preview
+
+## ASCII Mockup (1200x1800 pixels, 2:3 ratio)
+
+```
+╔════════════════════════════════════════════════════════════════════╗
+║                                                                    ║
+║                        [Topological Torus]                         ║
+║                     ∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿                      ║
+║                  ∿∿                        ∿∿                     ║
+║                ∿∿                              ∿∿                   ║
+║              ∿∿         [Dark Navy]              ∿∿                 ║
+║            ∿∿           Background                 ∿∿               ║
+║           ∿∿            #0a0a12                     ∿∿              ║
+║          ∿∿                                          ∿∿             ║
+║         ∿∿                                            ∿∿            ║
+║        ∿∿          ████████████████████               ∿∿           ║
+║        ∿∿       ██╔══════════════════╗██              ∿∿           ║
+║        ∿∿      ██║                    ║██             ∿∿           ║
+║        ∿∿      ██║    ITP/IMA         ║██             ∿∿           ║
+║         ∿∿     ██║                    ║██            ∿∿            ║
+║          ∿∿    ██╚══════════════════╝██            ∿∿             ║
+║           ∿∿      ████████████████████            ∿∿              ║
+║            ∿∿        [White + Glow]              ∿∿               ║
+║              ∿∿                                ∿∿                 ║
+║                ∿∿                            ∿∿                   ║
+║                  ∿∿∿                      ∿∿∿                     ║
+║                     ∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿                      ║
+║                                                                    ║
+║                    ╔══════════════════════╗                        ║
+║                    ║   WINTER SHOW       ║                        ║
+║                    ╚══════════════════════╝                        ║
+║                      [Electric Cyan Glow]                          ║
+║                         #06ffa5                                    ║
+║                                                                    ║
+║                      ╔════════════════╗                            ║
+║                      ║     2025       ║                            ║
+║                      ╚════════════════╝                            ║
+║                      [Purple Glow]                                 ║
+║                         #8338ec                                    ║
+║                                                                    ║
+║                                                                    ║
+║           [Quaternion Vector Field - Middle Layer]                ║
+║       ↗   ↑   ↖                               ↗   ↑   ↖          ║
+║     →       ←                               →       ←            ║
+║       ↘   ↓   ↙      [Purple-Blue-Yellow]    ↘   ↓   ↙          ║
+║                         Gradient                                   ║
+║                                                                    ║
+║    ∿∿∿∿∿∿∿   [Hopf Fibration Curves]   ∿∿∿∿∿∿∿                  ║
+║  ∿∿       ∿∿∿                       ∿∿∿       ∿∿                ║
+║ ∿           ∿                       ∿           ∿               ║
+║∿    [Glowing Purple & Blue Paths]    ∿                          ║
+║ ∿           ∿                       ∿           ∿               ║
+║  ∿∿       ∿∿∿                       ∿∿∿       ∿∿                ║
+║    ∿∿∿∿∿∿∿                               ∿∿∿∿∿∿∿                  ║
+║                                                                    ║
+║                                                                    ║
+║                                                                    ║
+║                                                                    ║
+║                                                                    ║
+║                  [Wave Functions - Foreground]                     ║
+║      ╭─╮     ╭─╮     ╭─╮     ╭─╮     ╭─╮                        ║
+║  ───╯   ╰───╯   ╰───╯   ╰───╯   ╰───╯   ╰───  [Cyan Wave]       ║
+║                                                 #06ffa5            ║
+║    ╭──╮   ╭──╮   ╭──╮   ╭──╮   ╭──╮                             ║
+║  ─╯    ╰─╯    ╰─╯    ╰─╯    ╰─╯    ╰─  [Blue Wave]            ║
+║                                            #48cae4                 ║
+║  ╭─╮ ╭─╮ ╭─╮ ╭─╮ ╭─╮ ╭─╮ ╭─╮ ╭─╮                              ║
+║ ╯   ╰   ╰   ╰   ╰   ╰   ╰   ╰   ╰  [Light Blue Wave]          ║
+║                                       #90e0ef                      ║
+║  [Gaussian envelopes with interference patterns]                  ║
+║                                                                    ║
+║                                                                    ║
+║               • • • • • •  [Particles]  • • • • • •               ║
+║         • •                                         • •           ║
+║       •           [Floating data points]              •          ║
+║     •                  300 total                        •         ║
+║       •              Low opacity                      •          ║
+║         • •                                         • •           ║
+║               • • • • • •                • • • • • •               ║
+║                                                                    ║
+║                                                                    ║
+║                                                                    ║
+║                      December 13-14                                ║
+║                                                                    ║
+║                  370 Jay Street, Brooklyn                          ║
+║                                                                    ║
+║                    6:00 PM - 9:00 PM                               ║
+║                                                                    ║
+║                                                                    ║
+║ 40.6942°N    ┊ ┊ ┊ ┊ ┊ ┊ ┊ ┊ ┊ ┊     MATRIX_DIM: 2:3 | RENDER   ║
+║ 73.9867°W    ┊ ┊ ┊ ┊ ┊ ┊ ┊ ┊ ┊ ┊     QUATERNION                  ║
+║              [Subtle Grid Overlay]                                 ║
+╚════════════════════════════════════════════════════════════════════╝
+
+Dimensions: 1200 x 1800 pixels (2:3 portrait)
+Print Size: 8" x 12" @ 300 DPI (or 2400x3600 for high-res)
+```
+
+## Layer Breakdown
+
+### Layer 1: Background (0-30% opacity)
+- **Torus topology**: Wireframe rotating slowly
+- **Color**: Muted blue (#1a4d6d)
+- **Effect**: Subtle, atmospheric
+
+### Layer 2: Vector Field (30-50% opacity)
+- **Quaternion rotations**: Arrows showing rotation
+- **Color gradient**: Purple → Blue → Yellow
+- **Size variation**: Based on field magnitude
+- **Animation**: Full rotation every 20 seconds
+
+### Layer 3: Parametric Curves (50-70% opacity)
+- **Hopf fibration**: Two interweaving paths
+- **Colors**: Purple (#8338ec) and Blue (#3a86ff)
+- **Glow**: Moderate intensity (0.4-0.6)
+- **Animation**: Phase rotation every 8-10 seconds
+
+### Layer 4: Wave Functions (70-90% opacity)
+- **Three waves**: Overlapping interference
+- **Colors**: Cyan family (#06ffa5, #48cae4, #90e0ef)
+- **Glow**: Strong (0.5-0.8)
+- **Animation**: Oscillating phases
+
+### Layer 5: Particles (20-50% opacity)
+- **Count**: 300 particles total
+- **Motion**: Following vector fields
+- **Size**: 2-4 pixels
+- **Color**: White and purple
+
+### Layer 6: Typography (100% opacity)
+- **ITP/IMA**: 120pt, white, center top
+- **WINTER SHOW**: 56pt, cyan, below title
+- **2025**: 96pt, purple, below subtitle
+- **Details**: 24-32pt, various colors, bottom
+
+### Layer 7: Grid & Accents (10% opacity)
+- **Grid**: 100px spacing
+- **Accent lines**: Left and right edges
+- **Technical details**: Bottom corners
+
+## Color Temperature Map
+
+```
+          Cold                    Warm
+            ↓                       ↓
+Background ══════════════════════════ Highlight
+#0a0a12     #1a4d6d   #3a86ff  #ff006e  #ffbe0b
+ Dark Navy   Blue      Bright   Hot Pink  Yellow
+```
+
+## Glow Intensity Map
+
+```
+Subtle        Moderate        Strong
+  ↓              ↓              ↓
+Torus      Quaternions      Waves
+0.3         0.5-0.6         0.6-0.8
+
+Title: 0.4-0.8 (pulsing)
+```
+
+## Animation Timeline (20-second loop)
+
+```
+0s  ━━━━━━━━━━━━━━━━━━━━ 20s
+
+Torus Rotation:   ━━━━━━━━━━━━━━━━━━━━ (360° continuous)
+Vector Field:     ━━━━━━━━━━━━━━━━━━━━ (rotation)
+Hopf Curve 1:     ━━━━━━━━━━ (10s loop)
+Hopf Curve 2:     ━━━━━━━━ (8s loop)
+Wave 1:           ━━━━ (4s loop)
+Wave 2:           ━━━━━ (5s loop)
+Wave 3:           ━━━ (3.5s loop)
+Particles:        ━━━━━━━━━━━━━━━━━━━━ (continuous flow)
+Title Glow:       ━━━ (3s pulse, alternating)
+```
+
+## Spatial Composition
+
+```
+╔═════════════════════════╗
+║    10% - Logo Space     ║  (top safe area)
+╠═════════════════════════╣
+║                         ║
+║    15% - Title          ║  ITP/IMA (centered)
+║                         ║
+╠═════════════════════════╣
+║                         ║
+║    60% - Visual         ║  Math visualizations
+║         Content         ║  (torus, quaternions, waves)
+║                         ║
+╠═════════════════════════╣
+║    10% - Event Info     ║  Date, location, time
+╠═════════════════════════╣
+║    5% - Details         ║  (bottom safe area)
+╚═════════════════════════╝
+```
+
+## Mathematical Formulas Used
+
+### Torus (3D → 2D projection)
+```
+x = (R + r·cos(v)) · cos(u)
+y = (R + r·cos(v)) · sin(u)  → Project to 2D
+z = r · sin(v)
+
+R = 2 (major radius)
+r = 1 (minor radius)
+```
+
+### Quaternion Rotation
+```
+q = cos(θ/2) + sin(θ/2)·(xi + yj + zk)
+Rotation field at point (x,y):
+  [cos(t)·x - sin(t)·y, sin(t)·x + cos(t)·y]
+```
+
+### Hopf Fibration (S³ → S²)
+```
+Parametric curves on S³ projected to S²:
+x(t) = 300·cos(t)
+y(t) = 450·sin(2t)
+```
+
+### Wave Function
+```
+ψ(x) = A · e^(-x²/2σ²) · cos(kx)
+|ψ(x)|² = probability density (shaded area)
+
+Where:
+  A = amplitude (80-100)
+  σ = spread (200-300)
+  k = wave number (0.02-0.03)
+```
+
+## Typography Hierarchy
+
+```
+1. ITP/IMA         120pt  White    Bold      Glow: 0.4-0.8
+2. WINTER SHOW      56pt  Cyan     Regular   Glow: 0.6-1.0
+3. 2025             96pt  Purple   Bold      Glow: 0.5
+4. Date             32pt  White    Regular   Glow: 0
+5. Location         28pt  Cyan     Regular   Glow: 0
+6. Time             24pt  Blue     Regular   Glow: 0
+7. Technical        14pt  Gray     Mono      Glow: 0
+```
+
+## Print Specifications
+
+**For Professional Printing:**
+- **Size**: 8" × 12" (standard poster)
+- **Resolution**: 2400 × 3600 pixels @ 300 DPI
+- **Color Space**: CMYK (convert from RGB)
+- **Bleed**: 0.125" on all sides
+- **Safe Zone**: 0.25" from edges (keep text inside)
+- **Format**: PDF or PNG
+
+**For Digital Display:**
+- **Size**: 1200 × 1800 pixels
+- **Resolution**: 72-150 DPI (screen)
+- **Color Space**: RGB
+- **Format**: PNG or JPEG (high quality)
+
+This poster will be absolutely stunning when Phase 5+ is complete! 🎨🎉

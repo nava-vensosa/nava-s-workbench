@@ -37,3 +37,18 @@ public:
     std::vector<glm::vec2> points;
     float thickness;
 };
+
+// Text body for typography
+class TextBody : public Body {
+public:
+    TextBody(const std::string& name) : Body(name) {}
+
+    void update(float dt) override;
+    void render(Renderer& renderer) override;
+
+    // Text properties
+    std::string content;
+    float font_size;
+    std::string font_family;
+    glm::vec2 alignment; // [-1,1] for left/right, top/bottom
+};

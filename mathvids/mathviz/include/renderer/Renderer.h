@@ -22,6 +22,7 @@ public:
     // Drawing primitives
     void drawLine(const std::vector<glm::vec2>& points, const glm::vec3& color, float thickness);
     void drawCircle(const glm::vec2& center, float radius, const glm::vec3& color);
+    void drawText(const std::string& text, const glm::vec2& position, const glm::vec3& color, float size);
 
     // Getters
     glm::mat4 getProjection() const { return projection_; }

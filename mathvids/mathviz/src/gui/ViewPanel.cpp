@@ -1,3 +1,5 @@
+#include <GL/glew.h>  // MUST be included before any OpenGL headers
+
 #include "gui/ViewPanel.h"
 #include "core/Scene.h"
 #include "renderer/Renderer.h"

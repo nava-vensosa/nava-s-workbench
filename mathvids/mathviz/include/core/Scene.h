@@ -11,8 +11,13 @@ class Frame;
 class Renderer;
 
 enum class ResolutionMode {
-    DESKTOP_1080P,
-    MOBILE_VERTICAL
+    DESKTOP_1080P,        // 1920x1080 (16:9)
+    MOBILE_VERTICAL,      // 1080x1920 (9:16)
+    POSTER_2_3,           // 1200x1800 (2:3 portrait)
+    POSTER_2_3_PRINT,     // 2400x3600 (2:3 high-res)
+    SQUARE_1080,          // 1080x1080 (1:1)
+    SQUARE_2000,          // 2000x2000 (1:1 high-res)
+    CUSTOM                // User-specified dimensions
 };
 
 class Scene {
@@ -33,9 +38,17 @@ public:
     glm::vec3 background_color;
     std::string output_path;
 
+    // Custom resolution (used when resolution_mode == CUSTOM)
+    int custom_width;
+    int custom_height;
+
     // Resolution info
     glm::ivec2 getResolution() const;
     glm::vec2 getOrigin() const;
+    void setCustomResolution(int width, int height);
+
+    // Allow parser access to frames
+    friend class CommandParser;
 
 private:
     std::vector<std::unique_ptr<Frame>> frames_;

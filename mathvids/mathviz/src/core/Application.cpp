@@ -1,3 +1,6 @@
+#include <GL/glew.h>  // MUST be included before any OpenGL headers
+#include <GLFW/glfw3.h>
+
 #include "core/Application.h"
 #include "core/Scene.h"
 #include "core/Frame.h"
@@ -5,16 +8,17 @@
 #include "gui/PanelManager.h"
 #include "renderer/Renderer.h"
 #include "parser/CommandParser.h"
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "../external/stb_image_write.h"
+
 #include <iostream>
 #include <stdexcept>
 #include <cmath>
+#include <vector>
 
 Application::Application()
     : mode_(AppMode::GUI)
@@ -46,8 +50,15 @@ void Application::init(int argc, char** argv) {
         panel_manager_ = std::make_unique<PanelManager>(
             window_width_, window_height_, scene_.get(), parser_.get());
 
-        // Create test scene with demo shapes
-        createTestScene();
+        // Load poster script
+        std::cout << "Loading poster script..." << std::endl;
+        parser_->parseFile("../examples/poster_winter_show_2025_fixed.md");
+
+        // Check if export is requested
+        if (!scene_->output_path.empty()) {
+            glm::ivec2 resolution = scene_->getResolution();
+            exportImage(scene_->output_path, resolution.x, resolution.y);
+        }
 
         std::cout << "MathViz initialized in GUI mode" << std::endl;
     }
@@ -218,6 +229,70 @@ void Application::createTestScene() {
     scene_->addFrame(std::move(frame));
 
     std::cout << "Test scene created with sine wave, circle, and axes" << std::endl;
+}
+
+void Application::exportImage(const std::string& filename, int width, int height) {
+    std::cout << "[Export] Rendering to " << width << "x" << height << " image: " << filename << std::endl;
+
+    // Create framebuffer for offscreen rendering
+    GLuint fbo, texture, rbo;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    // Create texture to render to
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+    // Create renderbuffer for depth/stencil
+    glGenRenderbuffers(1, &rbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        std::cerr << "[Export] Framebuffer is not complete!" << std::endl;
+        return;
+    }
+
+    // Set viewport and projection for export resolution
+    glViewport(0, 0, width, height);
+    renderer_->setViewport(0, 0, width, height);
+
+    glm::mat4 projection = glm::ortho(0.0f, (float)width, 0.0f, (float)height, -1.0f, 1.0f);
+    renderer_->setProjection(projection);
+
+    // Render the scene
+    renderer_->clear(scene_->background_color);
+    scene_->render(*renderer_);
+
+    // Read pixels from framebuffer
+    std::vector<unsigned char> pixels(width * height * 3);
+    glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
+
+    // Flip image vertically (OpenGL has origin at bottom-left)
+    std::vector<unsigned char> flipped(width * height * 3);
+    for (int y = 0; y < height; ++y) {
+        memcpy(&flipped[y * width * 3], &pixels[(height - 1 - y) * width * 3], width * 3);
+    }
+
+    // Save as PNG
+    if (stbi_write_png(filename.c_str(), width, height, 3, flipped.data(), width * 3)) {
+        std::cout << "[Export] Successfully saved: " << filename << std::endl;
+    } else {
+        std::cerr << "[Export] Failed to save: " << filename << std::endl;
+    }
+
+    // Cleanup
+    glDeleteFramebuffers(1, &fbo);
+    glDeleteTextures(1, &texture);
+    glDeleteRenderbuffers(1, &rbo);
+
+    // Restore viewport
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Application::shutdown() {
