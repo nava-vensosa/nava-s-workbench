@@ -1,21 +1,21 @@
 # Deadman
----
+<hr class="divider">
 
 Jaye and I met at Prospect Park, near the zoo. We walked a nearby trail as I gave an overview of what we were about to do and the rules of engagement. The sound of a lighter clicking would transition between the 3 scenes: The Walk Out, The Dreamwalk, and The Return.
 
-<div data-content-hook="image2" data-content-path="../../content/site_specific_explorations/deadman/deadman_project/image2.png" data-content-type="image"></div>
+<img src="../../content/site_specific_explorations/deadman/deadman_project/image2.png" alt="Deadman Project - Image 2" class="content-image">
 
----
+<hr class="divider">
 ## Part 1: The Walk Out
----
+<hr class="divider">
 
 To echo the experiences in Jaye's dream of witnessing, towing along behind, and being restricted in action, Jaye walked behind me, filming with an old video camera. Her mobility for expression lay in what she chose to put in frame, and how she chose to move the camera; the footage will become part of The Return.
 
-<div data-content-hook="image1" data-content-path="../../content/site_specific_explorations/deadman/deadman_project/image1.png" data-content-type="image"></div>
+<img src="../../content/site_specific_explorations/deadman/deadman_project/image1.png" alt="Deadman Project - Image 1" class="content-image">
 
----
+<hr class="divider">
 ## Part 2: The Dreamwalk
----
+<hr class="divider">
 
 Near the end of the path we were walking, Jaye was to freeze -- as if she were a camera built into a tree in the woods. In this section, Jaye made the choice to zoom in on the lips rather than framing the face to preserve the sense of anonymity and personlessness in hear dream. As we concluded the Dreamwalk, I recited some verse I had written on the content of her dream:
 
@@ -46,11 +46,11 @@ Call it crying, if you will.
 Dream that no one ever lies
 When their words stand still.
 
-<div data-content-hook="image3" data-content-path="../../content/site_specific_explorations/deadman/deadman_project/image3.png" data-content-type="image"></div>
+<img src="../../content/site_specific_explorations/deadman/deadman_project/image3.png" alt="Deadman Project - Image 3" class="content-image">
 
----
+<hr class="divider">
 ## Part 3: The Return
----
+<hr class="divider">
 
 "We are like the dreamer who dreams, and then lives inside the dream"
 
@@ -76,4 +76,3 @@ Has anybody got a light?
 Anybody? Anybody got a light?
 Has anybody got a light?
 
----
