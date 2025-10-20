@@ -87,8 +87,11 @@ function convertMarkdownToHTML(markdown) {
   let inParagraph = false;
 
   for (let line of lines) {
-    // Check for headers
-    if (line.match(/^### /)) {
+    // Check for horizontal rule
+    if (line.trim() === '---') {
+      if (inParagraph) { result.push('</p>'); inParagraph = false; }
+      result.push('<hr class="divider">');
+    } else if (line.match(/^### /)) {
       if (inParagraph) { result.push('</p>'); inParagraph = false; }
       result.push(line.replace(/^### (.*)$/, '<h3>$1</h3>'));
     } else if (line.match(/^## /)) {
