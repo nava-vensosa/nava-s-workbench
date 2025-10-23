@@ -5,3 +5,5 @@ The Three Quarters Club is a writing ring hosted on this blog. Each week, we wri
 Current members are:
 Nava
 Byron
+Ethan
+Ryan
