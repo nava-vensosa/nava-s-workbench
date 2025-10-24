@@ -39,7 +39,7 @@ void InputHandler::keyCallbackStatic(GLFWwindow* window, int key, int scancode, 
     // Alt+Space enters command mode (for window switching)
     if (key == GLFW_KEY_SPACE && (mods & GLFW_MOD_ALT) && action == GLFW_PRESS) {
         handler->commandMode = true;
-        std::cout << "Command mode: Press F (fullscreen), 1/2/3/4 (switch windows), or [ (copy mode)\n";
+        std::cout << "Command mode: F (fullscreen), 1/2/3/4 (windows), [ (copy), (/)\n(tabs)\n";
         return;
     }
 
@@ -64,6 +64,26 @@ void InputHandler::keyCallbackStatic(GLFWwindow* window, int key, int scancode, 
             return;
         }
 
+        // Check for ( to go to previous tab (GLFW_KEY_9 with Shift)
+        if (key == GLFW_KEY_9 && (mods & GLFW_MOD_SHIFT)) {
+            if (handler->tabSwitchCallback) {
+                handler->tabSwitchCallback(-1);  // Previous tab
+                std::cout << "Switching to previous tab\n";
+            }
+            handler->commandMode = false;
+            return;
+        }
+
+        // Check for ) to go to next tab (GLFW_KEY_0 with Shift)
+        if (key == GLFW_KEY_0 && (mods & GLFW_MOD_SHIFT)) {
+            if (handler->tabSwitchCallback) {
+                handler->tabSwitchCallback(1);  // Next tab
+                std::cout << "Switching to next tab\n";
+            }
+            handler->commandMode = false;
+            return;
+        }
+
         // Check for window switch keys (1, 2, 3, 4 or numpad 1, 2, 3, 4)
         int newWindow = -1;
         if (key == GLFW_KEY_1 || key == GLFW_KEY_KP_1) newWindow = 0;
@@ -72,13 +92,22 @@ void InputHandler::keyCallbackStatic(GLFWwindow* window, int key, int scancode, 
         else if (key == GLFW_KEY_4 || key == GLFW_KEY_KP_4) newWindow = 3;
 
         if (newWindow >= 0) {
-            handler->activeWindow = newWindow;
-            std::cout << "Switched to window " << newWindow << "\n";
             if (handler->windowSwitchCallback) {
                 handler->windowSwitchCallback(newWindow);
             }
+            handler->commandMode = false;
+            return;
         }
 
+        // Ignore modifier keys (don't exit command mode)
+        if (key == GLFW_KEY_LEFT_SHIFT || key == GLFW_KEY_RIGHT_SHIFT ||
+            key == GLFW_KEY_LEFT_CONTROL || key == GLFW_KEY_RIGHT_CONTROL ||
+            key == GLFW_KEY_LEFT_ALT || key == GLFW_KEY_RIGHT_ALT ||
+            key == GLFW_KEY_LEFT_SUPER || key == GLFW_KEY_RIGHT_SUPER) {
+            return;  // Stay in command mode
+        }
+
+        // If we get here, unknown command - exit command mode
         handler->commandMode = false;
         return;
     }
@@ -116,17 +145,67 @@ void InputHandler::keyCallbackStatic(GLFWwindow* window, int key, int scancode, 
 
         if (action == GLFW_PRESS || action == GLFW_REPEAT) {
             if (key == GLFW_KEY_BACKSPACE) {
-                buffer->deleteCharBefore();
+                // For shell, don't allow backspace on empty command line (would bring history down)
+                if (handler->activeWindow == 2 && buffer->getLineCount() > 0) {
+                    int lastLine = buffer->getLineCount() - 1;
+                    if (buffer->getCursorRow() == lastLine && !buffer->getLines()[lastLine].empty()) {
+                        // Only allow backspace if command line has content
+                        buffer->deleteCharBefore();
+                    }
+                } else {
+                    // For other windows, normal backspace behavior
+                    buffer->deleteCharBefore();
+                }
             } else if (key == GLFW_KEY_ENTER) {
-                buffer->insertNewline();
+                // For shell (window 2), execute command
+                if (handler->activeWindow == 2) {
+                    if (buffer->getLineCount() > 0) {
+                        std::string command = buffer->getLines().back();
+                        if (!command.empty() && handler->shellCommandCallback) {
+                            handler->shellCommandCallback(command);
+                        }
+                    }
+                } else {
+                    buffer->insertNewline();
+                }
             } else if (key == GLFW_KEY_LEFT) {
                 buffer->moveCursorLeft();
             } else if (key == GLFW_KEY_RIGHT) {
                 buffer->moveCursorRight();
             } else if (key == GLFW_KEY_UP) {
-                buffer->moveCursorUp();
+                // In shell INSERT mode, use UP for command history
+                if (handler->activeWindow == 2 && handler->shellHistoryCallback) {
+                    std::string historyCmd = handler->shellHistoryCallback(-1);  // Previous command
+                    // Clear current command line
+                    int lastLine = buffer->getLineCount() - 1;
+                    buffer->setCursor(lastLine, 0);
+                    while (!buffer->getLines()[lastLine].empty()) {
+                        buffer->deleteChar();
+                    }
+                    // Insert history command
+                    for (char c : historyCmd) {
+                        buffer->insertChar(c);
+                    }
+                } else if (handler->activeWindow != 2) {
+                    buffer->moveCursorUp();
+                }
             } else if (key == GLFW_KEY_DOWN) {
-                buffer->moveCursorDown();
+                // In shell INSERT mode, use DOWN for command history
+                if (handler->activeWindow == 2 && handler->shellHistoryCallback) {
+                    std::string historyCmd = handler->shellHistoryCallback(1);  // Next command
+                    // Clear current command line
+                    int lastLine = buffer->getLineCount() - 1;
+                    buffer->setCursor(lastLine, 0);
+                    while (!buffer->getLines()[lastLine].empty()) {
+                        buffer->deleteChar();
+                    }
+                    // Insert history command
+                    for (char c : historyCmd) {
+                        buffer->insertChar(c);
+                    }
+                } else if (handler->activeWindow != 2) {
+                    buffer->moveCursorDown();
+                }
             }
         }
         return;
@@ -140,7 +219,17 @@ void InputHandler::keyCallbackStatic(GLFWwindow* window, int key, int scancode, 
         } else if (key == GLFW_KEY_J || key == GLFW_KEY_DOWN) {
             buffer->moveCursorDown();
         } else if (key == GLFW_KEY_K || key == GLFW_KEY_UP) {
-            buffer->moveCursorUp();
+            // In shell NORMAL mode, don't allow moving up past the command line
+            if (handler->activeWindow == 2 && buffer->getLineCount() > 0) {
+                int lastLine = buffer->getLineCount() - 1;
+                if (buffer->getCursorRow() > lastLine) {
+                    // Already above command line, allow moving up
+                    buffer->moveCursorUp();
+                }
+                // Otherwise, block movement up (stay on command line)
+            } else {
+                buffer->moveCursorUp();
+            }
         } else if (key == GLFW_KEY_L || key == GLFW_KEY_RIGHT) {
             buffer->moveCursorRight();
         } else if (key == GLFW_KEY_W) {
@@ -183,8 +272,17 @@ void InputHandler::keyCallbackStatic(GLFWwindow* window, int key, int scancode, 
             buffer->moveCursorNextParagraph();
         }
 
-        // Enter insert mode
+        // Enter insert mode (not allowed on console - window 3)
         else if (key == GLFW_KEY_I) {
+            if (handler->activeWindow == 3) {
+                // Console is read-only, no INSERT mode
+                std::cout << "Console is read-only. Use Alt+Space+[ for COPY mode to scroll.\n";
+                return;
+            }
+            // For shell (window 2), move cursor to last line (command line)
+            if (handler->activeWindow == 2 && buffer->getLineCount() > 0) {
+                buffer->setCursor(buffer->getLineCount() - 1, 0);
+            }
             if (mods & GLFW_MOD_SHIFT) {
                 // I - insert at beginning of line
                 buffer->moveCursorLineStart();
@@ -193,48 +291,89 @@ void InputHandler::keyCallbackStatic(GLFWwindow* window, int key, int scancode, 
             handler->ignoreNextChar = true;
             std::cout << "-- INSERT --\n";
         } else if (key == GLFW_KEY_A) {
+            if (handler->activeWindow == 3) {
+                std::cout << "Console is read-only.\n";
+                return;
+            }
+            // For shell (window 2), move cursor to last line (command line)
+            if (handler->activeWindow == 2 && buffer->getLineCount() > 0) {
+                buffer->setCursor(buffer->getLineCount() - 1, buffer->getLines()[buffer->getLineCount() - 1].length());
+            }
             // Enter INSERT mode first so cursor positioning works correctly
             buffer->setMode(VimMode::INSERT);
             if (mods & GLFW_MOD_SHIFT) {
                 // A - append at end of line
                 buffer->moveCursorLineEnd();
             } else {
-                // a - append after cursor
-                buffer->moveCursorRight();
+                // a - append after cursor (only if not shell)
+                if (handler->activeWindow != 2) {
+                    buffer->moveCursorRight();
+                }
             }
             handler->ignoreNextChar = true;
             std::cout << "-- INSERT --\n";
         } else if (key == GLFW_KEY_O) {
-            if (mods & GLFW_MOD_SHIFT) {
-                // O - open line above
-                buffer->moveCursorLineStart();
-                buffer->insertNewline();
-                buffer->moveCursorUp();
+            if (handler->activeWindow == 3) {
+                std::cout << "Console is read-only.\n";
+                return;
+            }
+            // For shell (window 2), just enter INSERT mode on command line
+            if (handler->activeWindow == 2 && buffer->getLineCount() > 0) {
+                buffer->setCursor(buffer->getLineCount() - 1, 0);
             } else {
-                // o - open line below
-                buffer->moveCursorLineEnd();
-                buffer->insertNewline();
+                if (mods & GLFW_MOD_SHIFT) {
+                    // O - open line above
+                    buffer->moveCursorLineStart();
+                    buffer->insertNewline();
+                    buffer->moveCursorUp();
+                } else {
+                    // o - open line below
+                    buffer->moveCursorLineEnd();
+                    buffer->insertNewline();
+                }
             }
             buffer->setMode(VimMode::INSERT);
             handler->ignoreNextChar = true;
             std::cout << "-- INSERT --\n";
         } else if (key == GLFW_KEY_S) {
-            if (mods & GLFW_MOD_SHIFT) {
-                // S - substitute line (delete line and enter insert mode)
-                buffer->deleteLine();
+            if (handler->activeWindow == 3) {
+                std::cout << "Console is read-only.\n";
+                return;
+            }
+            // For shell (window 2), clear command line and enter INSERT mode
+            if (handler->activeWindow == 2 && buffer->getLineCount() > 0) {
+                int lastLine = buffer->getLineCount() - 1;
+                buffer->setCursor(lastLine, 0);
+                // Clear the command line
+                while (!buffer->getLines()[lastLine].empty()) {
+                    buffer->deleteChar();
+                }
             } else {
-                // s - substitute character (delete char and enter insert mode)
-                buffer->deleteChar();
+                if (mods & GLFW_MOD_SHIFT) {
+                    // S - substitute line (delete line and enter insert mode)
+                    buffer->deleteLine();
+                } else {
+                    // s - substitute character (delete char and enter insert mode)
+                    buffer->deleteChar();
+                }
             }
             buffer->setMode(VimMode::INSERT);
             handler->ignoreNextChar = true;
             std::cout << "-- INSERT --\n";
         }
 
-        // Delete operations
+        // Delete operations (not allowed on console)
         else if (key == GLFW_KEY_X) {
+            if (handler->activeWindow == 3) {
+                std::cout << "Console is read-only.\n";
+                return;
+            }
             buffer->deleteChar();
         } else if (key == GLFW_KEY_D) {
+            if (handler->activeWindow == 3) {
+                std::cout << "Console is read-only.\n";
+                return;
+            }
             if (handler->lastKey == GLFW_KEY_D) {
                 // dd - delete line
                 buffer->deleteLine();

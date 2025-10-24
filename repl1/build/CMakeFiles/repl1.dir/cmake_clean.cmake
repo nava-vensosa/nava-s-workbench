@@ -11,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/repl1.dir/src/nvim_client.cpp.o.d"
   "CMakeFiles/repl1.dir/src/renderer.cpp.o"
   "CMakeFiles/repl1.dir/src/renderer.cpp.o.d"
+  "CMakeFiles/repl1.dir/src/repl_interpreter.cpp.o"
+  "CMakeFiles/repl1.dir/src/repl_interpreter.cpp.o.d"
   "CMakeFiles/repl1.dir/src/text_buffer.cpp.o"
   "CMakeFiles/repl1.dir/src/text_buffer.cpp.o.d"
   "CMakeFiles/repl1.dir/src/window_manager.cpp.o"

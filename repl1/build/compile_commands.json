@@ -52,5 +52,11 @@
   "command": "/usr/bin/c++  -I/Users/kabirdaniel/Desktop/yusei/nava-s-workbench/repl1/include -I/Users/kabirdaniel/Desktop/yusei/nava-s-workbench/repl1/external/glad/include -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/repl1.dir/src/text_buffer.cpp.o -c /Users/kabirdaniel/Desktop/yusei/nava-s-workbench/repl1/src/text_buffer.cpp",
   "file": "/Users/kabirdaniel/Desktop/yusei/nava-s-workbench/repl1/src/text_buffer.cpp",
   "output": "CMakeFiles/repl1.dir/src/text_buffer.cpp.o"
+},
+{
+  "directory": "/Users/kabirdaniel/Desktop/yusei/nava-s-workbench/repl1/build",
+  "command": "/usr/bin/c++  -I/Users/kabirdaniel/Desktop/yusei/nava-s-workbench/repl1/include -I/Users/kabirdaniel/Desktop/yusei/nava-s-workbench/repl1/external/glad/include -iframework /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks -isystem /opt/homebrew/include -std=gnu++17 -arch arm64 -o CMakeFiles/repl1.dir/src/repl_interpreter.cpp.o -c /Users/kabirdaniel/Desktop/yusei/nava-s-workbench/repl1/src/repl_interpreter.cpp",
+  "file": "/Users/kabirdaniel/Desktop/yusei/nava-s-workbench/repl1/src/repl_interpreter.cpp",
+  "output": "CMakeFiles/repl1.dir/src/repl_interpreter.cpp.o"
 }
 ]

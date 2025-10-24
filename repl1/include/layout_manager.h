@@ -18,7 +18,9 @@ class LayoutManager {
 public:
     LayoutManager();
     void update(int windowWidth, int windowHeight);
+    void updateTab2(int windowWidth, int windowHeight);
 
+    // Tab 1 layouts (main display)
     Rect getVideoDisplayRect() const { return videoDisplay; }
     Rect getMobileDisplayRect() const { return mobileDisplay; }
     Rect getDossierEditorRect() const { return dossierEditor; }
@@ -26,13 +28,24 @@ public:
     Rect getShellWindowRect() const { return shellWindow; }
     Rect getConsoleWindowRect() const { return consoleWindow; }
 
+    // Tab 2 layouts (REPL focus)
+    Rect getTab2ReplRect() const { return tab2Repl; }
+    Rect getTab2ShellRect() const { return tab2Shell; }
+    Rect getTab2ConsoleRect() const { return tab2Console; }
+
 private:
+    // Tab 1
     Rect videoDisplay;
     Rect mobileDisplay;
     Rect dossierEditor;
     Rect replEditor;
     Rect shellWindow;
     Rect consoleWindow;
+
+    // Tab 2
+    Rect tab2Repl;
+    Rect tab2Shell;
+    Rect tab2Console;
 };
 
 #endif // LAYOUT_MANAGER_H

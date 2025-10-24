@@ -1,5 +1,6 @@
 #include <iostream>
 #include <memory>
+#include <sstream>
 #include <glad/glad.h>
 #include "window_manager.h"
 #include "layout_manager.h"
@@ -7,6 +8,7 @@
 #include "input_handler.h"
 #include "nvim_client.h"
 #include "text_buffer.h"
+#include "repl_interpreter.h"
 
 int main(int argc, char** argv) {
     std::cout << "REPL1 - Live Coding Environment for Video and Animation\n";
@@ -56,16 +58,166 @@ int main(int argc, char** argv) {
     // Set initial active buffer
     inputHandler->setActiveTextBuffer(buffers[0]);
 
+    // Track current tab (0 = Tab 1, 1 = Tab 2)
+    int currentTab = 0;
+
     // Setup input callbacks
     inputHandler->setFullscreenToggleCallback([&windowMgr]() {
         windowMgr->toggleFullscreen();
     });
 
-    inputHandler->setWindowSwitchCallback([&inputHandler, &buffers](int window) {
-        std::cout << "Switched to window " << window << "\n";
-        if (window >= 0 && window < 4) {
-            inputHandler->setActiveTextBuffer(buffers[window]);
+    inputHandler->setWindowSwitchCallback([&inputHandler, &buffers, &currentTab](int window) {
+        // Remap window numbers based on current tab
+        int actualWindow = window;
+
+        if (currentTab == 1) {
+            // Tab 2 mapping: 1->REPL(1), 2->console(3), 3->shell(2)
+            if (window == 0) actualWindow = 1;      // 1 -> REPL
+            else if (window == 1) actualWindow = 3; // 2 -> console
+            else if (window == 2) actualWindow = 2; // 3 -> shell
+            else if (window == 3) actualWindow = -1; // 4 -> invalid (no window 4 on Tab 2)
         }
+        // Tab 1 uses default mapping: 0->dossier, 1->REPL, 2->shell, 3->console
+
+        if (actualWindow >= 0 && actualWindow < 4) {
+            std::cout << "Switched to window " << actualWindow << "\n";
+            inputHandler->setActiveWindow(actualWindow);  // Update activeWindow for highlighting
+            inputHandler->setActiveTextBuffer(buffers[actualWindow]);
+        }
+    });
+
+    inputHandler->setTabSwitchCallback([&currentTab](int direction) {
+        currentTab = (currentTab + direction + 2) % 2;  // Wrap between 0 and 1
+        std::cout << "Switched to Tab " << (currentTab + 1) << "\n";
+    });
+
+    // Create REPL interpreter
+    auto replInterpreter = std::make_unique<ReplInterpreter>();
+
+    // Shell command history
+    std::vector<std::string> commandHistory;
+    int historyIndex = 0;  // Points to current position in history
+
+    // Setup shell command execution callback
+    auto executeShellCommand = [&shellBuffer, &consoleBuffer, &replBuffer, &replInterpreter, &commandHistory, &historyIndex](const std::string& command) {
+        std::cout << "Executing shell command: " << command << "\n";
+
+        // Add command to history
+        if (!command.empty()) {
+            commandHistory.push_back(command);
+            historyIndex = commandHistory.size();  // Point to end (one past last command)
+        }
+
+        // Add command to shell history and clear command line
+        if (shellBuffer->getLineCount() > 0) {
+            auto& lines = shellBuffer->getLines();
+            std::string cmd = lines.back();  // Get command line
+
+            // Insert command into history (before last line)
+            shellBuffer->setCursor(shellBuffer->getLineCount() - 1, 0);
+            shellBuffer->insertChar('>');
+            shellBuffer->insertChar(' ');
+            for (char c : cmd) {
+                shellBuffer->insertChar(c);
+            }
+            shellBuffer->insertNewline();
+
+            // Clear the command line (current last line)
+            int lastLine = shellBuffer->getLineCount() - 1;
+            shellBuffer->setCursor(lastLine, 0);
+            while (shellBuffer->getLineCount() > 0 && !shellBuffer->getLines().back().empty()) {
+                shellBuffer->deleteChar();
+            }
+        }
+
+        // Parse and execute command
+        if (command == "clear console") {
+            // Clear console buffer completely
+            while (consoleBuffer->getLineCount() > 1) {
+                consoleBuffer->setCursor(0, 0);
+                consoleBuffer->deleteLine();
+            }
+            // Clear the last remaining line
+            if (consoleBuffer->getLineCount() > 0) {
+                consoleBuffer->setCursor(0, 0);
+                while (!consoleBuffer->getLines()[0].empty()) {
+                    consoleBuffer->deleteChar();
+                }
+            }
+            std::cout << "Console cleared\n";
+        }
+        else if (command.find("clear ") == 0) {
+            std::string target = command.substr(6);
+            if (target == "REPL.txt") {
+                // Clear REPL buffer
+                while (replBuffer->getLineCount() > 1) {
+                    replBuffer->setCursor(0, 0);
+                    replBuffer->deleteLine();
+                }
+                // Clear the last remaining line
+                if (replBuffer->getLineCount() > 0) {
+                    replBuffer->setCursor(0, 0);
+                    while (!replBuffer->getLines()[0].empty()) {
+                        replBuffer->deleteChar();
+                    }
+                }
+                std::cout << "REPL.txt cleared\n";
+            }
+        }
+        else if (command.find("run ") == 0) {
+            std::string target = command.substr(4);
+            if (target == "REPL.txt") {
+                // Collect all lines from REPL buffer
+                std::string code;
+                const auto& lines = replBuffer->getLines();
+                for (const auto& line : lines) {
+                    code += line + "\n";
+                }
+
+                // Execute the code
+                std::cout << "Running REPL code:\n" << code << "\n";
+                auto outputs = replInterpreter->execute(code);
+
+                // Display output in console
+                for (const auto& output : outputs) {
+                    consoleBuffer->addOutputLine(output);
+                }
+
+                std::cout << "Execution complete. " << outputs.size() << " output lines.\n";
+            }
+        }
+        else {
+            consoleBuffer->addOutputLine("Unknown command: " + command);
+            std::cout << "Unknown command: " << command << "\n";
+        }
+    };
+
+    // Register the shell command callback
+    inputHandler->setShellCommandCallback(executeShellCommand);
+
+    // Register shell history callback
+    inputHandler->setShellHistoryCallback([&commandHistory, &historyIndex](int direction) -> std::string {
+        if (commandHistory.empty()) {
+            return "";
+        }
+
+        if (direction < 0) {
+            // UP - go to previous command
+            if (historyIndex > 0) {
+                historyIndex--;
+            }
+        } else {
+            // DOWN - go to next command
+            if (historyIndex < (int)commandHistory.size()) {
+                historyIndex++;
+            }
+        }
+
+        // Return command at current index (or empty if at end)
+        if (historyIndex >= 0 && historyIndex < (int)commandHistory.size()) {
+            return commandHistory[historyIndex];
+        }
+        return "";  // Empty command line when at the end
     });
 
     std::cout << "Initialization complete!\n";
@@ -80,11 +232,12 @@ int main(int argc, char** argv) {
     std::cout << "  Vim modes: i (insert), ESC (normal), hjkl (move), x (delete), dd (delete line)\n";
 
     // Helper function to render text buffer content
-    auto renderTextWindow = [&](const Rect& rect, TextBuffer* buffer, const std::string& title, bool isActive) {
+    // windowType: "editor" (dossier/REPL), "console", "shell"
+    auto renderTextWindow = [&](const Rect& rect, TextBuffer* buffer, const std::string& title, bool isActive, const std::string& windowType) {
         const int charPixelWidth = 6 * 4;
         const int lineHeight = 7 * 4;
         const int lineSpacing = 16;  // Increased spacing between lines
-        const int lineNumWidth = 60;
+        const int lineNumWidth = (windowType == "editor") ? 60 : 0;
 
         // Draw title
         renderer->drawText(title, rect.x + 5, rect.y + rect.height - 20, 0.7f, 0.7f, 0.7f);
@@ -99,38 +252,79 @@ int main(int argc, char** argv) {
         int availableHeight = rect.height - 60; // Leave space for title and mode
         int maxVisibleLines = availableHeight / (lineHeight + lineSpacing);
 
-        // Render visible lines
-        int startLine = (buffer->getMode() == VimMode::COPY) ? scrollOffset : 0;
-        int endLine = std::min((int)lines.size(), startLine + maxVisibleLines);
+        if (windowType == "shell") {
+            // Shell: show history above, command line at bottom
+            // Last line is the command line, everything else is history
+            int historyLines = lines.size() > 1 ? lines.size() - 1 : 0;
+            int displayLines = maxVisibleLines - 1; // Reserve one line for command input
 
-        for (int i = startLine; i < endLine; i++) {
-            int displayRow = i - startLine;
-            int yPos = rect.y + rect.height - 60 - ((displayRow + 1) * (lineHeight + lineSpacing));
+            // Render history (scrollable)
+            int historyStart = (buffer->getMode() == VimMode::COPY) ? scrollOffset : std::max(0, historyLines - displayLines);
+            int historyEnd = std::min(historyLines, historyStart + displayLines);
 
-            // Draw line number (right-justified)
-            std::string numStr = std::to_string(i + 1);
-            int numWidth = numStr.length() * charPixelWidth;
-            int numXPos = rect.x + lineNumWidth - numWidth;
-            renderer->drawText(numStr, numXPos, yPos, 0.5f, 0.5f, 0.5f);
+            for (int i = historyStart; i < historyEnd; i++) {
+                int displayRow = i - historyStart;
+                int yPos = rect.y + rect.height - 60 - ((displayRow + 1) * (lineHeight + lineSpacing));
+                renderer->drawText(lines[i], rect.x + 10, yPos, 0.7f, 0.7f, 0.7f);
+            }
 
-            // Draw line content
-            int textXPos = rect.x + lineNumWidth + 10;
-            if (i < lines.size()) {
-                renderer->drawText(lines[i], textXPos, yPos, 0.9f, 0.9f, 0.9f);
+            // Render command line at bottom
+            if (lines.size() > 0) {
+                int cmdLineY = rect.y + 40; // Just above mode indicator
+                renderer->drawText("> ", rect.x + 10, cmdLineY, 0.9f, 0.9f, 0.9f);
+                int cmdTextX = rect.x + 10 + (2 * charPixelWidth); // After "> "
+                renderer->drawText(lines[lines.size() - 1], cmdTextX, cmdLineY, 0.9f, 0.9f, 0.9f);
 
-                // Draw cursor if this is the active window and current line
-                if (isActive && i == cursorRow && buffer->getMode() != VimMode::COPY) {
-                    int cursorX = textXPos + (cursorCol * charPixelWidth);
+                // Draw cursor on command line in INSERT/NORMAL mode
+                if (isActive && buffer->getMode() != VimMode::COPY) {
+                    int cursorX = cmdTextX + (cursorCol * charPixelWidth);
                     Rect cursorRect;
-                    // Align cursor bottom with text bottom: yPos is the top, so bottom is yPos - lineHeight
                     if (buffer->getMode() == VimMode::INSERT) {
-                        // Line cursor in insert mode (thin vertical line)
-                        cursorRect = {cursorX, yPos - lineHeight, 3, lineHeight};
+                        cursorRect = {cursorX, cmdLineY - lineHeight, 3, lineHeight};
                         renderer->drawRect(cursorRect, 0.9f, 0.9f, 0.9f, 1.0f);
                     } else {
-                        // Block cursor in normal mode
-                        cursorRect = {cursorX, yPos - lineHeight, charPixelWidth, lineHeight};
+                        cursorRect = {cursorX, cmdLineY - lineHeight, charPixelWidth, lineHeight};
                         renderer->drawRect(cursorRect, 0.5f, 0.5f, 0.5f, 0.5f);
+                    }
+                }
+            }
+        } else {
+            // Editor or Console: normal rendering
+            int startLine = (buffer->getMode() == VimMode::COPY) ? scrollOffset : 0;
+            int endLine = std::min((int)lines.size(), startLine + maxVisibleLines);
+
+            for (int i = startLine; i < endLine; i++) {
+                int displayRow = i - startLine;
+                int yPos = rect.y + rect.height - 60 - ((displayRow + 1) * (lineHeight + lineSpacing));
+
+                // Draw line number (only for editors)
+                if (windowType == "editor") {
+                    std::string numStr = std::to_string(i + 1);
+                    int numWidth = numStr.length() * charPixelWidth;
+                    int numXPos = rect.x + lineNumWidth - numWidth;
+                    renderer->drawText(numStr, numXPos, yPos, 0.5f, 0.5f, 0.5f);
+                }
+
+                // Draw line content
+                int textXPos = rect.x + lineNumWidth + 10;
+                if (i < lines.size()) {
+                    renderer->drawText(lines[i], textXPos, yPos, 0.9f, 0.9f, 0.9f);
+
+                    // Draw cursor (for editors and console in NORMAL/COPY mode)
+                    if (isActive && i == cursorRow && buffer->getMode() != VimMode::COPY) {
+                        int cursorX = textXPos + (cursorCol * charPixelWidth);
+                        Rect cursorRect;
+                        if (buffer->getMode() == VimMode::INSERT) {
+                            // Console never enters INSERT mode, so only editors get thin cursor
+                            if (windowType == "editor") {
+                                cursorRect = {cursorX, yPos - lineHeight, 3, lineHeight};
+                                renderer->drawRect(cursorRect, 0.9f, 0.9f, 0.9f, 1.0f);
+                            }
+                        } else {
+                            // NORMAL mode cursor for both editors and console
+                            cursorRect = {cursorX, yPos - lineHeight, charPixelWidth, lineHeight};
+                            renderer->drawRect(cursorRect, 0.5f, 0.5f, 0.5f, 0.5f);
+                        }
                     }
                 }
             }
@@ -149,10 +343,14 @@ int main(int argc, char** argv) {
 
     // Main loop
     while (!windowMgr->shouldClose()) {
-        // Update layout
+        // Update layout based on current tab
         int fbWidth, fbHeight;
         windowMgr->getFramebufferSize(&fbWidth, &fbHeight);
-        layoutMgr->update(fbWidth, fbHeight);
+        if (currentTab == 0) {
+            layoutMgr->update(fbWidth, fbHeight);  // Tab 1: main display
+        } else {
+            layoutMgr->updateTab2(fbWidth, fbHeight);  // Tab 2: REPL focus
+        }
 
         // Process input
         inputHandler->processInput(windowMgr->getWindow());
@@ -160,62 +358,104 @@ int main(int argc, char** argv) {
         // Clear screen
         renderer->clear(0.1f, 0.1f, 0.12f, 1.0f);
 
-        // Get layout rectangles
-        Rect videoRect = layoutMgr->getVideoDisplayRect();
-        Rect mobileRect = layoutMgr->getMobileDisplayRect();
-        Rect dossierRect = layoutMgr->getDossierEditorRect();
-        Rect replRect = layoutMgr->getReplEditorRect();
-        Rect shellRect = layoutMgr->getShellWindowRect();
-        Rect consoleRect = layoutMgr->getConsoleWindowRect();
-
-        // Draw video display placeholder (monitor1)
-        renderer->drawRect(videoRect, 0.0f, 0.0f, 0.0f, 1.0f);
-        renderer->drawBorder(videoRect, 0.3f, 0.3f, 0.35f, 1.0f, 2);
-        renderer->drawText("monitor1", videoRect.x + 5, videoRect.y + videoRect.height - 20, 0.5f, 0.5f, 0.5f);
-
-        // Draw mobile display placeholder (monitor2)
-        renderer->drawRect(mobileRect, 0.0f, 0.0f, 0.0f, 1.0f);
-        renderer->drawBorder(mobileRect, 0.3f, 0.3f, 0.35f, 1.0f, 2);
-        renderer->drawText("monitor2", mobileRect.x + 5, mobileRect.y + mobileRect.height - 20, 0.5f, 0.5f, 0.5f);
-
-        // Draw text editor windows with highlights for active window
+        // Get active window for highlighting
         int activeWindow = inputHandler->getActiveWindow();
 
-        // Dossier editor (window 0)
-        renderer->drawRect(dossierRect, 0.15f, 0.15f, 0.17f, 1.0f);
-        if (activeWindow == 0) {
-            renderer->drawBorder(dossierRect, 0.2f, 0.6f, 0.9f, 1.0f, 3);
-        } else {
-            renderer->drawBorder(dossierRect, 0.3f, 0.3f, 0.35f, 1.0f, 2);
-        }
-        renderTextWindow(dossierRect, dossierBuffer.get(), "dossier.json", activeWindow == 0);
+        // Render based on current tab
+        if (currentTab == 0) {
+            // TAB 1: Main display with all 6 windows
+            Rect videoRect = layoutMgr->getVideoDisplayRect();
+            Rect mobileRect = layoutMgr->getMobileDisplayRect();
+            Rect dossierRect = layoutMgr->getDossierEditorRect();
+            Rect replRect = layoutMgr->getReplEditorRect();
+            Rect shellRect = layoutMgr->getShellWindowRect();
+            Rect consoleRect = layoutMgr->getConsoleWindowRect();
 
-        // REPL editor (window 1)
-        renderer->drawRect(replRect, 0.15f, 0.15f, 0.17f, 1.0f);
-        if (activeWindow == 1) {
-            renderer->drawBorder(replRect, 0.2f, 0.6f, 0.9f, 1.0f, 3);
-        } else {
-            renderer->drawBorder(replRect, 0.3f, 0.3f, 0.35f, 1.0f, 2);
-        }
-        renderTextWindow(replRect, replBuffer.get(), "REPL.txt", activeWindow == 1);
+            // Draw video display placeholder (monitor1)
+            renderer->drawRect(videoRect, 0.0f, 0.0f, 0.0f, 1.0f);
+            renderer->drawBorder(videoRect, 0.3f, 0.3f, 0.35f, 1.0f, 2);
+            renderer->drawText("monitor1", videoRect.x + 5, videoRect.y + videoRect.height - 20, 0.5f, 0.5f, 0.5f);
 
-        // Shell window (window 2)
-        renderer->drawRect(shellRect, 0.05f, 0.05f, 0.07f, 1.0f);
-        if (activeWindow == 2) {
-            renderer->drawBorder(shellRect, 0.2f, 0.6f, 0.9f, 1.0f, 3);
-        } else {
-            renderer->drawBorder(shellRect, 0.3f, 0.3f, 0.35f, 1.0f, 2);
-        }
-        renderTextWindow(shellRect, shellBuffer.get(), "shell", activeWindow == 2);
+            // Draw mobile display placeholder (monitor2)
+            renderer->drawRect(mobileRect, 0.0f, 0.0f, 0.0f, 1.0f);
+            renderer->drawBorder(mobileRect, 0.3f, 0.3f, 0.35f, 1.0f, 2);
+            renderer->drawText("monitor2", mobileRect.x + 5, mobileRect.y + mobileRect.height - 20, 0.5f, 0.5f, 0.5f);
 
-        // Console window (window 3)
-        renderer->drawRect(consoleRect, 0.05f, 0.05f, 0.07f, 1.0f);
-        if (activeWindow == 3) {
-            renderer->drawBorder(consoleRect, 0.2f, 0.6f, 0.9f, 1.0f, 3);
+            // Dossier editor (window 0)
+            renderer->drawRect(dossierRect, 0.15f, 0.15f, 0.17f, 1.0f);
+            if (activeWindow == 0) {
+                renderer->drawBorder(dossierRect, 0.2f, 0.6f, 0.9f, 1.0f, 3);
+            } else {
+                renderer->drawBorder(dossierRect, 0.3f, 0.3f, 0.35f, 1.0f, 2);
+            }
+            renderTextWindow(dossierRect, dossierBuffer.get(), "dossier.json", activeWindow == 0, "editor");
+
+            // REPL editor (window 1)
+            renderer->drawRect(replRect, 0.15f, 0.15f, 0.17f, 1.0f);
+            if (activeWindow == 1) {
+                renderer->drawBorder(replRect, 0.2f, 0.6f, 0.9f, 1.0f, 3);
+            } else {
+                renderer->drawBorder(replRect, 0.3f, 0.3f, 0.35f, 1.0f, 2);
+            }
+            renderTextWindow(replRect, replBuffer.get(), "REPL.txt", activeWindow == 1, "editor");
+
+            // Shell window (window 2)
+            renderer->drawRect(shellRect, 0.05f, 0.05f, 0.07f, 1.0f);
+            if (activeWindow == 2) {
+                renderer->drawBorder(shellRect, 0.2f, 0.6f, 0.9f, 1.0f, 3);
+            } else {
+                renderer->drawBorder(shellRect, 0.3f, 0.3f, 0.35f, 1.0f, 2);
+            }
+            renderTextWindow(shellRect, shellBuffer.get(), "shell", activeWindow == 2, "shell");
+
+            // Console window (window 3)
+            renderer->drawRect(consoleRect, 0.05f, 0.05f, 0.07f, 1.0f);
+            if (activeWindow == 3) {
+                renderer->drawBorder(consoleRect, 0.2f, 0.6f, 0.9f, 1.0f, 3);
+            } else {
+                renderer->drawBorder(consoleRect, 0.3f, 0.3f, 0.35f, 1.0f, 2);
+            }
+            renderTextWindow(consoleRect, consoleBuffer.get(), "console", activeWindow == 3, "console");
+
         } else {
-            renderer->drawBorder(consoleRect, 0.3f, 0.3f, 0.35f, 1.0f, 2);
+            // TAB 2: REPL focus layout
+            Rect replRect = layoutMgr->getTab2ReplRect();
+            Rect shellRect = layoutMgr->getTab2ShellRect();
+            Rect consoleRect = layoutMgr->getTab2ConsoleRect();
+
+            // REPL editor (window 1) - full width, top half
+            renderer->drawRect(replRect, 0.15f, 0.15f, 0.17f, 1.0f);
+            if (activeWindow == 1) {
+                renderer->drawBorder(replRect, 0.2f, 0.6f, 0.9f, 1.0f, 3);
+            } else {
+                renderer->drawBorder(replRect, 0.3f, 0.3f, 0.35f, 1.0f, 2);
+            }
+            renderTextWindow(replRect, replBuffer.get(), "REPL.txt", activeWindow == 1, "editor");
+
+            // Console window (window 3) - full width, 3rd quarter
+            renderer->drawRect(consoleRect, 0.05f, 0.05f, 0.07f, 1.0f);
+            if (activeWindow == 3) {
+                renderer->drawBorder(consoleRect, 0.2f, 0.6f, 0.9f, 1.0f, 3);
+            } else {
+                renderer->drawBorder(consoleRect, 0.3f, 0.3f, 0.35f, 1.0f, 2);
+            }
+            renderTextWindow(consoleRect, consoleBuffer.get(), "console", activeWindow == 3, "console");
+
+            // Shell window (window 2) - full width, bottom quarter
+            renderer->drawRect(shellRect, 0.05f, 0.05f, 0.07f, 1.0f);
+            if (activeWindow == 2) {
+                renderer->drawBorder(shellRect, 0.2f, 0.6f, 0.9f, 1.0f, 3);
+            } else {
+                renderer->drawBorder(shellRect, 0.3f, 0.3f, 0.35f, 1.0f, 2);
+            }
+            renderTextWindow(shellRect, shellBuffer.get(), "shell", activeWindow == 2, "shell");
         }
-        renderTextWindow(consoleRect, consoleBuffer.get(), "console", activeWindow == 3);
+
+        // Draw tab indicator in top-right corner
+        std::string tabIndicator = "Tab " + std::to_string(currentTab + 1);
+        // Each character is 6 pixels * 4 scale = 24 pixels wide
+        // "Tab X" is 5 characters = 120 pixels + 10 padding
+        renderer->drawText(tabIndicator, fbWidth - 130, fbHeight - 30, 0.5f, 0.8f, 0.5f);
 
         // Swap buffers and poll events
         windowMgr->swapBuffers();

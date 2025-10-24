@@ -19,8 +19,12 @@ public:
     void setFullscreenToggleCallback(std::function<void()> callback) { fullscreenToggleCallback = callback; }
     void setCharCallback(std::function<void(unsigned int)> callback) { charCallback = callback; }
     void setKeyCallback(std::function<void(int, int, int, int)> callback) { keyCallback = callback; }
+    void setShellCommandCallback(std::function<void(const std::string&)> callback) { shellCommandCallback = callback; }
+    void setTabSwitchCallback(std::function<void(int)> callback) { tabSwitchCallback = callback; }
+    void setShellHistoryCallback(std::function<std::string(int)> callback) { shellHistoryCallback = callback; }
 
     int getActiveWindow() const { return activeWindow; }
+    void setActiveWindow(int window) { activeWindow = window; }
 
     // Text buffer management
     void setActiveTextBuffer(TextBuffer* buffer) { activeTextBuffer = buffer; }
@@ -33,6 +37,9 @@ private:
     std::function<void()> fullscreenToggleCallback;
     std::function<void(unsigned int)> charCallback;
     std::function<void(int, int, int, int)> keyCallback;
+    std::function<void(const std::string&)> shellCommandCallback;
+    std::function<void(int)> tabSwitchCallback;  // +1 for next tab, -1 for previous
+    std::function<std::string(int)> shellHistoryCallback;  // direction: -1 for up, +1 for down
 
     int activeWindow; // 0=dossier, 1=repl, 2=shell, 3=console
     bool altPressed;

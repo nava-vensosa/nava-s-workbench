@@ -34,6 +34,10 @@ set(SOURCES
     src/nvim_client.cpp
     src/display_buffer.cpp
     src/text_buffer.cpp
+    src/repl_interpreter.cpp
+    src/video_source.mm
+    src/video_texture.cpp
+    src/video_variable.cpp
 )
 
 # Main executable
@@ -60,6 +64,9 @@ if(APPLE)
         "-framework Cocoa"
         "-framework IOKit"
         "-framework CoreVideo"
+        "-framework AVFoundation"
+        "-framework CoreMedia"
+        "-framework CoreGraphics"
     )
 endif()
 

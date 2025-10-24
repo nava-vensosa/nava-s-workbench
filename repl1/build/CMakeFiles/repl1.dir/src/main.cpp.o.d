@@ -793,6 +793,7 @@ CMakeFiles/repl1.dir/src/main.cpp.o: \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__fwd/stack.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/print \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/unistd.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/sstream \
   /Users/kabirdaniel/Desktop/yusei/nava-s-workbench/repl1/external/glad/include/glad/glad.h \
   /Users/kabirdaniel/Desktop/yusei/nava-s-workbench/repl1/include/window_manager.h \
   /opt/homebrew/include/GLFW/glfw3.h \
@@ -800,4 +801,7 @@ CMakeFiles/repl1.dir/src/main.cpp.o: \
   /Users/kabirdaniel/Desktop/yusei/nava-s-workbench/repl1/include/renderer.h \
   /Users/kabirdaniel/Desktop/yusei/nava-s-workbench/repl1/include/input_handler.h \
   /Users/kabirdaniel/Desktop/yusei/nava-s-workbench/repl1/include/nvim_client.h \
-  /Users/kabirdaniel/Desktop/yusei/nava-s-workbench/repl1/include/text_buffer.h
+  /Users/kabirdaniel/Desktop/yusei/nava-s-workbench/repl1/include/text_buffer.h \
+  /Users/kabirdaniel/Desktop/yusei/nava-s-workbench/repl1/include/repl_interpreter.h \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/map \
+  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1/__tree

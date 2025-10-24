@@ -310,6 +310,30 @@ src/renderer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/repl1.dir/build.make CMakeFiles/repl1.dir/src/renderer.cpp.s
 .PHONY : src/renderer.cpp.s
 
+src/repl_interpreter.o: src/repl_interpreter.cpp.o
+.PHONY : src/repl_interpreter.o
+
+# target to build an object file
+src/repl_interpreter.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/repl1.dir/build.make CMakeFiles/repl1.dir/src/repl_interpreter.cpp.o
+.PHONY : src/repl_interpreter.cpp.o
+
+src/repl_interpreter.i: src/repl_interpreter.cpp.i
+.PHONY : src/repl_interpreter.i
+
+# target to preprocess a source file
+src/repl_interpreter.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/repl1.dir/build.make CMakeFiles/repl1.dir/src/repl_interpreter.cpp.i
+.PHONY : src/repl_interpreter.cpp.i
+
+src/repl_interpreter.s: src/repl_interpreter.cpp.s
+.PHONY : src/repl_interpreter.s
+
+# target to generate assembly for a file
+src/repl_interpreter.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/repl1.dir/build.make CMakeFiles/repl1.dir/src/repl_interpreter.cpp.s
+.PHONY : src/repl_interpreter.cpp.s
+
 src/text_buffer.o: src/text_buffer.cpp.o
 .PHONY : src/text_buffer.o
 
@@ -389,6 +413,9 @@ help:
 	@echo "... src/renderer.o"
 	@echo "... src/renderer.i"
 	@echo "... src/renderer.s"
+	@echo "... src/repl_interpreter.o"
+	@echo "... src/repl_interpreter.i"
+	@echo "... src/repl_interpreter.s"
 	@echo "... src/text_buffer.o"
 	@echo "... src/text_buffer.i"
 	@echo "... src/text_buffer.s"

@@ -40,3 +40,21 @@ void LayoutManager::update(int windowWidth, int windowHeight) {
     // shell: bottom half of bottom-right
     shellWindow = {leftSectionWidth, 0, rightSectionWidth, halfBottomRightHeight};
 }
+
+void LayoutManager::updateTab2(int windowWidth, int windowHeight) {
+    // Tab 2 layout:
+    // Top half: REPL.txt (full width)
+    // Bottom half: split into console (top) and shell (bottom), both full width
+
+    int halfHeight = windowHeight / 2;
+    int quarterHeight = windowHeight / 4;
+
+    // REPL.txt: top half
+    tab2Repl = {0, halfHeight, windowWidth, halfHeight};
+
+    // Console: 3rd quarter
+    tab2Console = {0, quarterHeight, windowWidth, quarterHeight};
+
+    // Shell: bottom quarter
+    tab2Shell = {0, 0, windowWidth, quarterHeight};
+}
