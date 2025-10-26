@@ -1,0 +1,9 @@
+# Ignore all files in composition_files/ except .gitignore and README.md
+# Users' composition work should not be version controlled
+
+# Ignore everything
+*
+
+# Except these files
+!.gitignore
+!README.md

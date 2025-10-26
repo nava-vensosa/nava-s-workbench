@@ -161,4 +161,57 @@ When you have done your work, retire!
 
 [10]
 
+In keeping the spirit and the vital soul together,
+Are you able to maintain their perfect harmony?
+In gathering your vital energy to attain suppleness,
+Have you reached the state of a new-bom babe?
+In washing and clearing your inner vision,
+Have you purified it of all dross?
+In loving your people and governing your state,
+Are you able to dispense with cleverness?
+In the opening and shutting of heaven's gate,
+Are you able to play the feminine part?
+Enlightened and seeing far into all directions,
+Can you at the same time remain detached and nonactive?
+
+Rear your people!
+Feed your people!
+Rear them without claiming them for your own!
+Do your work without setting any store by it!
+Be a leader, not a butcher!
+This is called hidden Virtue.
+
+---
+
+[11]
+
+Thirty spokes converge upon a single hub;
+It is on the hole in the center that the use of the cart hinges.
+
+We make a vessel from a lump of clay;
+It is the empty space within the vessel that makes it useful.
+
+We make doors and windows for a room;
+But it is these empty spaces that make the room livable.
+
+Thus, while the tangible has advantages,
+It is the intangible that makes it useful.
+
+---
+
+[12]
+
+The five colors blind the eye.
+The five tones deafen the ear.
+The five flavors cloy the palate.
+Racing and hunting madden the mind.
+Rare goods tempt men to do wrong.
+
+Therefore, the Sage takes care of the belly, not the eye.
+He prefers what is within to what is without.
+
+---
+
+[13]
+
 

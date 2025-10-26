@@ -1,0 +1,34 @@
+// videocat.haec
+// Prototype Goal #1: Display webcam on two windows simultaneously
+//
+// This example demonstrates:
+// - Video capture from webcam (video_invar)
+// - Window creation (window_var)
+// - Layer-based composition (layer_obj)
+// - Dual display of same video source with different aspect ratios
+
+// Capture webcam input (device index 0)
+video_invar webcam = capture(0)
+
+// Create two output windows
+window_var win1 = window("Output 1", 1920, 1080)
+window_var win2 = window("Output 2", 1920, 1080)
+
+// Create composition layers with different aspect ratios
+layer_obj widescreenLayer = layer("Widescreen", 1920, 1080)
+layer_obj fullscreenLayer = layer("Fullscreen", 1440, 1080)
+
+// Cast webcam video to both layers
+widescreenLayer.cast(webcam)
+fullscreenLayer.cast(webcam)
+
+// Project layers to windows
+win1.project(widescreenLayer)
+win2.project(fullscreenLayer)
+
+// Expected result:
+// - Two Cocoa windows open displaying webcam footage
+// - Window 1: 16:9 widescreen (1920x1080)
+// - Window 2: 4:3 fullscreen (1440x1080) - cropped from webcam
+// - Both render at 60fps
+// - Zero-copy pipeline (IOSurface shared between layers)

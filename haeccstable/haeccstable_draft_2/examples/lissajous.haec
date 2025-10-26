@@ -1,0 +1,49 @@
+// lissajous.haec
+// Prototype Goal #2: Stereo synthesis with Lissajous visualization
+//
+// This example demonstrates:
+// - Function definitions (func)
+// - Generic variables (var)
+// - Audio synthesis with audio_outvar
+// - Stereo mixing with property assignment
+// - Simultaneous command execution (semicolon operator)
+// - Real-time graphics (Lissajous curve)
+
+// Define ratio variables
+var x
+var y
+func ratio(x, y) = x / y
+var base_freq = 440
+x = 3
+y = 2
+
+// Create two sine wave oscillators
+audio_outvar freq1 = sine(base_freq)                    // Left channel: 440 Hz
+audio_outvar freq2 = sine(base_freq * ratio(x, y))      // Right channel: 660 Hz (440 * 1.5)
+
+// Set stereo mixing
+freq1.mix = (100, 0)    // 100% left channel, 0% right channel
+freq2.mix = (0, 100)    // 0% left, 100% right
+
+// Create visualization window
+window_var lissajousAnimationWindow = window("Lissajous", 1920, 1080)
+
+// Start both frequencies simultaneously
+freq1.play; freq2.play  // Semicolon executes both at exactly the same time
+
+// Draw Lissajous curve (scaled down for visual clarity)
+draw(lissajous(freq1, freq2, scale=0.5), lissajousAnimationWindow)
+
+// Expected result:
+// - Stereo audio output (440Hz left, 660Hz right)
+// - Animated Lissajous curve showing 3:2 ratio pattern
+// - Real-time synchronization of audio and visual
+// - <10ms audio latency
+
+// Interactive modifications (can be entered at runtime):
+// freq1.waveform = "triangle"      // Change to triangle wave
+// freq2.waveform = "square"        // Change to square wave
+// x = 4; y = 3                     // Change ratio to 4:3
+// freq2.frequency = base_freq * ratio(x, y)  // Update frequency based on new ratio
+// base_freq = 220                  // Lower base frequency
+// freq1.frequency = base_freq      // Update left channel

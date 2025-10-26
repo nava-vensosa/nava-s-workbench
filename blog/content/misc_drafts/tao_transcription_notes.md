@@ -77,4 +77,24 @@
 
 [10]
 
-- 
+-* "Be a leader, not a butcher!" is extremely critical -- a leader guides, does not cut... this is a significant flaw of mine, I really need to hold this in mind. I really need to hold this in mind. "This is called hidden Virtue" -- the sign speaks in withdrawing; making clear cuts the thicket, destroys the ecology needlessly. Remain detached and nonactive
+-* Come back to this one frequently! Much to learn here... "Are you able to dispense with cleverness? ... Are you able to play the feminine part?"
+
+---
+
+[11]
+
+- This is Heidegger's "The Thing" but older and concise; isn't that nice!
+
+---
+
+[12]
+
+- I think I misunderstood the belly in the past. The belly is the engine of breath; energy and power come from the breath, from the belly, not from sight or insight.
+- "Racing and hunting madden the mind" oh I could learn from that
+
+---
+
+[13]
+
+

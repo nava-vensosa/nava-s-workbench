@@ -1,0 +1,159 @@
+// ascii_filter.haec
+// Prototype Goal #3: Acerola-style ASCII filter with Gooch shading
+//
+// This example demonstrates:
+// - Process block definitions (multi-step pipelines)
+// - video_invar for input streams
+// - video_outvar for processed video
+// - Layer-based composition
+// - Complete Acerola ASCII pipeline:
+//   * Luminance extraction with exposure/attenuation
+//   * Depth-based normal calculation
+//   * Gaussian blur → Difference of Gaussians (DoG)
+//   * Depth + Normal edge detection
+//   * Sobel edge detection with directional angles
+//   * ASCII character rendering based on edges/luminance
+//   * Depth falloff (distance fading)
+//   * Gooch shading (technical illustration style)
+
+// Capture webcam input
+video_invar webcam = capture(0)
+
+// Create two windows for comparison
+window_var original = window("Original", 1920, 1080)
+window_var filtered = window("ASCII Filter", 1920, 1080)
+
+// Define the complete Acerola ASCII filter pipeline as a process
+process $ascii_filter(input) {
+    // Step 1: Luminance extraction
+    // Convert to greyscale using standard luminance function
+    luminance = $luminance_extract(input, exposure=1.0, attenuation=1.0)
+
+    // Step 2: Downscale for performance (8x reduction)
+    downscaled = $downscale(luminance, factor=8)
+
+    // Step 3: Gaussian blur (horizontal then vertical)
+    blurred_h = $gaussian_blur(downscaled, sigma=1.0, direction="horizontal")
+    blurred = $gaussian_blur(blurred_h, sigma=1.0, direction="vertical")
+
+    // Step 4: Difference of Gaussians (DoG) for edge enhancement
+    // sigma_scale controls the ratio between inner and outer Gaussian
+    // tau is the DoG threshold for detail preservation
+    dog_edges = $dog(blurred, sigma1=1.0, sigma2=2.0, tau=0.98)
+
+    // Step 5: Depth-based normal calculation
+    // Reconstructs 3D surface normals from depth buffer
+    // This provides geometric edge information
+    normals = $depth_to_normals(input, depth_scale=1.0)
+
+    // Step 6: Combined edge detection (depth + normal based)
+    // depth_threshold: sensitivity to depth discontinuities
+    // normal_threshold: sensitivity to surface orientation changes
+    // depth_cutoff: maximum distance for edge detection
+    depth_edges = $edge_detect_depth(
+        input,
+        normals=normals,
+        depth_threshold=1.0,
+        normal_threshold=1.0,
+        depth_cutoff=1000.0
+    )
+
+    // Step 7: Sobel edge detection with directional information
+    // Computes edge angles for ASCII character orientation
+    sobel_h = $sobel(dog_edges, threshold=0.15, direction="horizontal")
+    sobel_angles = $sobel_with_angles(sobel_h, threshold=0.15, direction="vertical")
+
+    // Step 8: Combine all edge information
+    combined_edges = $combine_edges(
+        dog_edges,
+        depth_edges,
+        sobel_angles,
+        edge_threshold=32  // Minimum edge pixels per 8x8 tile
+    )
+
+    // Step 9: ASCII rendering with luminance + edge information
+    // chars: Brightness gradient from dark (space) to bright (@)
+    // size=8: Each character is 8x8 pixels
+    // use_edges: Whether to orient characters based on edge angles
+    ascii_img = $ascii(
+        input,
+        edges=combined_edges,
+        luminance=luminance,
+        chars=" .:-=+*#%@",
+        size=8,
+        use_edges=true,
+        invert_luminance=false
+    )
+
+    // Step 10: Depth falloff (fade ASCII characters with distance)
+    // falloff: How quickly characters fade (0.0 = no fade, 1.0 = fast fade)
+    // offset: Distance where fading begins
+    depth_faded = $depth_falloff(
+        ascii_img,
+        falloff=0.5,
+        offset=100.0
+    )
+
+    // Step 11: Gooch shading for technical illustration look
+    // warm=(1.0,0.8,0.4): Orange-ish highlights (RGB)
+    // cool=(0.2,0.4,0.8): Blue-ish shadows (RGB)
+    // base_color_blend: Mix with original image colors (0.0-1.0)
+    result = $gooch(
+        depth_faded,
+        warm=(1.0, 0.8, 0.4),
+        cool=(0.2, 0.4, 0.8),
+        base_color_blend=0.0
+    )
+
+    return result
+}
+
+// Create composition layers
+layer_obj originalLayer = layer("Original", 1920, 1080)
+layer_obj asciiLayer = layer("ASCII", 1920, 1080)
+
+// Cast video to layers (original and filtered)
+originalLayer.cast(webcam)
+asciiLayer.cast($ascii_filter(webcam))
+
+// Project layers to windows
+original.project(originalLayer)
+filtered.project(asciiLayer)
+
+// Expected result:
+// - Original window shows raw webcam footage
+// - Filtered window shows Acerola-style ASCII art with:
+//   * Edge-oriented characters following image contours
+//   * Depth-aware edge detection (geometric discontinuities)
+//   * Distance falloff (far objects fade)
+//   * Gooch shading for technical illustration style
+// - Both render at 60fps
+// - Filter pipeline uses:
+//   * C++ filters (Sobel, DoG, depth processing) with Accelerate framework
+//   * Metal compute shaders (ASCII character rendering, Gooch shading)
+
+// Advanced parameter tuning examples:
+//
+// For stronger edge detection:
+// process $ascii_filter_strong(input) {
+//     luminance = $luminance_extract(input, exposure=1.5, attenuation=0.8)
+//     dog_edges = $dog(blurred, sigma1=0.8, sigma2=2.5, tau=0.95)
+//     depth_edges = $edge_detect_depth(input, normals=normals,
+//                                       depth_threshold=0.5, normal_threshold=0.5)
+//     ...
+// }
+//
+// For more pronounced depth effects:
+// depth_faded = $depth_falloff(ascii_img, falloff=0.8, offset=50.0)
+//
+// For colored ASCII (preserve original colors):
+// result = $gooch(depth_faded, warm=(1.0,0.8,0.4), cool=(0.2,0.4,0.8),
+//                 base_color_blend=0.5)
+//
+// For different ASCII character sets:
+// Dense: chars=" .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+// Minimal: chars=" .:;+=xX$"
+// Blocks: chars=" ░▒▓█"
+
+// Note: All filter parameters can be tuned by loading custom C++ process files
+// See documentation for load_process command
