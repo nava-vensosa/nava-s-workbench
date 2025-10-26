@@ -1,0 +1,1 @@
+Genetics are instructions which jeter a form like a fuckhole waiting to be fucked and filled -- composing a DSL or esolang is such a crazy thought experience! how do author audience and action blend on the grounds of functional language and design?
