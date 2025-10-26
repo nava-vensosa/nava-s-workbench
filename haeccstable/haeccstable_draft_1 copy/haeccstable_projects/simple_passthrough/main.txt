@@ -1,0 +1,22 @@
+# Simple Passthrough
+# Routes webcam directly to monitor1 with no transformations
+# This is the minimal Haeccstable program
+#
+# Before running this, make sure you've opened the monitor:
+#   haeccstable> open_monitor monitor1
+#
+# Then run this file:
+#   haeccstable> run simple_passthrough.txt
+
+in_var webcam = webcam;
+out_var display = monitor1;
+
+layer_obj passthrough;
+passthrough.canvas = (1920, 1080);
+webcam.cast(passthrough);
+passthrough.transform(0, 0);
+passthrough.scale(1.0, 1.0);
+passthrough.rot(0, 0);
+passthrough.opacity(100);
+
+display.project(passthrough, 0);

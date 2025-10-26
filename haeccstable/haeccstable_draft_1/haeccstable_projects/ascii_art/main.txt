@@ -1,0 +1,79 @@
+# ASCII Art Filter Pipeline
+# Demonstrates multi-pass filter composition: Sobel → DoG → ASCII
+# Creates real-time ASCII art with edge-enhanced video
+#
+# Before running:
+#   haeccstable> open_monitor monitor1
+# Then run:
+#   haeccstable> select_composition ascii_art/
+#   haeccstable> run main.txt
+#
+# This example demonstrates:
+# - Multi-pass filter pipeline
+# - buffer_obj for intermediate textures
+# - Edge detection and enhancement
+# - Artistic ASCII conversion
+# - Texture ping-pong pattern
+
+# Input & Output
+in_var camera = webcam;
+out_var display = monitor1;
+
+# Source video layer
+layer_obj video;
+video.canvas = (1920, 1080);
+camera.cast(video);
+
+# Pass 1: Sobel edge detection
+# Extract edges from source video as single-channel grayscale
+buffer_obj edges;
+edges.canvas = (1920, 1080);
+edges.format = "r8";
+video.sobel(edges, 0.15);
+
+# Pass 2: Difference of Gaussians
+# Enhance edge definition by combining two Gaussian blurs
+# This creates sharper, more defined edges for ASCII conversion
+buffer_obj edges_refined;
+edges_refined.canvas = (1920, 1080);
+edges_refined.format = "r8";
+edges.dog(edges_refined, 1.0, 2.0);
+
+# Pass 3: Threshold to binary edge map
+# Convert edge magnitudes to hard black/white values
+# This creates clean edge boundaries for masking
+buffer_obj edges_binary;
+edges_binary.canvas = (1920, 1080);
+edges_binary.format = "r8";
+edges_refined.threshold(edges_binary, 0.4);
+
+# Pass 4: Multiply edge map with original video
+# Apply edge mask to source video (keep only edges)
+# This creates an "edge-only" version of the video
+buffer_obj masked_video;
+masked_video.canvas = (1920, 1080);
+masked_video.format = "rgba8";
+video.multiply(edges_binary, masked_video);
+
+# Pass 5: ASCII conversion
+# Convert the edge-masked video to ASCII art
+# Characters ordered from dark to bright: " .:-=+*#%@"
+buffer_obj ascii_art;
+ascii_art.canvas = (1920, 1080);
+ascii_art.format = "rgba8";
+masked_video.ascii(ascii_art, 8, " .:-=+*#%@");
+
+# Output final ASCII art to monitor
+display.project(ascii_art, 0);
+
+# Pipeline Flow Summary:
+# 1. video (1920x1080 RGBA) → Sobel → edges (1920x1080 R8 grayscale)
+# 2. edges → DoG (σ1=1.0, σ2=2.0) → edges_refined (1920x1080 R8)
+# 3. edges_refined → Threshold (0.4) → edges_binary (1920x1080 R8 binary)
+# 4. video × edges_binary → masked_video (1920x1080 RGBA, edges only)
+# 5. masked_video → ASCII (8px chars) → ascii_art (1920x1080 RGBA)
+# 6. ascii_art → monitor1
+#
+# Total buffers allocated: 5 intermediate textures
+# Total GPU passes: 5 filter operations + 1 composite
+# Expected latency: ~10ms @ 1080p on M1/M2 Macs

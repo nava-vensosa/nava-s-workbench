@@ -1,0 +1,46 @@
+{
+  "videoDevices": [
+    {
+      "index": 0,
+      "id": "3F45E80A-0176-46F7-B185-BB9E2C0E82E3",
+      "name": "FaceTime HD Camera"
+    },
+    {
+      "index": 1,
+      "id": "52523A4B-7A85-434A-BD1A-67B500000001",
+      "name": "Nava’s Phone Camera"
+    }
+  ],
+  "monitors": [
+    {
+      "index": 0,
+      "name": "Built-in Retina Display",
+      "width": 1920,
+      "height": 1200,
+      "refreshRate": 120,
+      "isPrimary": true
+    },
+    {
+      "index": 1,
+      "name": "Virtual monitor1 (1920x1080)",
+      "width": 1920,
+      "height": 1080,
+      "refreshRate": 60,
+      "isPrimary": false
+    },
+    {
+      "index": 2,
+      "name": "Virtual monitor2 (1080x1920 mobile)",
+      "width": 1080,
+      "height": 1920,
+      "refreshRate": 60,
+      "isPrimary": false
+    }
+  ],
+  "inputVariables": {
+  },
+  "outputVariables": {
+  },
+  "layers": {
+  }
+}

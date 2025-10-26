@@ -1,0 +1,10 @@
+in_var videoIn = 0;
+out_var videoOut = monitor1;
+layer_obj videocat;
+videocat.canvas = (1920, 1080);
+videoIn.cast(videocat);
+videocat.transform(0, 0);
+videocat.scale(1.0, 1.0);
+videocat.rot(0, 0);
+videocat.opacity(100);
+videoOut.project(videocat, 0);

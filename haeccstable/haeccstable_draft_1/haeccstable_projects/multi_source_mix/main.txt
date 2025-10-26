@@ -1,0 +1,54 @@
+# Multi-Source Mix
+# Quad split view with four camera sources
+# Demonstrates multi-input composition and grid layout
+#
+# Before running: haeccstable> open_monitor monitor1
+# Then run: haeccstable> run multi_source_mix.txt
+
+in_var camera1 = webcam;
+in_var camera2 = usb_camera_1;
+in_var camera3 = usb_camera_2;
+in_var camera4 = hdmi_input;
+out_var display = monitor1;
+
+# Top-left quadrant
+layer_obj topLeft;
+topLeft.canvas = (960, 540);
+camera1.cast(topLeft);
+topLeft.transform(0, 540);   # Top-left position
+topLeft.scale(1.0, 1.0);
+topLeft.rot(0, 0);
+topLeft.opacity(100);
+
+# Top-right quadrant
+layer_obj topRight;
+topRight.canvas = (960, 540);
+camera2.cast(topRight);
+topRight.transform(960, 540);  # Top-right position
+topRight.scale(1.0, 1.0);
+topRight.rot(0, 0);
+topRight.opacity(100);
+
+# Bottom-left quadrant
+layer_obj bottomLeft;
+bottomLeft.canvas = (960, 540);
+camera3.cast(bottomLeft);
+bottomLeft.transform(0, 0);    # Bottom-left position
+bottomLeft.scale(1.0, 1.0);
+bottomLeft.rot(0, 0);
+bottomLeft.opacity(100);
+
+# Bottom-right quadrant
+layer_obj bottomRight;
+bottomRight.canvas = (960, 540);
+camera4.cast(bottomRight);
+bottomRight.transform(960, 0);  # Bottom-right position
+bottomRight.scale(1.0, 1.0);
+bottomRight.rot(0, 0);
+bottomRight.opacity(100);
+
+# All layers at same z-index (no overlap)
+display.project(topLeft, 0);
+display.project(topRight, 0);
+display.project(bottomLeft, 0);
+display.project(bottomRight, 0);

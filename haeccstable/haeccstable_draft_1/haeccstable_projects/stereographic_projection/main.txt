@@ -1,0 +1,54 @@
+# Stereographic Projection
+# Visualize geometric structures through stereographic projection
+# Demonstrates 3D visualization with interactive camera angles
+#
+# Before running: haeccstable> open_monitor monitor1
+# Then run: haeccstable> run stereographic_projection.txt
+
+out_var output = monitor1;
+
+# Stereographic projection of a torus
+math_obj stereo;
+stereo.type = "stereographic_projection";
+stereo.object = "torus";
+stereo.projection_point = (0, 0, 2);
+stereo.camera_theta = 45 + t * 5;  # Animate camera angle
+stereo.camera_phi = 30;
+stereo.time_param = t;
+stereo.wireframe = false;
+stereo.color_by_height = true;
+
+# Main visualization layer
+layer_obj stereo_layer;
+stereo_layer.canvas = (1920, 1080);
+stereo.render(stereo_layer);
+stereo_layer.transform(0, 0);
+
+# Add title
+math_obj title;
+title.type = "latex";
+title.content = "Stereographic Projection: Torus";
+title.color = (255, 255, 255);
+title.size = 54;
+
+layer_obj title_layer;
+title_layer.canvas = (1920, 1080);
+title.render(title_layer);
+title_layer.transform(50, 980);
+
+# Add projection point indicator
+math_obj proj_info;
+proj_info.type = "latex";
+proj_info.content = "Projection Point: (0, 0, 2)";
+proj_info.color = (180, 220, 255);
+proj_info.size = 32;
+
+layer_obj info_layer;
+info_layer.canvas = (1920, 1080);
+proj_info.render(info_layer);
+info_layer.transform(50, 50);
+
+# Composite
+output.project(stereo_layer, 0);
+output.project(title_layer, 1);
+output.project(info_layer, 2);

@@ -1,0 +1,43 @@
+# Layered Transparency
+# Three semi-transparent layers creating a blended effect
+# Demonstrates opacity-based composition and visual mixing
+#
+# Before running: haeccstable> open_monitor monitor1
+# Then run: haeccstable> run layered_transparency.txt
+
+in_var source1 = webcam;
+in_var source2 = usb_camera_1;
+in_var source3 = usb_camera_2;
+out_var output = monitor1;
+
+# Bottom layer (60% opacity)
+layer_obj base;
+base.canvas = (1920, 1080);
+source1.cast(base);
+base.transform(0, 0);
+base.scale(1.0, 1.0);
+base.rot(0, 0);
+base.opacity(60);
+
+# Middle layer (50% opacity, slightly scaled)
+layer_obj middle;
+middle.canvas = (1920, 1080);
+source2.cast(middle);
+middle.transform(100, 100);
+middle.scale(0.9, 0.9);
+middle.rot(0, 0);
+middle.opacity(50);
+
+# Top layer (40% opacity, rotated)
+layer_obj top;
+top.canvas = (1920, 1080);
+source3.cast(top);
+top.transform(960, 540);  # Center
+top.scale(0.8, 0.8);
+top.rot(15, 0);            # Slight rotation
+top.opacity(40);
+
+# Stack all layers for blended effect
+output.project(base, 0);
+output.project(middle, 1);
+output.project(top, 2);

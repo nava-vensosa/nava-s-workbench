@@ -1,0 +1,32 @@
+# Picture-in-Picture
+# Main camera fullscreen with small overlay camera in corner
+# Demonstrates z-index layering and scaling
+#
+# Before running: haeccstable> open_monitor monitor1
+# Then run: haeccstable> run picture_in_picture.txt
+
+in_var mainCamera = webcam;
+in_var overlayCamera = usb_camera_1;
+out_var output = monitor1;
+
+# Background layer (fullscreen main camera)
+layer_obj background;
+background.canvas = (1920, 1080);
+mainCamera.cast(background);
+background.transform(0, 0);
+background.scale(1.0, 1.0);
+background.rot(0, 0);
+background.opacity(100);
+
+# Picture-in-picture layer (small overlay in bottom-right)
+layer_obj pip;
+pip.canvas = (1920, 1080);
+overlayCamera.cast(pip);
+pip.transform(1400, 50);  # Bottom-right corner position
+pip.scale(0.25, 0.25);     # Quarter size (480x270)
+pip.rot(0, 0);
+pip.opacity(100);
+
+# Composite layers (background first, then pip on top)
+output.project(background, 0);  # z-index 0 (back)
+output.project(pip, 1);          # z-index 1 (front)

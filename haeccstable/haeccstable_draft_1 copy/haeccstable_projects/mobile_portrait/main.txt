@@ -1,0 +1,34 @@
+# Mobile Portrait
+# Optimized layout for 9:16 mobile screens
+# Demonstrates portrait-specific composition
+#
+# Before running: haeccstable> open_monitor monitor2
+# Then run: haeccstable> run mobile_portrait.txt
+
+in_var camera = webcam;
+out_var mobile = monitor2;
+
+# Full-height portrait layer
+layer_obj portrait;
+portrait.canvas = (1080, 1920);
+camera.cast(portrait);
+portrait.transform(0, 0);
+portrait.scale(1.0, 1.0);
+portrait.rot(0, 0);
+portrait.opacity(100);
+
+# Optional: Add decorative top/bottom bars
+# Uncomment these for letterboxed effect
+# layer_obj topBar;
+# topBar.canvas = (1080, 100);
+# topBar.transform(0, 1820);
+# topBar.opacity(80);
+
+# layer_obj bottomBar;
+# bottomBar.canvas = (1080, 100);
+# bottomBar.transform(0, 0);
+# bottomBar.opacity(80);
+
+mobile.project(portrait, 0);
+# mobile.project(topBar, 1);
+# mobile.project(bottomBar, 1);

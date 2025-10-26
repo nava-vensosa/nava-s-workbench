@@ -1,0 +1,53 @@
+# Octonion Visualization
+# Step-by-step construction of octonions with Penrose stereographic bi-twistor representation
+# Demonstrates mathematical animation capabilities for educational content
+#
+# Before running: haeccstable> open_monitor monitor1
+# Then run: haeccstable> run octonion_visualization.txt
+
+out_var display = monitor1;
+
+# Main octonion visualization
+math_obj octonion;
+octonion.type = "octonion_construction";
+octonion.step = 3;  # 0=reals, 1=complex, 2=quaternion, 3=octonion
+octonion.visualization = "penrose_bitwistor";
+octonion.rotation = (30, 45, t * 10);  # Animate rotation over time
+octonion.time_param = t;
+octonion.show_basis_vectors = true;
+octonion.color_scheme = "spectral";
+
+# Render octonion visualization to layer
+layer_obj octonion_layer;
+octonion_layer.canvas = (1920, 1080);
+octonion.render(octonion_layer);
+octonion_layer.transform(0, 0);
+
+# Add LaTeX annotation showing the algebraic structure
+math_obj annotation;
+annotation.type = "latex";
+annotation.content = "\\mathbb{O} = \\mathbb{R} \\oplus \\mathbb{R}^7";
+annotation.color = (255, 255, 255);
+annotation.size = 48;
+
+layer_obj text_layer;
+text_layer.canvas = (1920, 1080);
+annotation.render(text_layer);
+text_layer.transform(50, 950);
+
+# Add step indicator
+math_obj step_label;
+step_label.type = "latex";
+step_label.content = "Step 3: Octonion (8D)";
+step_label.color = (200, 200, 255);
+step_label.size = 36;
+
+layer_obj step_layer;
+step_layer.canvas = (1920, 1080);
+step_label.render(step_layer);
+step_layer.transform(50, 50);
+
+# Composite all layers
+display.project(octonion_layer, 0);
+display.project(text_layer, 1);
+display.project(step_layer, 2);

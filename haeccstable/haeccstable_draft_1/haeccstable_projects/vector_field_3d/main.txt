@@ -1,0 +1,56 @@
+# 3D Vector Field Visualization
+# Displays gradient flow of a 3D vector field
+# Demonstrates mathematical visualization for physics/math education
+#
+# Before running: haeccstable> open_monitor monitor1
+# Then run: haeccstable> run vector_field_3d.txt
+
+out_var display = monitor1;
+
+# 3D vector field (example: electromagnetic field)
+math_obj field;
+field.type = "vector_field_3d";
+field.field_x = "-y / (x*x + y*y + z*z)^1.5";
+field.field_y = "x / (x*x + y*y + z*z)^1.5";
+field.field_z = "0";
+field.grid_size = (10, 10, 10);
+field.bounds = ((-3, 3), (-3, 3), (-3, 3));
+field.arrow_scale = 0.3;
+field.color_by_magnitude = true;
+field.camera_rotation = (t * 15, t * 10, 0);
+field.time_param = t;
+
+# Render field visualization
+layer_obj field_layer;
+field_layer.canvas = (1920, 1080);
+field.render(field_layer);
+field_layer.transform(0, 0);
+
+# Add equation display
+math_obj equation;
+equation.type = "latex";
+equation.content = "\\vec{F} = \\frac{(-y, x, 0)}{(x^2 + y^2 + z^2)^{3/2}}";
+equation.color = (255, 255, 255);
+equation.size = 42;
+
+layer_obj equation_layer;
+equation_layer.canvas = (1920, 1080);
+equation.render(equation_layer);
+equation_layer.transform(50, 950);
+
+# Add title
+math_obj title;
+title.type = "latex";
+title.content = "3D Vector Field: Magnetic Circulation";
+title.color = (255, 220, 180);
+title.size = 48;
+
+layer_obj title_layer;
+title_layer.canvas = (1920, 1080);
+title.render(title_layer);
+title_layer.transform(50, 50);
+
+# Composite all layers
+display.project(field_layer, 0);
+display.project(equation_layer, 1);
+display.project(title_layer, 2);

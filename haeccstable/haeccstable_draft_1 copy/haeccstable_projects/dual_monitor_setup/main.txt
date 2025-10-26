@@ -1,0 +1,37 @@
+# Dual Monitor Setup
+# Outputs same video source to both desktop (1920x1080) and mobile (1080x1920)
+# Demonstrates multi-output with aspect ratio handling
+#
+# Before running this, open both monitors:
+#   haeccstable> open_monitor monitor1
+#   haeccstable> open_monitor monitor2
+#
+# Then run this file:
+#   haeccstable> run dual_monitor_setup.txt
+
+in_var camera = webcam;
+out_var desktop = monitor1;
+out_var mobile = monitor2;
+
+# Desktop output (landscape 16:9)
+layer_obj desktopLayer;
+desktopLayer.canvas = (1920, 1080);
+camera.cast(desktopLayer);
+desktopLayer.transform(0, 0);
+desktopLayer.scale(1.0, 1.0);
+desktopLayer.rot(0, 0);
+desktopLayer.opacity(100);
+
+# Mobile output (portrait 9:16)
+# Scale video to fit portrait orientation
+layer_obj mobileLayer;
+mobileLayer.canvas = (1080, 1920);
+camera.cast(mobileLayer);
+mobileLayer.transform(0, 360);  # Center vertically
+mobileLayer.scale(0.5625, 0.5625);  # Scale to fit portrait
+mobileLayer.rot(0, 0);
+mobileLayer.opacity(100);
+
+# Project to both monitors
+desktop.project(desktopLayer, 0);
+mobile.project(mobileLayer, 0);
