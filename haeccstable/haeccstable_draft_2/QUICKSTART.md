@@ -84,14 +84,24 @@ layer_obj name = layer("Name", width, height)
 $sobel(video, threshold=0.15)
 ```
 
+**REPL Commands** (log as program):
+- `print("text")` - Console output (# prefix)
+- `println("text")` - Console output + newline
+- `run("file.txt")` - Execute script file
+- `dd` (in log pane) - Delete line, re-execute log
+
 **Terminal Commands**:
 - `exit` - Quit
+- `---` - Add blank lines (visual separator)
 - `clear log.txt` - Clear log
 - `save dossier.json <file>` - Save state
 - `save log.txt <file>` - Save log
 
+**See [REPL_SYSTEM.md](REPL_SYSTEM.md) for REPL system guide**
+
 ## Keyboard Shortcuts
 
+### Mode & Focus
 | Key | Action |
 |-----|--------|
 | `1` | Focus dossier (NORMAL) |
@@ -100,15 +110,29 @@ $sobel(video, threshold=0.15)
 | `i` | Enter INSERT mode |
 | `ESC` | Enter NORMAL mode |
 | `Enter` | Execute command (INSERT) |
-| `j/k` | Scroll down/up (NORMAL) |
-| `gg/G` | Jump to top/bottom (NORMAL) |
+
+### Vim Navigation (NORMAL mode, all panes)
+| Key | Action |
+|-----|--------|
+| `h/j/k/l` | Left/down/up/right |
+| `w/b` | Word forward/backward |
+| `e/E/B` | Word end, WORD end, WORD back |
+| `0/$` | Line start/end |
+| `gg/G` | File start/end |
+| `{/}` | Paragraph backward/forward |
+| `Ctrl-D/U` | Page down/up |
+| `dd` | **Delete line (log pane only) - re-executes entire log!** |
+
+See **[VIM_NAVIGATION.md](VIM_NAVIGATION.md)** for complete guide.
 
 ## Tips
 
 1. **Stay in INSERT mode** - Commands keep you in INSERT mode for rapid entry
-2. **Save often** - Use `save dossier.json <name>` before experiments
-3. **Clear logs** - Use `clear log.txt` to start fresh
-4. **Navigate freely** - Press ESC, navigate panes, press 'i' to return
+2. **Use vim motions** - Navigate dossier/log with `w/b/e` for word jumping, `gg/G` for file navigation
+3. **Cursor tracks you** - The blinking cursor shows exactly where you are in the focused pane
+4. **Save often** - Use `save dossier.json <name>` before experiments
+5. **Clear logs** - Use `clear log.txt` to start fresh
+6. **Quick navigation** - Press `1` to view dossier, `2` for log, `3` then `i` to resume commands
 
 ## File Locations
 
@@ -136,18 +160,21 @@ layer_obj layer = layer("Main", 1920, 1080)
 # 4. Save snapshot
 save dossier.json baseline.json
 
-# 5. Experiment
+# 5. Add visual separator in log
+---
+
+# 6. Experiment
 $sobel(webcam, threshold=0.15)
 layer.cast(webcam)
 win.project(layer)
 
-# 6. Save experiment
+# 7. Save experiment
 save dossier.json with_sobel.json
 
-# 7. Save commands for reference
+# 8. Save commands for reference
 save log.txt sobel_demo.txt
 
-# 8. Exit
+# 9. Exit
 exit
 ```
 

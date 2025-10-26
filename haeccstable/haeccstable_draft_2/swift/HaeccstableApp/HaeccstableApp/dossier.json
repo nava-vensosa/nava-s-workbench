@@ -1,0 +1,28 @@
+{
+  "devices" : {
+
+  },
+  "functions" : {
+
+  },
+  "layers" : {
+
+  },
+  "processes" : {
+
+  },
+  "session" : {
+    "description" : "Haeccstable Session",
+    "start_time" : "2025-10-26T15:14:23Z"
+  },
+  "variables" : {
+    "x" : {
+      "created_at" : "2025-10-26T15:29:00Z",
+      "type" : "var",
+      "value" : "hello world"
+    }
+  },
+  "windows" : {
+
+  }
+}

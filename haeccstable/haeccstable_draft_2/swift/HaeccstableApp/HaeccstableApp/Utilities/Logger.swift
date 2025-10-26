@@ -16,6 +16,8 @@ class Logger {
         case debug = "DEBUG"
     }
 
+    // MARK: - Static Methods (for compatibility)
+
     static func log(_ message: String, level: Level = .info) {
         let timestamp = dateFormatter.string(from: Date())
         let logMessage = "[\(timestamp)] [\(level.rawValue)] \(message)"
@@ -31,6 +33,28 @@ class Logger {
     }
 
     static func debug(_ message: String) {
+        log(message, level: .debug)
+    }
+
+    // MARK: - Instance Methods
+
+    func log(_ message: String, level: Level = .info) {
+        Logger.log(message, level: level)
+    }
+
+    func info(_ message: String) {
+        log(message, level: .info)
+    }
+
+    func error(_ message: String) {
+        log(message, level: .error)
+    }
+
+    func warning(_ message: String) {
+        log(message, level: .warning)
+    }
+
+    func debug(_ message: String) {
         log(message, level: .debug)
     }
 }

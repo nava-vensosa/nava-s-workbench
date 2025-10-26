@@ -312,6 +312,19 @@ class Parser:
             next_token = self._peek(1)
             if next_token.type == TokenType.DOT:
                 return self._parse_method_or_property()
+            # Check for print/println function calls
+            elif next_token.type == TokenType.LPAREN and token.value in ['print', 'println']:
+                return self._parse_print_statement()
+            # Check for other function calls
+            elif next_token.type == TokenType.LPAREN:
+                result = self._parse_function_call()
+                return {
+                    "status": "success",
+                    "type": "function_call",
+                    "name": result["name"],
+                    "arguments": result["arguments"],
+                    "message": f"Function '{result['name']}' called"
+                }
 
         # Process call
         if token.type == TokenType.PROCESS_IDENTIFIER:
@@ -524,6 +537,30 @@ class Parser:
             return self._parse_tuple()
 
         return {"type": "unknown"}
+
+    def _parse_print_statement(self) -> Dict[str, Any]:
+        """Parse print/println statement with printf-style formatting"""
+        func_name = self._consume(TokenType.IDENTIFIER).value  # 'print' or 'println'
+        self._consume(TokenType.LPAREN)
+
+        # Parse arguments - could be format string + values, or just values
+        args = []
+        while self._peek().type not in [TokenType.RPAREN, TokenType.EOF]:
+            args.append(self._parse_expression())
+            if self._peek().type == TokenType.COMMA:
+                self._consume(TokenType.COMMA)
+            else:
+                break
+
+        self._consume(TokenType.RPAREN)
+
+        return {
+            "status": "success",
+            "type": "print_statement",
+            "function": func_name,
+            "arguments": args,
+            "message": f"{func_name}() executed"
+        }
 
     def _parse_function_call(self) -> Dict[str, Any]:
         """Parse function call: name(args)"""

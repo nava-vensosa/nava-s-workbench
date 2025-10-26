@@ -6,13 +6,17 @@ class MessageRouter {
 
     // MARK: - Properties
 
-    // Command handlers will be added in Phase 2 Day 3
-    // For now, we'll use a simple routing system
+    private let stateManager: StateManager
+    private let processRegistry: ProcessRegistry
+    private let logger: Logger
 
     // MARK: - Initialization
 
-    init() {
-        Logger.log("MessageRouter initialized")
+    init(stateManager: StateManager, processRegistry: ProcessRegistry, logger: Logger) {
+        self.stateManager = stateManager
+        self.processRegistry = processRegistry
+        self.logger = logger
+        logger.log("MessageRouter initialized")
     }
 
     // MARK: - Public Methods
@@ -26,7 +30,7 @@ class MessageRouter {
             return createErrorResponse("Missing 'type' field in message")
         }
 
-        Logger.debug("Routing message type: \(type)")
+        logger.debug("Routing message type: \(type)")
 
         // Route based on message type
         switch type {
@@ -54,6 +58,9 @@ class MessageRouter {
         case "get_state":
             return handleGetState(data: message["data"] as? [String: Any])
 
+        case "reset_state":
+            return handleResetState()
+
         case "ping":
             return handlePing()
 
@@ -71,138 +78,369 @@ class MessageRouter {
             return createErrorResponse("Invalid declare_variable data")
         }
 
-        Logger.log("Declare variable: \(varType) \(name)")
+        // Parse variable type
+        guard let type = VariableType(rawValue: varType) else {
+            return createErrorResponse("Invalid variable type: \(varType)")
+        }
 
-        // TODO: Implement in Phase 2 Day 3
+        // Parse value
+        let value: VariableValue
+        if let valueData = data["value"] {
+            // Parse based on type and value data
+            if let stringValue = valueData as? String {
+                value = .string(stringValue)
+            } else if let numberValue = valueData as? Double {
+                value = .number(numberValue)
+            } else if let boolValue = valueData as? Bool {
+                value = .boolean(boolValue)
+            } else if let tupleValue = valueData as? [Double] {
+                value = .tuple(tupleValue)
+            } else if let deviceId = valueData as? Int {
+                value = .deviceReference(deviceId)
+            } else {
+                value = .null
+            }
+        } else {
+            value = .null
+        }
+
+        // Store variable in state
+        stateManager.setVariable(name: name, type: type, value: value)
+
+        logger.log("Variable '\(name)' declared: \(varType)")
+
         return [
             "status": "success",
             "type": "declare_variable",
-            "message": "Variable '\(name)' declared (stub response)"
+            "message": "Variable '\(name)' declared"
         ]
     }
 
     private func handleCallFunction(data: [String: Any]?) -> [String: Any] {
         guard let data = data,
-              let name = data["name"] as? String else {
+              let name = data["name"] as? String,
+              let arguments = data["arguments"] as? [Any] else {
             return createErrorResponse("Invalid call_function data")
         }
 
-        Logger.log("Call function: \(name)")
-
-        // TODO: Implement in Phase 2 Day 3
-        return [
-            "status": "success",
-            "type": "call_function",
-            "message": "Function '\(name)' called (stub response)"
-        ]
+        // Check if function exists
+        if let function = stateManager.getFunction(name) {
+            logger.log("Function '\(name)' called with \(arguments.count) arguments")
+            // TODO: Phase 4 - Execute function body
+            return [
+                "status": "success",
+                "type": "call_function",
+                "message": "Function '\(name)' called (stub)"
+            ]
+        } else {
+            return createErrorResponse("Unknown function '\(name)'. Function not defined.")
+        }
     }
 
     private func handleCallProcess(data: [String: Any]?) -> [String: Any] {
         guard let data = data,
-              let name = data["name"] as? String else {
+              let name = data["name"] as? String,
+              let arguments = data["arguments"] as? [String: Any] else {
             return createErrorResponse("Invalid call_process data")
         }
 
         // Validate process name has $ prefix
-        guard name.hasPrefix("$") else {
+        guard processRegistry.validateProcessName(name) else {
             return createErrorResponse("Process names must start with '$'. Did you mean '$\(name)'?")
         }
 
-        Logger.log("Call process: \(name)")
+        // Check if process is built-in or user-defined
+        let processName = processRegistry.stripProcessPrefix(name)
 
-        // TODO: Implement in Phase 2 Day 3
-        return [
-            "status": "success",
-            "type": "call_process",
-            "message": "Process '\(name)' called (stub response)"
-        ]
+        if processRegistry.isBuiltIn(processName) {
+            // Execute built-in process (stub for Phase 5)
+            let success = processRegistry.executeProcess(name, arguments: arguments)
+            if success {
+                logger.log("Built-in process '\(name)' executed")
+                return [
+                    "status": "success",
+                    "type": "call_process",
+                    "message": "Process '\(name)' executed (stub)"
+                ]
+            } else {
+                return createErrorResponse("Failed to execute process '\(name)'")
+            }
+        } else {
+            // Check if user-defined process exists
+            if let process = stateManager.getProcess(name) {
+                logger.log("User-defined process '\(name)' called")
+                // TODO: Phase 4 - Execute user-defined process body
+                return [
+                    "status": "success",
+                    "type": "call_process",
+                    "message": "User-defined process '\(name)' called (stub)"
+                ]
+            } else {
+                return createErrorResponse("Unknown process '\(name)'. Process not defined.")
+            }
+        }
     }
 
     private func handleMethodCall(data: [String: Any]?) -> [String: Any] {
         guard let data = data,
               let object = data["object"] as? String,
-              let method = data["method"] as? String else {
+              let method = data["method"] as? String,
+              let arguments = data["arguments"] as? [Any] else {
             return createErrorResponse("Invalid method_call data")
         }
 
-        Logger.log("Method call: \(object).\(method)")
+        logger.log("Method call: \(object).\(method)")
 
-        // TODO: Implement in Phase 2 Day 3
-        return [
-            "status": "success",
-            "type": "method_call",
-            "message": "Method '\(object).\(method)' called (stub response)"
-        ]
+        // Check if object is a variable
+        guard let variable = stateManager.getVariable(object) else {
+            return createErrorResponse("Unknown variable '\(object)'")
+        }
+
+        // Handle based on variable type and method
+        switch variable.type {
+        case .windowVar:
+            return handleWindowMethod(windowName: object, method: method, arguments: arguments)
+        case .layerObj:
+            return handleLayerMethod(layerName: object, method: method, arguments: arguments)
+        default:
+            return createErrorResponse("Variable '\(object)' of type '\(variable.type.rawValue)' does not support method '\(method)'")
+        }
+    }
+
+    // MARK: - Window Method Handlers
+
+    private func handleWindowMethod(windowName: String, method: String, arguments: [Any]) -> [String: Any] {
+        switch method {
+        case "project":
+            // window.project(layer, priority)
+            guard arguments.count == 2,
+                  let layerName = arguments[0] as? String,
+                  let priority = arguments[1] as? Int else {
+                return createErrorResponse("Invalid arguments for window.project(layer, priority)")
+            }
+            stateManager.windowProjectLayer(windowName, layerName: layerName, priority: priority)
+            return [
+                "status": "success",
+                "type": "method_call",
+                "message": "Layer '\(layerName)' projected to window '\(windowName)' with priority \(priority)"
+            ]
+
+        case "layerpriority":
+            // window.layerpriority(layer, priority)
+            guard arguments.count == 2,
+                  let layerName = arguments[0] as? String,
+                  let priority = arguments[1] as? Int else {
+                return createErrorResponse("Invalid arguments for window.layerpriority(layer, priority)")
+            }
+            stateManager.windowSetLayerPriority(windowName, layerName: layerName, priority: priority)
+            return [
+                "status": "success",
+                "type": "method_call",
+                "message": "Layer '\(layerName)' priority set to \(priority) on window '\(windowName)'"
+            ]
+
+        case "layeropacity":
+            // window.layeropacity(layer, opacity)
+            guard arguments.count == 2,
+                  let layerName = arguments[0] as? String,
+                  let opacity = arguments[1] as? Double else {
+                return createErrorResponse("Invalid arguments for window.layeropacity(layer, opacity)")
+            }
+            stateManager.windowSetLayerOpacity(windowName, layerName: layerName, opacity: opacity)
+            return [
+                "status": "success",
+                "type": "method_call",
+                "message": "Layer '\(layerName)' opacity set to \(opacity) on window '\(windowName)'"
+            ]
+
+        case "layerposition":
+            // window.layerposition(layer, [x, y])
+            guard arguments.count == 2,
+                  let layerName = arguments[0] as? String,
+                  let position = arguments[1] as? [Double] else {
+                return createErrorResponse("Invalid arguments for window.layerposition(layer, [x, y])")
+            }
+            stateManager.windowSetLayerPosition(windowName, layerName: layerName, position: position)
+            return [
+                "status": "success",
+                "type": "method_call",
+                "message": "Layer '\(layerName)' position set to \(position) on window '\(windowName)'"
+            ]
+
+        case "layerscale":
+            // window.layerscale(layer, [sx, sy])
+            guard arguments.count == 2,
+                  let layerName = arguments[0] as? String,
+                  let scale = arguments[1] as? [Double] else {
+                return createErrorResponse("Invalid arguments for window.layerscale(layer, [sx, sy])")
+            }
+            stateManager.windowSetLayerScale(windowName, layerName: layerName, scale: scale)
+            return [
+                "status": "success",
+                "type": "method_call",
+                "message": "Layer '\(layerName)' scale set to \(scale) on window '\(windowName)'"
+            ]
+
+        case "layerremove":
+            // window.layerremove(layer)
+            guard arguments.count == 1,
+                  let layerName = arguments[0] as? String else {
+                return createErrorResponse("Invalid arguments for window.layerremove(layer)")
+            }
+            stateManager.windowRemoveLayer(windowName, layerName: layerName)
+            return [
+                "status": "success",
+                "type": "method_call",
+                "message": "Layer '\(layerName)' removed from window '\(windowName)'"
+            ]
+
+        default:
+            return createErrorResponse("Unknown window method: '\(method)'")
+        }
+    }
+
+    // MARK: - Layer Method Handlers
+
+    private func handleLayerMethod(layerName: String, method: String, arguments: [Any]) -> [String: Any] {
+        // Layer methods like layer.cast(variable) will be implemented here
+        // TODO: Phase 3 - Implement layer methods
+        return createErrorResponse("Layer methods not yet implemented")
     }
 
     private func handlePropertyAssignment(data: [String: Any]?) -> [String: Any] {
         guard let data = data,
               let object = data["object"] as? String,
-              let property = data["property"] as? String else {
+              let property = data["property"] as? String,
+              let value = data["value"] else {
             return createErrorResponse("Invalid property_assignment data")
         }
 
-        Logger.log("Property assignment: \(object).\(property)")
+        logger.log("Property assignment: \(object).\(property)")
 
-        // TODO: Implement in Phase 2 Day 3
-        return [
-            "status": "success",
-            "type": "property_assignment",
-            "message": "Property '\(object).\(property)' assigned (stub response)"
-        ]
+        // Check if object is a variable
+        guard let variable = stateManager.getVariable(object) else {
+            return createErrorResponse("Unknown variable '\(object)'")
+        }
+
+        // Handle based on variable type and property
+        switch variable.type {
+        case .layerObj:
+            return handleLayerPropertyAssignment(layerName: object, property: property, value: value)
+        default:
+            return createErrorResponse("Variable '\(object)' of type '\(variable.type.rawValue)' does not support property '\(property)'")
+        }
+    }
+
+    // MARK: - Layer Property Assignment
+
+    private func handleLayerPropertyAssignment(layerName: String, property: String, value: Any) -> [String: Any] {
+        switch property {
+        case "opacity":
+            guard let opacity = value as? Double else {
+                return createErrorResponse("Invalid value for layer.opacity (expected number)")
+            }
+            stateManager.updateLayerDefaults(layerName, opacity: opacity)
+            return [
+                "status": "success",
+                "type": "property_assignment",
+                "message": "Layer '\(layerName)' default opacity set to \(opacity)"
+            ]
+
+        case "position":
+            guard let position = value as? [Double] else {
+                return createErrorResponse("Invalid value for layer.position (expected [x, y])")
+            }
+            stateManager.updateLayerDefaults(layerName, position: position)
+            return [
+                "status": "success",
+                "type": "property_assignment",
+                "message": "Layer '\(layerName)' default position set to \(position)"
+            ]
+
+        case "scale":
+            guard let scale = value as? [Double] else {
+                return createErrorResponse("Invalid value for layer.scale (expected [sx, sy])")
+            }
+            stateManager.updateLayerDefaults(layerName, scale: scale)
+            return [
+                "status": "success",
+                "type": "property_assignment",
+                "message": "Layer '\(layerName)' default scale set to \(scale)"
+            ]
+
+        default:
+            return createErrorResponse("Unknown layer property: '\(property)'")
+        }
     }
 
     private func handleDefineFunction(data: [String: Any]?) -> [String: Any] {
         guard let data = data,
-              let name = data["name"] as? String else {
+              let name = data["name"] as? String,
+              let parameters = data["parameters"] as? [String],
+              let body = data["body"] as? String else {
             return createErrorResponse("Invalid define_function data")
         }
 
-        Logger.log("Define function: \(name)")
+        // Store function in state
+        stateManager.defineFunction(name: name, parameters: parameters, body: body)
 
-        // TODO: Implement in Phase 2 Day 3
+        logger.log("Function '\(name)' defined with \(parameters.count) parameters")
+
         return [
             "status": "success",
             "type": "define_function",
-            "message": "Function '\(name)' defined (stub response)"
+            "message": "Function '\(name)' defined"
         ]
     }
 
     private func handleDefineProcess(data: [String: Any]?) -> [String: Any] {
         guard let data = data,
-              let name = data["name"] as? String else {
+              let name = data["name"] as? String,
+              let parameters = data["parameters"] as? [String] else {
             return createErrorResponse("Invalid define_process data")
         }
 
         // Validate process name has $ prefix
-        guard name.hasPrefix("$") else {
+        guard processRegistry.validateProcessName(name) else {
             return createErrorResponse("Process names must start with '$'. Did you mean '$\(name)'?")
         }
 
-        Logger.log("Define process: \(name)")
+        // Get optional body (built-in processes won't have one)
+        let body = data["body"] as? String
 
-        // TODO: Implement in Phase 2 Day 3
+        // Store process in state
+        stateManager.defineProcess(name: name, parameters: parameters, body: body)
+
+        logger.log("Process '\(name)' defined with \(parameters.count) parameters")
+
         return [
             "status": "success",
             "type": "define_process",
-            "message": "Process '\(name)' defined (stub response)"
+            "message": "Process '\(name)' defined"
         ]
     }
 
     private func handleGetState(data: [String: Any]?) -> [String: Any] {
-        Logger.log("Get state")
+        logger.log("Get state")
 
-        // TODO: Implement in Phase 2 Day 2 with StateManager
+        // Get state summary from StateManager
+        let summary = stateManager.getStateSummary()
+
         return [
             "status": "success",
             "type": "get_state",
-            "state": [
-                "variables": [:],
-                "functions": [:],
-                "processes": [:],
-                "windows": [:],
-                "layers": [:]
-            ]
+            "state": summary
+        ]
+    }
+
+    private func handleResetState() -> [String: Any] {
+        logger.info("Resetting all state")
+        stateManager.resetAll()
+
+        return [
+            "status": "success",
+            "type": "reset_state",
+            "message": "All state cleared"
         ]
     }
 

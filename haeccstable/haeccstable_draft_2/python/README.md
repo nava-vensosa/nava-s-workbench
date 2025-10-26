@@ -33,11 +33,18 @@ This directory contains the Python terminal interface for Haeccstable Draft 2.
 - Adapts to any terminal size
 
 ### ✅ Vim Modal System
-- **NORMAL mode**: Navigate with h/j/k/l, w/e/b, gg/G, {/}, 0/$
+- **NORMAL mode**: Full vim navigation in all 3 panes
+  - Basic: `h/j/k/l` (left/down/up/right)
+  - Word: `w/b/e/E/B` (word forward/back/end, WORD end/back)
+  - Line: `0/$` (line start/end)
+  - File: `gg/G` (file start/end), `Ctrl-D/Ctrl-U` (page down/up)
+  - Paragraph: `{/}` (previous/next empty line)
 - **INSERT mode**: Text input in command pane
+- **Blinking cursor**: Visible cursor tracks position in focused pane (just like Vim!)
+- **Text wrapping**: All 3 panes wrap long lines automatically
 - Mode transitions: i/a/o/s → INSERT, ESC → NORMAL
 - Stays in INSERT mode after executing commands
-- Cursor positioning and scrolling
+- Auto-scroll keeps cursor visible
 
 ### ✅ DSL Parser
 Supports all Draft 2 syntax:
@@ -64,9 +71,25 @@ Supports all Draft 2 syntax:
 - Tuples: `(1920, 1080)`, `(1.0, 0.8, 0.4)`
 - Comments: `//` and `#`
 
+### ✅ REPL System - Log as Programmable File
+The log.txt file functions as an **editable program**:
+- **`dd` motion** in log pane - Delete line and re-execute entire log as program
+- **`print("message")`** - Console output with `#` prefix
+- **`println("message")`** - Console output with `#` prefix + blank line
+- **`run("filename.txt")`** - Import and execute script files
+- **Log format**: `>` commands, `#` output, `//` comments, `✓/✗` results
+
+This enables iterative development where you edit history, and the dossier rebuilds automatically!
+
+**See [REPL_SYSTEM.md](../REPL_SYSTEM.md) for complete guide.**
+
 ### ✅ Special Commands
 Built-in terminal commands:
 - `exit` - Exit Haeccstable
+- `---` - Add two blank lines to log (visual separator for organizing sessions)
+- `print("text")` - Output console message with `#` prefix
+- `println("text")` - Output console message with `#` prefix + blank line
+- `run("file.txt")` - Execute script file from composition_files/
 - `clear log.txt` - Clear the command log
 - `save dossier.json <filename>` - Save current dossier state (e.g., `save dossier.json snapshot1.json`)
 - `save log.txt <filename>` - Save current log (e.g., `save log.txt session1.txt`)
@@ -129,6 +152,15 @@ The test script validates:
 - State queries
 
 See `../swift/README_PHASE2_DAY1.md` for detailed documentation.
+
+## Documentation
+
+- **[REPL_SYSTEM.md](../REPL_SYSTEM.md)** - 🆕 REPL system: Edit log as program, print(), run()
+- **[VIM_NAVIGATION.md](../VIM_NAVIGATION.md)** - Complete guide to vim navigation features
+- **[DSL_SPECIFICATION.md](../DSL_SPECIFICATION.md)** - Full DSL syntax reference
+- **[ARCHITECTURE.md](../ARCHITECTURE.md)** - System architecture
+- **[QUICKSTART.md](../QUICKSTART.md)** - Quick start guide
+- **[WORKFLOW_IMPROVEMENTS.md](../WORKFLOW_IMPROVEMENTS.md)** - Workflow features
 
 ## Next Steps (Phase 2 Day 2+)
 
