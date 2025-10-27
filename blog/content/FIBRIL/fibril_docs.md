@@ -3,9 +3,6 @@
 
 ---
 
-## Introduction
-
-This paper presents a **Dynamic Bayesian Network (DBN)** for generative harmonic voice allocation.  
 The system models a continuously evolving probability field over the 128-note MIDI pitch space,  
 where each note’s probability represents its contextual likelihood of being voiced in the next machine state.
 
