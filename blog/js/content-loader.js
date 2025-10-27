@@ -2,12 +2,16 @@
 // Loads content from text files into elements with data-content-hook attributes
 
 document.addEventListener('DOMContentLoaded', async () => {
+  console.log('Content Loader: DOMContentLoaded event fired');
   const contentHooks = document.querySelectorAll('[data-content-hook]');
+  console.log(`Content Loader: Found ${contentHooks.length} content hooks`);
 
   for (const element of contentHooks) {
     const hookName = element.getAttribute('data-content-hook');
     const contentPath = element.getAttribute('data-content-path');
     const contentType = element.getAttribute('data-content-type') || 'text';
+
+    console.log(`Content Loader: Processing hook "${hookName}" with path "${contentPath}" and type "${contentType}"`);
 
     if (!contentPath) {
       console.warn(`No content path specified for hook: ${hookName}`);
@@ -15,7 +19,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
+      console.log(`Content Loader: Fetching ${contentPath}...`);
       const response = await fetch(contentPath);
+      console.log(`Content Loader: Response status: ${response.status}`);
       if (!response.ok) {
         console.warn(`Failed to load content for ${hookName} from ${contentPath}`);
         element.textContent = '';
@@ -23,6 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
 
       const content = await response.text();
+      console.log(`Content Loader: Successfully loaded ${content.length} characters`);
 
       switch (contentType) {
         case 'text':
@@ -37,8 +44,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         case 'markdown':
           // Simple markdown to HTML conversion (basic support)
-          element.innerHTML = convertMarkdownToHTML(content);
+          console.log(`Content Loader: Converting markdown to HTML...`);
+          const htmlContent = convertMarkdownToHTML(content);
+          console.log(`Content Loader: Converted to ${htmlContent.length} characters of HTML`);
+          element.innerHTML = htmlContent;
           element.classList.add('content-markdown');
+          console.log(`Content Loader: Successfully injected content into element`);
           break;
 
         case 'image':
