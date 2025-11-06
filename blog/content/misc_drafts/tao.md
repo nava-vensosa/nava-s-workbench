@@ -214,4 +214,73 @@ He prefers what is within to what is without.
 
 [13]
 
+"Welcome disgrace as a pleasant surprise.
+Prize calamities as your own body."
 
+Why should we "welcome disgrace as a pleasant surprise?"
+Because a lowly state is a boon:
+Getting it is a pleasant surprise,
+And so is losing it!
+That is why we should "welcome disgrace as a pleasant surprise."
+
+Why should we "prize calamities as our own body?"
+Because our body is the very source of our calamities.
+If we have no body, what calamities can we have?
+
+Hence, only he who is willing to give his body for the sake of the world is fit to be entrusted with the world.
+Only he who can do it with love is worthy of being the steward of the world.
+
+---
+
+[14]
+
+Look at it but you cannot see it!
+Its name is Formless.
+
+Listen to it but you cannot hear it!
+Its name is Soundless.
+
+Grasp it but you cannot get it!
+Its name is Incorporeal.
+
+These three attributes are unfathomable;
+Therefore they fuse into one.
+
+Its upper side is not bright:
+Its under side not dim.
+Continually the Unnameable moves on,
+Until it returns beyond the realm of things.
+We call it the formless Form, the imageless Image.
+We call it the indefinable and unimaginable.
+
+Confront it and you do not see its face!
+Follow it and you do not see its back!
+Yet, equipped with this timeless Tao,
+You can harness present realities.
+
+To know the origins is initiation into the Tao.
+
+---
+
+[15]
+
+The ancient adepts of the Tao were subtle and flexible, profound and comprehensive.
+Their minds were too deep to be fathomed.
+
+Because they are unfathomable,
+One can only describe them vaguely by their appearance.
+
+Hesitant like one wading a stream in winter;
+Timid like one afraid of his neighbours on all sides;
+Cautious and courteous like a guest;
+Yielding like ice on th point of melting;
+Simple like an uncarved block;
+Hollow like a cave;
+Confused like a muddy pool;
+And yet who else could quietly and gradually evolve from the muddy ot the clear?
+Who else could slowly but steadily move from the intert to the living?
+
+He who keeps the Tao does not want to be full.
+But precisely because he is never full,
+He can always remain like a hidden sprout,
+And does not rush to early ripening.

@@ -97,4 +97,17 @@
 
 [13]
 
+- This reminds me of how calm Iroh was when he was captured. A lowly state is a boon! Calamity is in the body -- not essential, nor mental
 
+---
+
+[14]
+
+- Form, matter, morphos, and faciality in this one are interesting... to follow is not to find its back, and to confront is not to see its face... what kind of creature is this? What are the implications of seeing the Tao as a creature and not a force or spirit or something otherwise abstract? Time, sociality...
+
+---
+
+[15]
+
+- The unfathomable ancient adepts of the Tao... what is it with the mystical figure of the Presocratic or the nomoidei?
+- Simple like an uncarved block... who else could slowly but steadily move from the intert to the living?

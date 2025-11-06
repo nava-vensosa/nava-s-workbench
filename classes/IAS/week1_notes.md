@@ -80,3 +80,18 @@ HOMEWORK:
   - Email responses to: melissa.jp@rga.com
   - Friday 9AM-10AM Office Hours, email Melissa.
     - Carolina will fit you in, she rules Melissa's life benevolently
+
+In my favorite poem, Yeats writes: "A line may take us hours maybe, but if it does not seem a moment's thought, our stitching and unstitching has been naught." The line speaks to the work of poetry, but also gives away much of his approach to the composition of the line. The words must be laden with the utmost care, yet seem effortless. 
+
+While a line's content may contain its insight -- and that's not to be underestimated -- delivery often matters more for the audience. A skilled after may move an audience to tears ordering a burger, while another could make Shakespeare sound flat. It's never *what* you said so much as *how* you said it that matters.
+
+
+What of a line with no words? There is an invisible language of the body all musicians speak. We know the weight of our instruments against our body better than our other halves. we feel more at ease in our own skin when it's pressed up against the grit of our instruments' metal, ivory, wood, or plastic. All day, we obsess over tiny technical details in how our tendons move or how we hold our elbows.
+
+This language lives in our hands. Watch a musician's hands and their life is all laid out right there -- the way they store their anxiety in their chest, or forget it along with their shoulders in a holistic motion with the instrument, or the tension and intensity and relaxation in the curling of their fingers. It's the same when we speak -- the words we choose are often textural and contextual decoration for the gestures we draw with our body language.
+
+I want to talk of those who innovate in the invisible space of gesture in reflection on "how innovation has shaped my life." I can nearly count on two hands the number of times I've been in a room full of musicians with collective centuries of intense technical study between them watching someone on stage with their jaws open wide, whispering between songs "I didn't know that was possible." It just might be my favorite feeling I have felt. 
+
+What is that? How can these people find something completely new in a wordless language millions of people have been obsessing over for centuries? Their music is always so genuine, so moving, so evocative. Accolades of genius or earnesty don't come near the sheer splendor of the audience experience in the moment of the performance. 
+
+What brings that kind of ingenuity beyond the realm of music and back into language? Into speech? Could it be woven into prepared speech or poetry or prose? What do you name the study of invention at hand in this kind of innovation? In its depth, it's simply making people feel the weight of presence with what you say and how you say it. How is it that people do this anew all the time? I live for the moments of earnesty in myself and others that bring that new perspective, that attentiveness.
