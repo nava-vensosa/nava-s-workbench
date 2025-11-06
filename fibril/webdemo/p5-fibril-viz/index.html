@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fibril Algorithm Visualization</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Fibril Algorithm Visualization</h1>
+            <p>Bayesian MIDI Note Selection with Real-time Probability Distribution</p>
+        </header>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="numVoices">Number of Voices:</label>
+                <input type="number" id="numVoices" min="1" max="12" value="4">
+            </div>
+
+            <div class="control-group">
+                <label for="randomSeed">Random Seed:</label>
+                <input type="number" id="randomSeed" min="0" value="12345">
+            </div>
+
+            <div class="control-group">
+                <label for="rootNote">Root Note (MIDI):</label>
+                <input type="number" id="rootNote" min="0" max="127" value="60">
+                <span class="note-label">(60 = C)</span>
+            </div>
+
+            <div class="control-group">
+                <label>
+                    <input type="checkbox" id="useServer" onchange="toggleServerMode(this.checked)">
+                    Run on Server
+                </label>
+            </div>
+
+            <div class="control-group">
+                <label>
+                    <input type="checkbox" id="autoSave">
+                    Auto-save runs
+                </label>
+            </div>
+
+            <button id="runButton">Run Algorithm</button>
+            <button id="saveButton" onclick="saveCurrentRun()" style="display:none;">Save Current Run</button>
+        </div>
+
+        <div id="canvas-container"></div>
+
+        <div class="info">
+            <h3>How to read the visualization:</h3>
+            <ul>
+                <li><strong>Four squares</strong> (2×2 grid) show the probability distribution at each stage: Initial, Iteration 1, Iteration 2, Iteration 3</li>
+                <li><strong>Square chart layout</strong> - Like a pie chart but square; each cell's area = its exact probability percentage</li>
+                <li><strong>Only in-key notes shown</strong> - Zero-probability notes take 0% area (not displayed)</li>
+                <li><strong>Area = probability</strong> - If a note has 8.625% probability, it occupies exactly 8.625% of the square</li>
+                <li><strong>MIDI numbers</strong> displayed inside each cell (when space allows)</li>
+                <li><strong>Blue gradient</strong> - In-key notes (darker blue = higher probability)</li>
+                <li><strong>Green cells</strong> - Allocated voices selected by the algorithm</li>
+            </ul>
+            <p style="margin-top: 15px;"><em>Watch how probability concentrates on harmonically related notes across iterations, then see which specific notes get selected (green) for voice allocation.</em></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
