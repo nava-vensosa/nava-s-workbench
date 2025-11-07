@@ -53,8 +53,8 @@ class VimNavigator {
     this.links = Array.from(navLinks).map((link, index) => {
       const listItem = link.closest('li');
       if (listItem) {
-        // Remove any existing emoji or number prefix
-        const textContent = link.textContent.trim().replace(/^[🔗\[\]0-9]+\s*/, '');
+        // Remove any existing emoji or number prefix (e.g., "[1] ")
+        const textContent = link.textContent.trim().replace(/^\[\d+\]\s*/, '');
 
         // Create number prefix span
         const prefix = document.createElement('span');
