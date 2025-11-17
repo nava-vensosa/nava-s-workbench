@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generated Treemap</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Generated Treemap</h1>
+
+    <% if (imageUrl) { %>
+      <div class="chart-container">
+        <img src="<%= imageUrl %>" alt="Treemap Visualization" style="max-width: 100%; height: auto;">
+      </div>
+      <div class="info-box" style="background: #d4edda; border-color: #28a745; color: #155724;">
+        <p><strong>Success!</strong> Treemap generated using Python matplotlib with numpy-calculated grayscale colors.</p>
+      </div>
+    <% } else { %>
+      <div class="info-box">
+        <p><strong>Note:</strong> <%= errorMessage || 'Treemap generation failed. Please ensure R, ggplot2, and treemapify are installed.' %></p>
+      </div>
+    <% } %>
+
+    <div class="item-list">
+      <h2>Your Data:</h2>
+      <ul>
+        <% items.forEach(item => { %>
+          <li><strong><%= item.name %>:</strong> <%= item.percentage %>%</li>
+        <% }); %>
+      </ul>
+    </div>
+
+    <a href="/" class="back-link">Create Another Treemap</a>
+  </div>
+</body>
+</html>

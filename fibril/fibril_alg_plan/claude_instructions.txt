@@ -1,0 +1,11 @@
+help me design a circuit for a controller. First, write a README.md; after I verify or tweak your README.md, we'll write a hardware implementation guide. 
+
+We can use: Raspberry Pi 5, GPIO boards, R/2R Ladders using voltage dividers to detect multiple keypresses within a section
+
+We need to output: HDMI output as well as stereo Instrument Jack output. 
+
+We need to be able to run Python, Numpy, and C on the Raspberry Pi. Perhaps also R, or C# for visualization.
+
+In terms of General Purpose Input Voltage Read Pins, the interface contains: 8 rank arrays (4 buttons in an R/2R ladder for each array), 4 KeySelector arrays (3 buttons in an R/2R ladder for each array), 2 VL Toggle arrays (2 buttons in a voltage divider or R/2R ladder for each toggle array), 1 Sustain Toggle (a single button), 3 Scramble Arrays (3 buttons in an R/2R ladder), 1 Scramble Selector Array (3 buttons in an R/2R ladder), and 18 individual potentiometers each connected to a single pin responsible for controlling data within a range of (0, 1). Apart from these 18 potentiometers, the Raspberry Pi must be able to detect the source of each boolean keypress
+
+The interface must be very consistent -- help me decide on Resistor and Power Supply values; can it all be run from the Raspberry Pi's onboard 5V Output? Would that be unreliable? 

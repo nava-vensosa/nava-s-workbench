@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css?family=Audiowide');
+
+html {
+  font-family: 'Audiowide', sans-serif;
+}
+
+#mainRowContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+}
+
+#leftSide {
+  width: 10%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#rightSide {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#topRight {
+  height: 50%;
+  background-color: rgb(140, 240, 70);
+}
+
+#bottomRight {
+  height: 50%;
+  background-color: rgb(170, 140, 240);
+}
+
+#topLeft {
+  background-color: rgb(70, 140, 240);
+}
+
+#bottomLeft {
+  background-color: rgb(140, 240, 70);
+}
+
