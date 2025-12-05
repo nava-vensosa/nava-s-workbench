@@ -1,0 +1,12 @@
+{
+  "name": "maven2-keyboard-grid",
+  "version": "1.0.0",
+  "description": "Keyboard grid with fetch navigation and p5.js",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

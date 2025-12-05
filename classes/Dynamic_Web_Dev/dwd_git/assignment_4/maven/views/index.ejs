@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FIBRIL Keyboard</title>
+  <link href="/css/styles.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <div id="app">
+    <a id="fetchlink">Click here to fetch the keyboard interface</a>
+  </div>
+  <script>
+    document.getElementById('fetchlink').addEventListener('click', async (e) => {
+      e.preventDefault();
+      const response = await fetch('/keyboard');
+      const html = await response.text();
+      document.open();
+      document.write(html);
+      document.close();
+    });
+  </script>
+</body>
+</html>

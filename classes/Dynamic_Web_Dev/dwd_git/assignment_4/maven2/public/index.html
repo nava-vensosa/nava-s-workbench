@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FIBRIL Keyboard</title>
+  <link href="/css/styles.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <div id="app">
+    <a id="fetchlink" style="cursor: pointer; color: #6af; font-size: 24px;">Click here to fetch the keyboard interface</a>
+  </div>
+  <script>
+    document.getElementById('fetchlink').addEventListener('click', async (e) => {
+      e.preventDefault();
+
+      const response = await fetch('/keyboard.html');
+      const html = await response.text();
+
+      // Parse HTML without executing scripts
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+
+      // Replace body and head content
+      document.body.innerHTML = doc.body.innerHTML;
+      document.head.innerHTML = doc.head.innerHTML;
+
+      // Manually load p5.js first
+      const p5Script = document.createElement('script');
+      p5Script.src = 'https://ajax.googleapis.com/ajax/libs/p5.js/1.9.0/p5.min.js';
+
+      // Only load sketch.js after p5.js finishes loading
+      p5Script.onload = () => {
+        const sketchScript = document.createElement('script');
+        sketchScript.src = '/sketch.js?' + Date.now(); // Cache bust
+        sketchScript.onload = () => {
+          // Set up home button after sketch loads
+          const homeBtn = document.getElementById('homebutton');
+          if (homeBtn) {
+            homeBtn.addEventListener('click', async () => {
+              const response = await fetch('/index.html');
+              const html = await response.text();
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(html, 'text/html');
+              document.body.innerHTML = doc.body.innerHTML;
+              document.head.innerHTML = doc.head.innerHTML;
+
+              // Re-run this script to set up navigation
+              const indexScript = document.createElement('script');
+              indexScript.textContent = document.querySelector('script').textContent;
+              document.body.appendChild(indexScript);
+            });
+          }
+        };
+        document.body.appendChild(sketchScript);
+      };
+
+      document.body.appendChild(p5Script);
+    });
+  </script>
+</body>
+</html>

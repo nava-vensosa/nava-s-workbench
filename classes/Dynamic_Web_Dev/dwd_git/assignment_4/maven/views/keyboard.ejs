@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FIBRIL Keyboard</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <link href="/css/keys.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <div id="container"></div>
+  <button id="homebutton" class="btn">Return to Home</button>
+  <script src="/sketch.js"></script>
+  <script>
+    document.getElementById('homebutton').addEventListener('click', async () => {
+      const response = await fetch('/');
+      const html = await response.text();
+      document.open();
+      document.write(html);
+      document.close();
+    });
+  </script>
+</body>
+</html>
