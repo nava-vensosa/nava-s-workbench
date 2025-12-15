@@ -24,7 +24,7 @@ export const SCALE_DEGREE_MAP = {
 export const DEFAULT_PRIORITY_ORDER = [3, 4, 5, 2, 1, 6];
 
 // Clock interval in milliseconds
-export const CLOCK_INTERVAL_MS = 12;
+export const CLOCK_INTERVAL_MS = 22;
 
 // MIDI range
 export const MIDI_MIN = 0;
